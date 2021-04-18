@@ -1,7 +1,6 @@
 import React from 'react';
-import {Container, Grid, Step, StepLabel, Stepper} from "@material-ui/core";
-
-interface StepWrapperProps {
+import {Card, Container, Grid, Step, StepLabel, Stepper} from '@material-ui/core'
+    interface StepWrapperProps {
     activeStep: number
 }
 
