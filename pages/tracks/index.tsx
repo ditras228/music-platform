@@ -4,7 +4,6 @@ import {Box, Button, Card, Grid} from '@material-ui/core'
 import {useRouter} from "next/router";
 import {ITrack} from "../../types/track";
 import TrackList from '../../components/TrackList'
-import s from './Tracks.module.css'
 const Index = () => {
     const router= useRouter()
     const tracks: ITrack[] = [

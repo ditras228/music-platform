@@ -1,16 +1,65 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Card, Grid, IconButton} from '@material-ui/core'
 import {Pause, PlayArrow, VolumeUp} from '@material-ui/icons'
 import s from '../styles/Player.module.css'
 import TrackProgress from './TrackProgress'
-const Player: React.FC = () => {
-    const active=false
-    const track=         {_id: 1, artist: 'a1', audio: '', comments: [], listens: 5, name: 'name 1', picture: '', text: 'text'}
+import {useTypedSelector} from '../hooks/useTypedSelector'
+import {useActions} from '../hooks/useAction'
 
+let audio
+const Player: React.FC = () => {
+    const track = {
+        _id: 1,
+        artist: 'a1',
+        audio: 'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3',
+        comments: [],
+        listens: 5,
+        name: 'name 1',
+        picture: '',
+        text: 'text'
+    }
+    const {pause, volume, active, duration, currentTime} = useTypedSelector(state => state.player)
+    const {pauseTrack, playTrack, setVolume, setActiveTrack, setCurrentTime, setDuration} = useActions()
+    useEffect(() => {
+        if (!audio) {
+            audio = new Audio()
+        } else {
+            setAudio()
+        }
+    }, [])
+    const setAudio = () => {
+
+        audio.src = track.audio
+        audio.volume = volume / 100
+        audio.onloadedmetadata = () => {
+            setDuration(Math.ceil(audio.duration))
+        }
+        audio.ontimeupdate = () => {
+            setCurrentTime(Math.ceil(audio.currentTime))
+        }
+    }
+    const play = () => {
+        if (active) {
+            playTrack()
+            audio.play()
+        } else {
+            pauseTrack()
+            audio.pause()
+        }
+    }
+
+    const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+        audio.volume = Number(e.target.value) / 100
+        setVolume(Number(e.target.value))
+    }
+    const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+        audio.currentTime = Number(e.target.value)
+        setCurrentTime(Number(e.target.value))
+    }
     return (
         <div className={s.player}>
-            <IconButton onClick={e=>e.stopPropagation()}>
-                {active
+            <IconButton onClick={play}>
+                {pause
                     ? <Pause/>
                     : <PlayArrow/>
                 }
@@ -19,10 +68,10 @@ const Player: React.FC = () => {
                 <div>{track.name}</div>
                 <div style={{fontSize: 12, color: 'gray'}}>{track.artist}</div>
             </Grid>
-            <TrackProgress left={0} right={100} onChange={()=>{}}/>
+            <TrackProgress left={currentTime} right={duration} onChange={changeCurrentTime}/>
             <VolumeUp style={{marginLeft: 'auto'}}/>
-            <TrackProgress left={0} right={100} onChange={()=>{}}/>
-            </div>
+            <TrackProgress left={volume} right={100} onChange={changeVolume}/>
+        </div>
     )
 }
 
