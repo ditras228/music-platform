@@ -1,7 +1,7 @@
 import React from 'react'
 interface  TrackProgress{
     left: number
-    right: number
+    right: number   
     onChange: (e) => void
 }
 const TrackProgress: React.FC<TrackProgress> =

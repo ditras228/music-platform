@@ -5,7 +5,7 @@ import MainLayout from '../layouts/MainLayout'
 const Index = () => {
     return (
         <>
-            <MainLayout/>
+                <MainLayout/>
             <div className={s.center}>
                 <h1>Добро пожаловать</h1>
                 <h3>Здесь собраны лучшие треки</h3>

@@ -5,6 +5,7 @@ import {Delete, Pause, PlayArrow} from '@material-ui/icons'
 import s from './TrackItem.module.css'
 import {useRouter} from 'next/router'
 import {useActions} from '../hooks/useAction'
+import {baseURL} from '../api'
 
 interface TrackItemProps {
     track: ITrack
@@ -20,15 +21,21 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
         setActiveTrack(track)
         playTrack()
     }
+    const pause=(e)=>{
+        e.stopPropagation()
+
+        setActiveTrack(track)
+        pauseTrack()
+    }
     return (
         <Card className={s.track} onClick={() => router.push('/tracks/' + track._id)}>
-            <IconButton onClick={e => e.stopPropagation()}>
+            <IconButton >
                 {active
-                    ? <Pause/>
-                    : <PlayArrow/>
+                    ? <Pause onClick={play} />
+                    : <PlayArrow onClick={pause}/>
                 }
             </IconButton>
-            <img width={70} height={70} src={track.picture}/>
+            <img width={70} height={70} src={baseURL+'/image'+track.picture}/>
             <Grid container direction={'column'} style={{width: 200, margin: '0 20px'}}>
                 <div style={{fontSize: 12, color: 'gray'}}>{track.name}</div>
             </Grid>
