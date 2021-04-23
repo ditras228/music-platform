@@ -1,15 +1,30 @@
-import {Button} from '@material-ui/core'
+import {Button, makeStyles} from '@material-ui/core'
 import React from 'react'
-import s from './index.module.css'
 import MainLayout from '../layouts/MainLayout'
+import {useRouter} from 'next/router'
+
+const useStyles = makeStyles({
+    center: {
+        marginTop: '150px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+})
+
 const Index = () => {
+    const router = useRouter()
+    const classes = useStyles()
     return (
         <>
-                <MainLayout/>
-            <div className={s.center}>
+            <MainLayout/>
+            <div className={classes.center}>
                 <h1>Добро пожаловать</h1>
-                <h3>Здесь собраны лучшие треки</h3>
-                <Button>Кнопка</Button>
+                <h3>Здесь собраны лучшие треки.</h3>
+                <Button onClick={() => {
+                    router.push('/tracks')
+                }}>Начать</Button>
             </div>
         </>
     )

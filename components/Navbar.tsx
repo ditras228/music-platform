@@ -1,21 +1,22 @@
-import React from 'react';
-import {useTheme} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import {useRouter} from "next/router";
+import React from 'react'
+import {useTheme} from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import {useRouter} from 'next/router'
+import MusicNoteIcon from '@material-ui/icons/MusicNote'
+import AlbumIcon from '@material-ui/icons/Album'
+import AppsIcon from '@material-ui/icons/Apps';
 
 const menuItem = [
     {text: 'Главная', href: '/'},
@@ -24,17 +25,17 @@ const menuItem = [
 ]
 
 export default function Navbar() {
-    const router= useRouter()
-    const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const router = useRouter()
+    const theme = useTheme()
+    const [open, setOpen] = React.useState(false)
 
     const handleDrawerOpen = () => {
-        setOpen(true);
-    };
+        setOpen(true)
+    }
 
     const handleDrawerClose = () => {
-        setOpen(false);
-    };
+        setOpen(false)
+    }
 
     return (
         <div>
@@ -52,7 +53,7 @@ export default function Navbar() {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Persistent drawer
+                        Музыкальная площадка
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -69,13 +70,25 @@ export default function Navbar() {
                 </div>
                 <List>
                     {menuItem.map(({text, href}, index) => (
-                        <ListItem button key={href} onClick={()=> router.push(href)}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                        <ListItem button key={href} onClick={() => router.push(href)}>
+                            <ListItemIcon>
+                                {getIcon(index)}
+                            </ListItemIcon>
                             <ListItemText primary={text}/>
                         </ListItem>
                     ))}
                 </List>
             </Drawer>
         </div>
-    );
+    )
+}
+const getIcon = (index)=>{
+    switch(index){
+        case 0:
+            return <AppsIcon/>
+        case 1:
+            return <MusicNoteIcon/>
+        case 2:
+            return <AlbumIcon/>
+    }
 }

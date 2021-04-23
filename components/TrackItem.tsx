@@ -2,50 +2,97 @@ import React from 'react'
 import {ITrack} from '../types/track'
 import {Card, Grid, IconButton} from '@material-ui/core'
 import {Delete, Pause, PlayArrow} from '@material-ui/icons'
-import s from './TrackItem.module.css'
 import {useRouter} from 'next/router'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
+import {makeStyles} from '@material-ui/styles'
+import {TracksAPI} from '../api/tracksAPI'
+import {fetchTracks} from '../store/action-creators/track'
+import {useDispatch} from 'react-redux'
 
 interface TrackItemProps {
     track: ITrack
     active?: boolean
 }
 
+const useStyles = makeStyles({
+    track: {
+        marginBottom: '5px',
+        padding: '10px',
+        display: 'grid',
+        gridGap: '15px',
+        gridTemplateColumns: 'auto auto 1fr auto',
+        gridTemplateRows: '2fr 1r',
+        textAlign: 'left',
+        '&:hover': {
+            backgroundColor: '#f2f3f4',
+            cursor: 'pointer'
+        },
+        '&:active': {
+            opacity: '0.7'
+        }
+    },
+    play: {
+        gridColumn: '1 / 2',
+        gridRow: '1 / 3',
+    },
+    image: {
+        gridColumn: '2 / 3',
+        gridRow: '1 / 3',
+        width: '70px',
+        height: '70px'
+    },
+    name: {
+        gridColumn: '3 / 4',
+        gridRow: '1 / 2',
+        fontSize: '18px',
+        fontWidth: '400',
+        textAlign: 'left'
+    },
+    delete: {
+        gridColumn: '4 / 5',
+        gridRow: '1 / 3'
+    }
+
+})
 
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
+    const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
-    const {pauseTrack, playTrack, setActiveTrack}= useActions()
-    const play=(e)=>{
+    const classes = useStyles()
+    const dispatch= useDispatch()
+    const deleteOne = async (id)=>{
+        await TracksAPI.deleteOne(id).then()
+        await dispatch(await fetchTracks())
+    }
+    const play = (e) => {
         e.stopPropagation()
         setActiveTrack(track)
         playTrack()
     }
-    const pause=(e)=>{
+    const pause = (e) => {
         e.stopPropagation()
 
         setActiveTrack(track)
         pauseTrack()
     }
     return (
-        <Card className={s.track} onClick={() => router.push('/tracks/' + track._id)}>
-            <IconButton >
+        <Card className={classes.track} onClick={() => router.push('/tracks/' + track._id)}>
+            <IconButton className={classes.play}>
                 {active
-                    ? <Pause onClick={play} />
+                    ? <Pause onClick={play}/>
                     : <PlayArrow onClick={pause}/>
                 }
             </IconButton>
-            <img width={70} height={70} src={baseURL+'/image'+track.picture}/>
-            <Grid container direction={'column'} style={{width: 200, margin: '0 20px'}}>
-                <div style={{fontSize: 12, color: 'gray'}}>{track.name}</div>
+            <img className={classes.image} src={baseURL + track.picture} alt={'Обложка трека'}/>
+            <Grid className={classes.name} container direction={'column'}>
+                <div>{track.name}</div>
             </Grid>
-            {active && <div>0:42 / 3:44</div>}
-            <IconButton style={{marginLeft: 'auto'}} onClick={e => e.stopPropagation()}>
-                <Delete/>
+            <div>3:44/5:22</div>
+            <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
+                <Delete onClick={()=>{deleteOne(track._id)}} />
             </IconButton>
-
         </Card>
     )
 }
-
 export default TrackItem

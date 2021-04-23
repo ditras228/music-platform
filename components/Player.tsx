@@ -1,16 +1,32 @@
 import React, {useEffect} from 'react'
-import {Card, Grid, IconButton} from '@material-ui/core'
+import {Grid, IconButton} from '@material-ui/core'
 import {Pause, PlayArrow, VolumeUp} from '@material-ui/icons'
-import s from '../styles/Player.module.css'
 import TrackProgress from './TrackProgress'
 import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
-import {instance} from '../api'
+import {baseURL} from '../api'
+import {makeStyles} from '@material-ui/styles'
 
 let audio
+
+const useStyles = makeStyles({
+    player:{
+    height: '60px',
+    width: '100%',
+    position: 'fixed',
+    bottom: 0,
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 10px',
+    backgroundColor: 'lightgray'
+}
+});
+
 const Player: React.FC = () => {
     const {pause, volume, active, duration, currentTime} = useTypedSelector(state => state.player)
-    const {pauseTrack, playTrack, setVolume, setActiveTrack, setCurrentTime, setDuration} = useActions()
+    const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration} = useActions()
+    const classes= useStyles()
+
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
@@ -21,7 +37,8 @@ const Player: React.FC = () => {
     }, [active])
     const setAudio = () => {
         if (active){
-        audio.src = instance+active.audio
+        audio.src = baseURL+active.audio
+            console.log(audio)
         audio.volume = volume / 100
         audio.onloadedmetadata = () => {
             setDuration(Math.ceil(audio.duration))
@@ -32,7 +49,7 @@ const Player: React.FC = () => {
     }}
     const play = () => {
         playTrack()
-        if (active) {
+        if (pause) {
             playTrack()
             audio.play()
         } else {
@@ -40,7 +57,6 @@ const Player: React.FC = () => {
             audio.pause()
         }
     }
-
     const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
         audio.volume = Number(e.target.value) / 100
         setVolume(Number(e.target.value))
@@ -53,7 +69,7 @@ const Player: React.FC = () => {
         return null
     }
     return (
-        <div className={s.player}>
+        <div className={classes.player}>
             <IconButton onClick={play}>
                 {pause
                     ? <Pause/>
