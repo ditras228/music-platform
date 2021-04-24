@@ -1,7 +1,7 @@
 import React from 'react'
 import {ITrack} from '../types/track'
 import {Card, Grid, IconButton} from '@material-ui/core'
-import {Delete, Pause, PlayArrow} from '@material-ui/icons'
+import {Delete, Pause, PlayArrow, Timer} from '@material-ui/icons'
 import {useRouter} from 'next/router'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
         marginBottom: '5px',
         padding: '10px',
         display: 'grid',
-        gridGap: '15px',
+        gridColumnGap: '15px',
         gridTemplateColumns: 'auto auto 1fr auto',
         gridTemplateRows: '2fr 1r',
         textAlign: 'left',
@@ -39,19 +39,30 @@ const useStyles = makeStyles({
     image: {
         gridColumn: '2 / 3',
         gridRow: '1 / 3',
-        width: '70px',
-        height: '70px'
+        width: '80px',
+        height: '80px'
     },
     name: {
         gridColumn: '3 / 4',
         gridRow: '1 / 2',
-        fontSize: '18px',
-        fontWidth: '400',
+        fontSize: '19px',
+        fontWidth: '600',
         textAlign: 'left'
+    },
+    author:{
+        fontSize: '16px',
+        color: 'gray'
     },
     delete: {
         gridColumn: '4 / 5',
         gridRow: '1 / 3'
+    },
+    length:{
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr',
+        gridGap: '10px',
+        alignItems: 'center',
+        fontSize: '15px'
     }
 
 })
@@ -87,8 +98,9 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
             <img className={classes.image} src={baseURL + track.picture} alt={'Обложка трека'}/>
             <Grid className={classes.name} container direction={'column'}>
                 <div>{track.name}</div>
+                <div className={classes.author}>{track.artist}</div>
             </Grid>
-            <div>3:44/5:22</div>
+            <div className={classes.length}><Timer/> 3:44/5:22</div>
             <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
                 <Delete onClick={()=>{deleteOne(track._id)}} />
             </IconButton>

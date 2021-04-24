@@ -7,6 +7,7 @@ import {TracksAPI} from '../../api/tracksAPI'
 import {baseURL} from '../../api'
 import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
+import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
 
 const useStyles = makeStyles({
     grid: {
@@ -17,8 +18,20 @@ const useStyles = makeStyles({
     },
     info: {
         display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
+        gridTemplateColumns: 'auto auto',
         padding: '20px',
+        ['@media (max-width: 600px)']: {
+            gridTemplateColumns: 'auto',
+            gridTemplateRows: 'auto auto',
+            gridRowGap: '20px'
+        }
+    },
+    img: {
+        width: '200px',
+        height: '200px',
+        ['@media (max-width: 600px)']: {
+            margin: '0 auto'
+        }
     },
     card: {
         padding: '20px'
@@ -28,18 +41,65 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         gridTemplateColumns: '1fr 1fr',
     },
+    text: {
+        textAlign: 'center'
+    },
     item_title: {
-        display: 'inline-block',
-        textAlign: 'left'
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr',
+        gridGap: '10px'
     },
     item_value: {
         display: 'inline-block',
         textAlign: 'right'
     },
-    comments_form:{
+    comments_form: {
+        display: 'grid',
+        gridTemplateColumns: '1fr auto',
+        gridTemplateRows: 'auto 50px auto',
+        gridGap: '10px'
+    },
+    comments_input: {
+        gridRow: '2/4',
+        gridColumn: '1/2'
+    },
+    comments_submit: {
+        gridRow: '2/3',
+        gridColumn: '2/3'
+    },
+    form: {
+        width: '100%'
+    },
+    comment: {
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
-        gridTemplateRows: 'auto'
+        gridTemplateRows: 'auto auto',
+        gridColumnGap: '20px',
+        padding: '20px',
+        fontSize: '16px'
+
+    },
+    comment_img: {
+        width: '45px',
+        height: '45px',
+        borderRadius: '50%',
+        gridColumn: '1/2',
+        gridRow: '1/3'
+    },
+    comment_author: {
+        gridColumn: '2/3',
+        gridRow: '1/2',
+        fontWeight: 'bold'
+    },
+    comment_text: {
+        gridColumn: '2/3',
+        gridRow: '2/3'
+    },
+    title:{
+        marginLeft: '10px',
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr',
+        gridGap: '10px'
     }
 })
 
@@ -61,7 +121,7 @@ const TrackPage = ({serverTrack}) => {
     })
     return (
         <MainLayout
-            title={'Музыкальная плошадка - ' + track.name + ' - ' + track.artist}
+            title={'Музыкальная площадка - ' + track.name + ' - ' + track.artist}
             keywords={'Музыка, артисты,' + track.name + track.artist}
         >
             <Grid container className={classes.grid}>
@@ -70,33 +130,35 @@ const TrackPage = ({serverTrack}) => {
                     style={{fontSize: 32}}
                     onClick={() => router.push('/tracks')}
                 >
-                    К списку
+                    <ArrowBackIos/> К списку
                 </Button>
                 <Card>
                     <Grid container className={classes.info}>
-                        <img src={baseURL + track.picture} width={200} height={200} alt={'Обложка трека'}/>
+                        <img src={baseURL + track.picture} className={classes.img} alt={'Обложка трека'}/>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
-                                <h2 className={classes.item_title}>Название</h2>
+                                <h2 className={classes.item_title}><Title/>Название</h2>
                                 <h2 className={classes.item_value}>{track.name}</h2>
                             </div>
                             <div className={classes.line}>
-                                <h2 className={classes.item_title}>Автор</h2>
+                                <h2 className={classes.item_title}><Person/>Автор</h2>
                                 <h2 className={classes.item_value}>{track.artist}</h2>
                             </div>
                             <div className={classes.line}>
-                                <h2 className={classes.item_title}>Прослушиваний</h2>
+                                <h2 className={classes.item_title}><Hearing/>Прослушиваний</h2>
                                 <h2 className={classes.item_value}>{track.listens}</h2>
                             </div>
                         </div>
                     </Grid>
                 </Card>
                 <Card className={classes.card}>
-                    <h2>Слова к песне</h2>
-                    <p>{track.text}</p>
-                    <h2>Комментарии</h2>
-                    <Grid container>
-                        <form onSubmit={formik.handleSubmit}>
+                    <h2 className={classes.title}><GTranslate/> Слова к песне</h2>
+                    <p className={classes.text}>{track.text}</p>
+                </Card>
+                <Card>
+                    <Grid container className={classes.card}>
+                        <form onSubmit={formik.handleSubmit} className={classes.form}>
+                            <h2 className={classes.title}><InsertComment/> Комментарии</h2>
                             <Grid className={classes.comments_form}>
                                 <TextField
                                     value={formik.values.username}
@@ -107,28 +169,41 @@ const TrackPage = ({serverTrack}) => {
                                 >
                                 </TextField>
                                 <TextField
+                                    className={classes.comments_input}
                                     value={formik.values.text}
                                     onChange={formik.handleChange}
                                     name={'text'}
                                     label='Комментарий'
                                     fullWidth
                                     multiline
-                                    rows={4}
                                 >
                                 </TextField>
-                                <Button type={'submit'}>Отправить</Button>
+                                <Button
+                                    type={'submit'}
+                                    className={classes.comments_submit}
+                                >Отправить
+                                </Button>
                             </Grid>
                         </form>
                     </Grid>
+
+                    {
+                        serverTrack.comments.map(comment =>
+                            <Card className={classes.comment}>
+                                <img className={classes.comment_img}
+                                     src="http://placehold.it/80x80" alt='Ава комментатора'/>
+                                <div className={classes.comment_author}>
+                                    {comment.username}
+                                </div>
+                                <div
+                                    className={classes.comment_text}
+                                >
+                                    {comment.text}
+                                </div>
+                            </Card>
+                        )
+                    }
                 </Card>
-                {
-                    serverTrack.comments.map(comment =>
-                        <div>
-                            <div>Автор - {comment.username}</div>
-                            <div>Комментарий - {comment.text}</div>
-                        </div>
-                    )
-                }
             </Grid>
         </MainLayout>
     )

@@ -17,11 +17,13 @@ import {useRouter} from 'next/router'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import AppsIcon from '@material-ui/icons/Apps';
+import {LockOpen} from '@material-ui/icons'
 
 const menuItem = [
     {text: 'Главная', href: '/'},
     {text: 'Треки', href: '/tracks'},
     {text: 'Альбомы', href: '/albums'},
+    {text: 'Логин', href: '/auth'},
 ]
 
 export default function Navbar() {
@@ -90,5 +92,7 @@ const getIcon = (index)=>{
             return <MusicNoteIcon/>
         case 2:
             return <AlbumIcon/>
+        case 3:
+            return <LockOpen/>
     }
 }
