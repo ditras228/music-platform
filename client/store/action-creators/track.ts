@@ -10,7 +10,7 @@ export const fetchTracks = () => {
         } catch (e) {
             dispatch({
                 type: TrackActionTypes.FETCH_TRACKS_ERROR,
-                payload: 'Произошла ошибка загрузки трека'
+                payload: 'Произошла ошибка загрузки треков'
             })
         }
     }

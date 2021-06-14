@@ -2,6 +2,7 @@ import {Button, makeStyles} from '@material-ui/core'
 import React from 'react'
 import MainLayout from '../layouts/MainLayout'
 import {useRouter} from 'next/router'
+import {withAutoRedirect} from '../hooks/withAutoRedirect'
 
 const useStyles = makeStyles({
     center: {
@@ -12,8 +13,7 @@ const useStyles = makeStyles({
         justifyContent: 'center'
     }
 })
-
-const Index = () => {
+const Index =  () => {
     const router = useRouter()
     const classes = useStyles()
     return (
@@ -29,5 +29,4 @@ const Index = () => {
         </>
     )
 }
-
-export default Index
+export default  Index

@@ -27,7 +27,7 @@ const useStyles= makeStyles({
 })
 const Index = () => {
     const router = useRouter()
-    const {tracks,  error} = useTypedSelector(state => state.track)
+    const {tracks,  error} = useTypedSelector(state => state.user)
     const [timer, setTimer] = useState(null)
     const classes= useStyles()
     const dispatch = useDispatch()

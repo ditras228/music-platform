@@ -8,6 +8,7 @@ import {baseURL} from '../../api'
 import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
+import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
 const useStyles = makeStyles({
     grid: {
@@ -104,6 +105,7 @@ const useStyles = makeStyles({
 })
 
 const TrackPage = ({serverTrack}) => {
+    withAutoRedirect()
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
     const classes = useStyles()

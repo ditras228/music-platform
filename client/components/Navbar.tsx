@@ -18,6 +18,7 @@ import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import AppsIcon from '@material-ui/icons/Apps';
 import {LockOpen} from '@material-ui/icons'
+import {makeStyles} from '@material-ui/core'
 
 const menuItem = [
     {text: 'Главная', href: '/'},
@@ -25,12 +26,26 @@ const menuItem = [
     {text: 'Альбомы', href: '/albums'},
     {text: 'Логин', href: '/auth'},
 ]
+const useStyles = makeStyles({
+    AppBar:{
+        boxShadow: 'none'
+    },
+    List_header:{
+        height: '64px',
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr',
+        gridTemplateRows: 'auto'
+    },
+    logo:{
 
+    }
+
+})
 export default function Navbar() {
     const router = useRouter()
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
-
+    const classes=useStyles()
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -44,6 +59,8 @@ export default function Navbar() {
             <CssBaseline/>
             <AppBar
                 position="fixed"
+                color={'secondary'}
+                className={classes.AppBar}
             >
                 <Toolbar>
                     <IconButton
@@ -63,9 +80,8 @@ export default function Navbar() {
                 variant="persistent"
                 anchor="left"
                 open={open}
-
             >
-                <div>
+                <div className={classes.List_header}>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>

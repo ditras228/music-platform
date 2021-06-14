@@ -5,6 +5,9 @@ import {Checkbox, Button, Card, Grid, makeStyles, TextField} from '@material-ui/
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import {VpnKey} from '@material-ui/icons'
+import {useDispatch} from 'react-redux'
+import cookieCutter from 'cookie-cutter'
+import {UsersAPI} from '../../api/usersAPI'
 
 const useStyles = makeStyles({
     form: {
@@ -37,51 +40,53 @@ const SignupSchema = Yup.object({
         .required('Required'),
 })
 
-const Register = () => {
+const LogIn = () => {
     const router = useRouter()
     const classes = useStyles()
+    const dispatch = useDispatch()
+
     const formik = useFormik({
         initialValues: {
-            email: '',
+            login: '',
             password: '',
             authMe: false
         },
         validationSchema: SignupSchema,
-        onSubmit: values => {
-            router.push('/tracks')
+        onSubmit: async values => {
+            cookieCutter.set('auth_token', 'some-value')
+            console.log('кука '+ cookieCutter.get('myCookieName'))
+            await UsersAPI.login(values)
         }
+
     })
     return (
         <MainLayout>
             <form onSubmit={formik.handleSubmit}>
                 <Card
                     className={classes.card}>
-                    npm install --save @nestjs/passport passport passport-local                    <Grid
+                    <h2 className={classes.title}><VpnKey/> Войти</h2>
+                    <Grid
                         className={classes.form}
                     >
                         <TextField
                             label={'Введите Email'}
-                            name={'email'}
-                            value={formik.values.email}
+                            name={'login'}
+                            value={formik.values.login}
                             onChange={formik.handleChange}
-                        />
-                        {formik.touched.email && formik.errors.email
-                        && <div>{formik.errors.email}</div>}
+                        >
+                            Логин
+                        </TextField>
+                        {formik.touched.login && formik.errors.login
+                        && <div>{formik.errors.login}</div>}
                         <TextField
                             label={'Введите пороль'}
                             name={'password'}
                             value={formik.values.password}
                             onChange={formik.handleChange}
-                        />
-                        {formik.touched.email && formik.errors.password
-                        && <div>{formik.errors.password}</div>}
-                        <TextField
-                            label={'Повторите пороль'}
-                            name={'password'}
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                        />
-                        {formik.touched.email && formik.errors.password
+                        >
+                            Пороль
+                        </TextField>
+                        {formik.touched.login && formik.errors.password
                         && <div>{formik.errors.password}</div>}
                         <div>
                             <Checkbox
@@ -90,7 +95,9 @@ const Register = () => {
                                 onChange={formik.handleChange}
                             />Запомнить меня
                         </div>
-                        <Button>
+                        <Button
+                            onClick={() => router.push('auth/register')}
+                        >
                             Регистрация
                         </Button>
                         <Button
@@ -104,4 +111,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default LogIn

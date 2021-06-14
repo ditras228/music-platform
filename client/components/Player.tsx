@@ -6,6 +6,7 @@ import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
 import {makeStyles} from '@material-ui/styles'
+import cookieCutter from 'cookie-cutter'
 
 let audio
 
@@ -27,9 +28,11 @@ const Player: React.FC = () => {
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration} = useActions()
     const classes= useStyles()
 
+
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
+            setCurrentTime (cookieCutter.get('audio_currentTime' || 0))
         } else {
             setAudio()
             play()
@@ -44,6 +47,7 @@ const Player: React.FC = () => {
             setDuration(Math.ceil(audio.duration))
         }
         audio.ontimeupdate = () => {
+            cookieCutter.set('audio_currentTime', audio.currentTime)
             setCurrentTime(Math.ceil(audio.currentTime))
         }
     }}

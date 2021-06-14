@@ -3,21 +3,23 @@ import MainLayout from '../../layouts/MainLayout'
 import {useFormik} from 'formik'
 import {Checkbox, Button, Card, Grid, makeStyles, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
-import * as Yup from 'yup';
+import * as Yup from 'yup'
 import {VpnKey} from '@material-ui/icons'
-const useStyles= makeStyles({
+import {UsersAPI} from '../../api/usersAPI'
+
+const useStyles = makeStyles({
     form: {
         display: 'grid',
         gridTemplateRows: 'auto',
         gridTemplateColumns: '1fr',
         gridRowGap: '10px'
     },
-    card:{
+    card: {
         padding: '20px',
         margin: '0 auto',
         maxWidth: '600px'
     },
-    title:{
+    title: {
         marginLeft: '10px',
         display: 'grid',
         gridTemplateColumns: 'auto 1fr',
@@ -26,7 +28,7 @@ const useStyles= makeStyles({
 })
 
 const SignupSchema = Yup.object({
-    email:  Yup.string().email('Invalid email').required('Required')
+    email: Yup.string().email('Invalid email').required('Required')
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Required'),
@@ -34,50 +36,56 @@ const SignupSchema = Yup.object({
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Required'),
-});
+})
 
-const LogIn = () => {
+const Register = () => {
     const router = useRouter()
-    const classes= useStyles()
+    const classes = useStyles()
     const formik = useFormik({
         initialValues: {
-            email: '',
+            login: '',
             password: '',
+            repeat_password: '',
             authMe: false
         },
         validationSchema: SignupSchema,
-        onSubmit:  values => {
-            router.push('/tracks')
+        onSubmit: async values => {
+            await UsersAPI.registration(values)
+            // router.push('/tracks')
         }
     })
     return (
         <MainLayout>
             <form onSubmit={formik.handleSubmit}>
                 <Card
-                className={classes.card}>
-                    <h2 className={classes.title}> <VpnKey/> Войти</h2>
+                    className={classes.card}>
+                    <h2 className={classes.title}><VpnKey/> Регистрация</h2>
                     <Grid
-                    className={classes.form}
+                        className={classes.form}
                     >
                         <TextField
                             label={'Введите Email'}
-                            name={'email'}
-                            value={formik.values.email}
+                            name={'login'}
+                            value={formik.values.login}
                             onChange={formik.handleChange}
-                        >
-                            Логин
-                        </TextField>
-                        {formik.touched.email && formik.errors.email
-                        && <div>{formik.errors.email}</div>}
+                        />
+                        {formik.touched.login && formik.errors.login
+                        && <div>{formik.errors.login}</div>}
                         <TextField
                             label={'Введите пороль'}
                             name={'password'}
                             value={formik.values.password}
                             onChange={formik.handleChange}
-                        >
-                        Пороль
-                        </TextField>
-                        {formik.touched.email && formik.errors.password
+                        />
+                        {formik.touched.login && formik.errors.password
+                        && <div>{formik.errors.password}</div>}
+                        <TextField
+                            label={'Повторите пороль'}
+                            name={'repeat_password'}
+                            value={formik.values.repeat_password}
+                            onChange={formik.handleChange}
+                        />
+                        {formik.touched.login && formik.errors.password
                         && <div>{formik.errors.password}</div>}
                         <div>
                             <Checkbox
@@ -86,9 +94,7 @@ const LogIn = () => {
                                 onChange={formik.handleChange}
                             />Запомнить меня
                         </div>
-                        <Button
-                            onClick={()=>router.push('auth/register')}
-                        >
+                        <Button>
                             Регистрация
                         </Button>
                         <Button
@@ -102,4 +108,4 @@ const LogIn = () => {
     )
 }
 
-export default LogIn
+export default Register

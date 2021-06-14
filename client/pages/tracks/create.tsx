@@ -6,8 +6,10 @@ import FileUpload from '../../components/FileUpload'
 import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
 import {useFormik} from 'formik'
+import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
 const Create = () => {
+    withAutoRedirect()
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
     const [audio, setAudio] = useState(null)
