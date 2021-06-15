@@ -1,0 +1,13 @@
+.error{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    padding: 20px;
+    font-weight: normal;
+
+}
+.title{
+    margin-left: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+}

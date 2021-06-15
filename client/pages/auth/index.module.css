@@ -1,0 +1,17 @@
+.form {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr;
+    grid-row-gap: 10px;
+}
+.card {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 600px;
+}
+.title {
+    margin-left: 10px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+}

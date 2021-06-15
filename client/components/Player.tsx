@@ -5,28 +5,14 @@ import TrackProgress from './TrackProgress'
 import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
-import {makeStyles} from '@material-ui/styles'
 import cookieCutter from 'cookie-cutter'
 
 let audio
 
-const useStyles = makeStyles({
-    player:{
-    height: '60px',
-    width: '100%',
-    position: 'fixed',
-    bottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 10px',
-    backgroundColor: 'lightgray'
-}
-});
 
 const Player: React.FC = () => {
     const {pause, volume, active, duration, currentTime} = useTypedSelector(state => state.player)
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration} = useActions()
-    const classes= useStyles()
 
 
     useEffect(() => {

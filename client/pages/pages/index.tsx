@@ -9,27 +9,12 @@ import {fetchTracks, searchTracks} from '../../store/action-creators/track'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import {RotateLeft, Search} from '@material-ui/icons'
+import classes from './index.module.css'
 
-const useStyles= makeStyles({
-    error:{
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        padding: '20px',
-        fontWeight: 'normal'
-
-    },
-    title:{
-        marginLeft: '10px',
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridGap: '10px'
-    }
-})
 const Index = () => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.user)
     const [timer, setTimer] = useState(null)
-    const classes= useStyles()
     const dispatch = useDispatch()
 
     const formik = useFormik({

@@ -1,0 +1,10 @@
+.AppBar{
+    box-shadow: none!important;
+
+}
+.List_header{
+    height: 64px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto;
+}

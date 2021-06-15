@@ -18,34 +18,18 @@ import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import AppsIcon from '@material-ui/icons/Apps';
 import {LockOpen} from '@material-ui/icons'
-import {makeStyles} from '@material-ui/core'
+import classes from './NavBar.module.css'
 
 const menuItem = [
-    {text: 'Главная', href: '/'},
     {text: 'Треки', href: '/tracks'},
     {text: 'Альбомы', href: '/albums'},
     {text: 'Логин', href: '/auth'},
 ]
-const useStyles = makeStyles({
-    AppBar:{
-        boxShadow: 'none'
-    },
-    List_header:{
-        height: '64px',
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridTemplateRows: 'auto'
-    },
-    logo:{
 
-    }
-
-})
 export default function Navbar() {
     const router = useRouter()
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
-    const classes=useStyles()
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -72,7 +56,7 @@ export default function Navbar() {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Музыкальная площадка
+                        MERNMusic
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -103,12 +87,10 @@ export default function Navbar() {
 const getIcon = (index)=>{
     switch(index){
         case 0:
-            return <AppsIcon/>
-        case 1:
             return <MusicNoteIcon/>
-        case 2:
+        case 1:
             return <AlbumIcon/>
-        case 3:
+        case 2:
             return <LockOpen/>
     }
 }

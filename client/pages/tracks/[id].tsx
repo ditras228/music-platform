@@ -9,106 +9,12 @@ import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
-
-const useStyles = makeStyles({
-    grid: {
-        maxWidth: '900px',
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        gridGap: '20px'
-    },
-    info: {
-        display: 'grid',
-        gridTemplateColumns: 'auto auto',
-        padding: '20px',
-        ['@media (max-width: 600px)']: {
-            gridTemplateColumns: 'auto',
-            gridTemplateRows: 'auto auto',
-            gridRowGap: '20px'
-        }
-    },
-    img: {
-        width: '200px',
-        height: '200px',
-        ['@media (max-width: 600px)']: {
-            margin: '0 auto'
-        }
-    },
-    card: {
-        padding: '20px'
-    },
-    line: {
-        display: 'grid',
-        flexDirection: 'column',
-        gridTemplateColumns: '1fr 1fr',
-    },
-    text: {
-        textAlign: 'center'
-    },
-    item_title: {
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridGap: '10px'
-    },
-    item_value: {
-        display: 'inline-block',
-        textAlign: 'right'
-    },
-    comments_form: {
-        display: 'grid',
-        gridTemplateColumns: '1fr auto',
-        gridTemplateRows: 'auto 50px auto',
-        gridGap: '10px'
-    },
-    comments_input: {
-        gridRow: '2/4',
-        gridColumn: '1/2'
-    },
-    comments_submit: {
-        gridRow: '2/3',
-        gridColumn: '2/3'
-    },
-    form: {
-        width: '100%'
-    },
-    comment: {
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridTemplateRows: 'auto auto',
-        gridColumnGap: '20px',
-        padding: '20px',
-        fontSize: '16px'
-
-    },
-    comment_img: {
-        width: '45px',
-        height: '45px',
-        borderRadius: '50%',
-        gridColumn: '1/2',
-        gridRow: '1/3'
-    },
-    comment_author: {
-        gridColumn: '2/3',
-        gridRow: '1/2',
-        fontWeight: 'bold'
-    },
-    comment_text: {
-        gridColumn: '2/3',
-        gridRow: '2/3'
-    },
-    title:{
-        marginLeft: '10px',
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridGap: '10px'
-    }
-})
+import classes from './[id].module.css'
 
 const TrackPage = ({serverTrack}) => {
     withAutoRedirect()
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
-    const classes = useStyles()
     const formik = useFormik({
         initialValues: {
             username: '',

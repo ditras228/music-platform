@@ -1,6 +1,7 @@
 // src/context/state.js
 import { createContext, useContext } from 'react';
 
+// @ts-ignore
 const AppContext = createContext();
 
 export function AppWrapper({ children }) {

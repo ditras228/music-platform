@@ -16,54 +16,6 @@ interface TrackItemProps {
 }
 
 const useStyles = makeStyles({
-    track: {
-        marginBottom: '5px',
-        padding: '10px',
-        display: 'grid',
-        gridColumnGap: '15px',
-        gridTemplateColumns: 'auto auto 1fr auto',
-        gridTemplateRows: '2fr 1r',
-        textAlign: 'left',
-        '&:hover': {
-            backgroundColor: '#f2f3f4',
-            cursor: 'pointer'
-        },
-        '&:active': {
-            opacity: '0.7'
-        }
-    },
-    play: {
-        gridColumn: '1 / 2',
-        gridRow: '1 / 3',
-    },
-    image: {
-        gridColumn: '2 / 3',
-        gridRow: '1 / 3',
-        width: '80px',
-        height: '80px'
-    },
-    name: {
-        gridColumn: '3 / 4',
-        gridRow: '1 / 2',
-        fontSize: '19px',
-        fontWidth: '600',
-        textAlign: 'left'
-    },
-    author:{
-        fontSize: '16px',
-        color: 'gray'
-    },
-    delete: {
-        gridColumn: '4 / 5',
-        gridRow: '1 / 3'
-    },
-    length:{
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridGap: '10px',
-        alignItems: 'center',
-        fontSize: '15px'
-    }
 
 })
 
