@@ -17,7 +17,7 @@ import {useRouter} from 'next/router'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import AppsIcon from '@material-ui/icons/Apps';
-import {LockOpen} from '@material-ui/icons'
+import {LockOpen, Note} from '@material-ui/icons'
 import classes from './NavBar.module.css'
 
 const menuItem = [
@@ -55,8 +55,8 @@ export default function Navbar() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" noWrap>
-                        MERNMusic
+                    <Typography variant="h6" noWrap className={classes.logo}>
+                        <MusicNoteIcon/>MERNMusic
                     </Typography>
                 </Toolbar>
             </AppBar>

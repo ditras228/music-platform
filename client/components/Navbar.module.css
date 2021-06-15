@@ -1,6 +1,9 @@
 .AppBar{
     box-shadow: none!important;
-
+}
+.logo{
+    display: flex!important;
+    align-items: center;
 }
 .List_header{
     height: 64px;

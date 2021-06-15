@@ -1,7 +1,7 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {useFormik} from 'formik'
-import {Checkbox, Button, Card, Grid, makeStyles, TextField} from '@material-ui/core'
+import {Checkbox, Button, Card, Grid, makeStyles, TextField, Link} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import {VpnKey} from '@material-ui/icons'
@@ -36,6 +36,10 @@ const LogIn = () => {
         }
 
     })
+    const regHandler = (e: any) => {
+       e.preventDefault()
+       router.push('/auth/register')
+    }
     return (
         <MainLayout>
             <form onSubmit={formik.handleSubmit}>
@@ -54,7 +58,9 @@ const LogIn = () => {
                             Логин
                         </TextField>
                         {formik.touched.login && formik.errors.login
-                        && <div>{formik.errors.login}</div>}
+                        &&<Alert variant="filled" severity="error">
+                            {formik.errors.login}
+                        </Alert>}
                         <TextField
                             label={'Введите пороль'}
                             name={'password'}
@@ -64,16 +70,16 @@ const LogIn = () => {
                             Пороль
                         </TextField>
                         {formik.touched.login && formik.errors.password
-                        && <div>{formik.errors.password}</div>}
-                        <Button
-                            onClick={() => router.push('auth/register')}
-                        >
-                            Регистрация
-                        </Button>
+                        &&<Alert variant="filled" severity="error">
+                            {formik.errors.password}
+                        </Alert>}
                         <Button
                             type={'submit'}>
                             Войти
                         </Button>
+                        <Link onClick={e=>regHandler(e)}>
+                            Ещё нет аккаунта? Регистрация
+                        </Link>
                     </Grid>
                 </Card>
             </form>
