@@ -13,7 +13,7 @@ import classes from './index.module.css'
 
 const Index = () => {
     const router = useRouter()
-    const {tracks,  error} = useTypedSelector(state => state.user)
+    const {tracks,  error} = useTypedSelector(state => state.track)
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch()
 

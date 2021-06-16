@@ -1,18 +1,19 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {useFormik} from 'formik'
-import {Checkbox, Button, Card, Grid, makeStyles, TextField, Link} from '@material-ui/core'
+import {Button, Card, Grid, Link, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import {VpnKey} from '@material-ui/icons'
-import {useDispatch} from 'react-redux'
-import cookieCutter from 'cookie-cutter'
-import {UsersAPI} from '../../api/usersAPI'
-import Alert from '@material-ui/lab/Alert';
-import classes from './index.module.css'
+import classes from './register.module.css'
+import {Alert} from '@material-ui/lab'
+import {useDispatch, useSelector} from 'react-redux'
+import {Login, Registration} from '../../store/action-creators/user'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {GetError} from '../../store/selectors'
 
 const SignupSchema = Yup.object({
-    email: Yup.string().email('Неккоректный email').required('Обязательно'),
+    username: Yup.string().email('Неккоректный email').required('Обязательно'),
     password: Yup.string()
         .min(6, 'Должен быть больше 5 симолов')
         .max(16, 'Должен быть меньше 17 симолов')
@@ -22,63 +23,64 @@ const SignupSchema = Yup.object({
 const LogIn = () => {
     const router = useRouter()
     const dispatch = useDispatch()
-
+    const error = useSelector(state =>GetError(state, 'login'))
     const formik = useFormik({
         initialValues: {
-            login: '',
+            username: '',
             password: '',
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-            cookieCutter.set('auth_token', 'some-value')
-            console.log('кука '+ cookieCutter.get('myCookieName'))
-            await UsersAPI.login(values)
+            dispatch(Login(values.username, values.password))
+            //  router.push('/tracks')
         }
-
     })
-    const regHandler = (e: any) => {
-       e.preventDefault()
-       router.push('/auth/register')
+    const loginHandler=(e: any)=>{
+        e.preventDefault()
+        router.push('/auth/register')
     }
+
     return (
         <MainLayout>
             <form onSubmit={formik.handleSubmit}>
                 <Card
                     className={classes.card}>
-                    <h2 className={classes.title}><VpnKey/> Войти</h2>
+                    <h2 className={classes.title}><VpnKey/> Вход</h2>
                     <Grid
                         className={classes.form}
                     >
                         <TextField
                             label={'Введите Email'}
-                            name={'login'}
-                            value={formik.values.login}
+                            name={'username'}
+                            value={formik.values.username}
                             onChange={formik.handleChange}
-                        >
-                            Логин
-                        </TextField>
-                        {formik.touched.login && formik.errors.login
-                        &&<Alert variant="filled" severity="error">
-                            {formik.errors.login}
+                        />
+                        {formik.touched.username && formik.errors.username
+                        &&  <Alert variant="filled" severity="error">
+                            {formik.errors.username}
                         </Alert>}
                         <TextField
                             label={'Введите пороль'}
                             name={'password'}
                             value={formik.values.password}
                             onChange={formik.handleChange}
-                        >
-                            Пороль
-                        </TextField>
-                        {formik.touched.login && formik.errors.password
-                        &&<Alert variant="filled" severity="error">
+                            type={'password'}
+
+                        />
+                        {formik.touched.username && formik.errors.password
+                        && <Alert variant="filled" severity="error">
                             {formik.errors.password}
                         </Alert>}
+                        {error?
+                         <Alert variant="filled" severity="error">
+                            {error.message}
+                        </Alert>: null}
                         <Button
                             type={'submit'}>
                             Войти
                         </Button>
-                        <Link onClick={e=>regHandler(e)}>
-                            Ещё нет аккаунта? Регистрация
+                        <Link onClick={e=>loginHandler(e)}>
+                            Ещё нет аккаунта? Зарегистрируйтесь
                         </Link>
                     </Grid>
                 </Card>

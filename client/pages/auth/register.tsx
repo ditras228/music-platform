@@ -1,16 +1,17 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {useFormik} from 'formik'
-import {Checkbox, Button, Card, Grid, makeStyles, TextField, Link} from '@material-ui/core'
+import {Button, Card, Grid, Link, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import {VpnKey} from '@material-ui/icons'
-import {UsersAPI} from '../../api/usersAPI'
 import classes from './register.module.css'
 import {Alert} from '@material-ui/lab'
+import {useDispatch} from 'react-redux'
+import {Registration} from '../../store/action-creators/user'
 
 const SignupSchema = Yup.object({
-    login: Yup.string().email('Неккоректный email').required('Обязательно'),
+    username: Yup.string().email('Неккоректный email').required('Обязательно'),
     password: Yup.string()
         .min(6, 'Должен быть больше 5 симолов')
         .max(16, 'Должен быть меньше 17 симолов')
@@ -21,15 +22,16 @@ const SignupSchema = Yup.object({
 
 const Register = () => {
     const router = useRouter()
+    const dispatch = useDispatch()
     const formik = useFormik({
         initialValues: {
-            login: '',
+            username: '',
             password: '',
             repeat_password: '',
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-            await UsersAPI.registration(values)
+            dispatch(Registration(values.username, values.password))
           //  router.push('/tracks')
         }
     })
@@ -49,13 +51,13 @@ const Register = () => {
                     >
                         <TextField
                             label={'Введите Email'}
-                            name={'login'}
-                            value={formik.values.login}
+                            name={'username'}
+                            value={formik.values.username}
                             onChange={formik.handleChange}
                         />
-                        {formik.touched.login && formik.errors.login
+                        {formik.touched.username && formik.errors.username
                         &&  <Alert variant="filled" severity="error">
-                            {formik.errors.login}
+                            {formik.errors.username}
                         </Alert>}
                         <TextField
                             label={'Введите пороль'}
@@ -65,7 +67,7 @@ const Register = () => {
                             type={'password'}
 
                         />
-                        {formik.touched.login && formik.errors.password
+                        {formik.touched.username && formik.errors.password
                         && <Alert variant="filled" severity="error">
                             {formik.errors.password}
                         </Alert>}
@@ -76,7 +78,7 @@ const Register = () => {
                             onChange={formik.handleChange}
                             type={'password'}
                         />
-                        {formik.touched.login && formik.errors.password
+                        {formik.touched.username && formik.errors.password
                         &&<Alert variant="filled" severity="error">
                             {formik.errors.repeat_password}
                         </Alert>
