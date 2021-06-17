@@ -14,6 +14,10 @@ export class UserController{
     login(@Body() dto: CreateUserDto){
         return this.userService.login(dto)
     }
+    @Post('/')
+    auth(@Body() token){
+        return this.userService.auth(token)
+    }
     @Get('/users')
     users(){
         return this.userService.getUsers()
@@ -22,4 +26,5 @@ export class UserController{
     install(){
         return this.userService.install()
     }
+
 }
