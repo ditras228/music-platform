@@ -12,26 +12,55 @@ export const getUsers = () => {
         }
     }
 }
-export const Login=(username, password)=>{
-    return async (dispatch: Dispatch<UserAction>)=>{
-        await UsersAPI.login({username, password}).then(response=>{
-            console.log(response)
-        }).catch(e=>{
-            console.log(e.data.message)
-            dispatch({
-                type: UsersActionTypes.ADD_ERROR,
-                payload: {type: 'login', message: e.data.message || 'Неизвестная ошибка'}
+export const Login = (username, password) => {
+    return async (dispatch: Dispatch<UserAction>) => {
+        await UsersAPI.login({username, password})
+            .then(response => {
+                if (response.data.status === 500) {
+                    dispatch({
+                        type: UsersActionTypes.ADD_ERROR,
+                        payload: {type: 'login', message: response.data.message || 'Неизвестная ошибка'}
+                    })
+                }
+                localStorage.setItem('token', response.data.token)
+                dispatch({
+                    type: UsersActionTypes.LOGIN,
+                    payload: response.data.user
+                })
             })
-        })
+            .catch(e => {
+                dispatch({
+                    type: UsersActionTypes.ADD_ERROR,
+                    payload: {type: 'login', message: e.data.message || 'Неизвестная ошибка'}
+                })
+            })
 
     }
 }
+export const Auth = () => {
+    return async (dispatch: Dispatch<UserAction>) => {
+        const token= localStorage.getItem('token')
+        await UsersAPI.auth(token)
+            .then(response => {
+                localStorage.setItem('token', response.data.token)
+                dispatch({
+                    type: UsersActionTypes.LOGIN,
+                    payload: response.data.user
+                })
+            })
 
-export const Registration=(username, password)=>{
-    return async (dispatch: Dispatch<UserAction>)=>{
-        await UsersAPI.registration({username, password}).then(response=>{
-
-        }).catch(e=>{
+    }
+}
+export const Registration = (username, password) => {
+    return async (dispatch: Dispatch<UserAction>) => {
+        await UsersAPI.registration({username, password}).then(response => {
+            if (response.data.status === 500) {
+                dispatch({
+                    type: UsersActionTypes.ADD_ERROR,
+                    payload: {type: 'register', message: response.data.message || 'Неизвестная ошибка'}
+                })
+            }
+        }).catch(e => {
             console.log(e)
             dispatch({
                 type: UsersActionTypes.ADD_ERROR,

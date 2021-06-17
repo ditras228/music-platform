@@ -10,8 +10,10 @@ import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import {RotateLeft, Search} from '@material-ui/icons'
 import classes from './index.module.css'
+import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
 const Index = () => {
+    withAutoRedirect(false)
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
     const [timer, setTimer] = useState(null)
@@ -83,5 +85,5 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async ({store}) => {
     const dispatch = store.dispatch as NextThunkDispatch
-    await dispatch(await fetchTracks())
+    await dispatch(fetchTracks())
 })

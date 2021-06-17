@@ -1,8 +1,9 @@
 import {UserAction, UsersActionTypes, UserState} from '../../types/user'
+
 const initialState: UserState={
     users:[],
     errors: [],
-    isAuth: true
+    isAuth: false
 }
 export const usersReducer = (state = initialState, action: UserAction): UserState => {
     switch (action.type) {

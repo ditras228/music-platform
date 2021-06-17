@@ -7,8 +7,10 @@ import * as Yup from 'yup'
 import {VpnKey} from '@material-ui/icons'
 import classes from './register.module.css'
 import {Alert} from '@material-ui/lab'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {Registration} from '../../store/action-creators/user'
+import {GetError} from '../../store/selectors'
+import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
 const SignupSchema = Yup.object({
     username: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -21,8 +23,11 @@ const SignupSchema = Yup.object({
 })
 
 const Register = () => {
+    withAutoRedirect(true)
     const router = useRouter()
     const dispatch = useDispatch()
+    const error = useSelector(state =>GetError(state, 'register'))
+
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -83,6 +88,10 @@ const Register = () => {
                             {formik.errors.repeat_password}
                         </Alert>
                         }
+                        {error?
+                            <Alert variant="filled" severity="error">
+                                {error.message}
+                            </Alert>: null}
                         <Button
                         type={'submit'}>
                             Регистрация

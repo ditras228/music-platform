@@ -4,8 +4,8 @@ export const UsersAPI={
     getUsers(){
         return instance.get('auth/users')
     },
-    auth(){
-        return instance.post('auth/')
+    auth(token){
+        return instance.post('auth/', token)
     },
     login(props){
         return instance.post('auth/login', props)

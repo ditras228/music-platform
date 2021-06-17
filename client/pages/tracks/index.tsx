@@ -27,7 +27,7 @@ const useStyles= makeStyles({
     }
 })
 const Index = () => {
-    withAutoRedirect()
+    withAutoRedirect(false)
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
     const [timer, setTimer] = useState(null)

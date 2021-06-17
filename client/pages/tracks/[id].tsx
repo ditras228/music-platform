@@ -12,7 +12,7 @@ import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 import classes from './[id].module.css'
 
 const TrackPage = ({serverTrack}) => {
-    withAutoRedirect()
+    withAutoRedirect(false)
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
     const formik = useFormik({

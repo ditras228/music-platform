@@ -11,6 +11,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Login, Registration} from '../../store/action-creators/user'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {GetError} from '../../store/selectors'
+import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
 const SignupSchema = Yup.object({
     username: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -21,6 +22,7 @@ const SignupSchema = Yup.object({
 })
 
 const LogIn = () => {
+    withAutoRedirect(true)
     const router = useRouter()
     const dispatch = useDispatch()
     const error = useSelector(state =>GetError(state, 'login'))

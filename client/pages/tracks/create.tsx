@@ -9,7 +9,7 @@ import {useFormik} from 'formik'
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
 const Create = () => {
-    withAutoRedirect()
+    withAutoRedirect(false)
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
     const [audio, setAudio] = useState(null)
