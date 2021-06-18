@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Box, Button, Card, Grid, makeStyles, TextField} from '@material-ui/core'
+import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
@@ -9,31 +9,17 @@ import {fetchTracks, searchTracks} from '../../store/action-creators/track'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import {RotateLeft, Search} from '@material-ui/icons'
+import classes from './index.module.css'
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
+import {Auth} from '../../store/action-creators/user'
 
-const useStyles= makeStyles({
-    error:{
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        padding: '20px',
-        fontWeight: 'normal'
-
-    },
-    title:{
-        marginLeft: '10px',
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gridGap: '10px'
-    }
-})
 const Index = () => {
-    withAutoRedirect(false)
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
-    const [timer, setTimer] = useState(null)
-    const classes= useStyles()
-    const dispatch = useDispatch()
+    const {isAuth} = useTypedSelector(state => state.user)
 
+    const [timer, setTimer] = useState(null)
+    const dispatch = useDispatch()
     const formik = useFormik({
         initialValues: {
             query: ''
@@ -52,6 +38,7 @@ const Index = () => {
             }, 500)
         )
     }
+
     if (error) {
         return (
             <MainLayout title={error}>
@@ -68,9 +55,7 @@ const Index = () => {
         <MainLayout title={'Список треков'}>
 
             <Grid container justify={'center'}>
-                <Card style={{width: 900}}>
-
-                    <Box p={3}>
+                <Card className={classes.card}>
                         <Grid container justify={'space-between'} direction={'row'}>
                             <h2 className={classes.title}><Search/>Список треков</h2>
                             <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
@@ -87,7 +72,6 @@ const Index = () => {
                                 }}
                             />
                         </form>
-                    </Box>
                     <TrackList tracks={tracks}/>
                 </Card>
             </Grid>
@@ -100,5 +84,6 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async ({store}) => {
     const dispatch = store.dispatch as NextThunkDispatch
-    await dispatch(await fetchTracks())
+    await dispatch( Auth())
+    await dispatch( fetchTracks())
 })

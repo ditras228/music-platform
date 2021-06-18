@@ -3,18 +3,15 @@ import MainLayout from '../../layouts/MainLayout'
 import StepWrapper from '../../components/StepWrapper'
 import {Button, Grid, TextField} from '@material-ui/core'
 import FileUpload from '../../components/FileUpload'
-import {useRouter} from 'next/router'
-import {TracksAPI} from '../../api/tracksAPI'
 import {useFormik} from 'formik'
-import {withAutoRedirect} from '../../hooks/withAutoRedirect'
+import {TracksAPI} from '../../api/tracksAPI'
+import {router} from 'next/client'
 
 const Create = () => {
-    withAutoRedirect(false)
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
     const [audio, setAudio] = useState(null)
 
-    const router = useRouter()
         const next = () => {
         if (activeStep !== 2) {
             setActiveState(prevState => prevState + 1)
@@ -34,7 +31,7 @@ const Create = () => {
             audio: audio
         },
         onSubmit: values => {
-            TracksAPI.createTrack(values).then(() => router.push('/tracks'))
+           TracksAPI.createTrack(values).then(() => router.push('/tracks'))
         }
     })
     return (

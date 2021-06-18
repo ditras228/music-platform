@@ -5,8 +5,7 @@ import TrackProgress from './TrackProgress'
 import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
-import cookieCutter from 'cookie-cutter'
-
+import classes from './Player.module.css'
 let audio
 
 
@@ -18,7 +17,7 @@ const Player: React.FC = () => {
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
-            setCurrentTime (cookieCutter.get('audio_currentTime' || 0))
+            setCurrentTime ( 0)
         } else {
             setAudio()
             play()
@@ -33,7 +32,6 @@ const Player: React.FC = () => {
             setDuration(Math.ceil(audio.duration))
         }
         audio.ontimeupdate = () => {
-            cookieCutter.set('audio_currentTime', audio.currentTime)
             setCurrentTime(Math.ceil(audio.currentTime))
         }
     }}
@@ -70,7 +68,7 @@ const Player: React.FC = () => {
                 <div>{active.name}</div>
                 <div style={{fontSize: 12, color: 'gray'}}>{active.artist}</div>
             </Grid>
-            <TrackProgress left={currentTime} right={duration} onChange={changeCurrentTime}/>
+            <TrackProgress left={currentTime} right={duration} onChange={changeCurrentTime} format={'time'}/>
             <VolumeUp style={{marginLeft: 'auto'}}/>
             <TrackProgress left={volume} right={100} onChange={changeVolume}/>
         </div>

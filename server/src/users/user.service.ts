@@ -7,12 +7,12 @@ import jwt = require('jsonwebtoken')
 import {validationResult} from 'express-validator'
 import {Role, RoleDocument} from './schemas/role.schema'
 import {CreateUserDto} from './dto/create.user.dto'
-import jwt_decode from "jwt-decode";
+
 const bcrypt = require('bcryptjs')
 
 require('dotenv').config()
 
-const generateAccessToken = (id, username,roles) => {
+const generateAccessToken = (id, username, roles) => {
     const payload = {
         id,
         username,
@@ -71,15 +71,17 @@ export class UserService {
             ('Login failed', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
     async auth(token) {
         try {
-            const validToken = jwt.verify(token, process.env.SECRET)
-            if(!validToken){
+            const parseToken = token.split(' ')
+            const validToken = jwt.verify(parseToken[1], process.env.SECRET)
+            if (!validToken) {
                 return new HttpException
                 (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
             const decodedHeader = jwt.verify(token, process.env.SECRET) as any
-            console.log(decodedHeader);
+            console.log(decodedHeader)
             const user = await this.userModel.findOne({_id: decodedHeader._id})
             if (!user) {
                 return new HttpException
@@ -87,7 +89,7 @@ export class UserService {
             }
             return {
                 user: {username: user.username, roles: user.roles},
-                token: generateAccessToken(user._id,user.username, user.roles)
+                token: generateAccessToken(user._id, user.username, user.roles)
             }
         } catch (e) {
             console.log(e)
@@ -95,6 +97,7 @@ export class UserService {
             ('Auth error', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
     async install() {
         try {
             const userRole = new this.roleModel()

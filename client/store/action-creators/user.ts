@@ -1,6 +1,7 @@
 import {Dispatch} from 'react'
 import {UsersAPI} from '../../api/usersAPI'
 import {UserAction, UsersActionTypes} from '../../types/user'
+import cookie from 'js-cookie'
 
 export const getUsers = () => {
     return async (dispatch: Dispatch<UserAction>) => {
@@ -16,13 +17,13 @@ export const Login = (username, password) => {
     return async (dispatch: Dispatch<UserAction>) => {
         await UsersAPI.login({username, password})
             .then(response => {
-                if (response.data.status === 500) {
+                if (response.data?.status === 500) {
                     dispatch({
                         type: UsersActionTypes.ADD_ERROR,
-                        payload: {type: 'login', message: response.data.message || 'Неизвестная ошибка'}
+                        payload: {type: 'login', message: response.data?.message || 'Неизвестная ошибка'}
                     })
                 }
-                localStorage.setItem('token', response.data.token)
+                cookie.set('token', `Bearer ${response.data.token}`)
                 dispatch({
                     type: UsersActionTypes.LOGIN,
                     payload: response.data.user
@@ -34,20 +35,25 @@ export const Login = (username, password) => {
                     payload: {type: 'login', message: e.data.message || 'Неизвестная ошибка'}
                 })
             })
+            .finally(()=>{
+                console.log('12312')
+                console.log(cookie.get('token'))
+            })
 
     }
 }
 export const Auth = () => {
     return async (dispatch: Dispatch<UserAction>) => {
-        const token= localStorage.getItem('token')
+        const token= cookie.get('token')
         await UsersAPI.auth(token)
             .then(response => {
-                localStorage.setItem('token', response.data.token)
+                cookie.set('token', `Bearer ${response.data.token}`)
                 dispatch({
                     type: UsersActionTypes.LOGIN,
                     payload: response.data.user
                 })
             })
+
 
     }
 }
@@ -57,7 +63,7 @@ export const Registration = (username, password) => {
             if (response.data.status === 500) {
                 dispatch({
                     type: UsersActionTypes.ADD_ERROR,
-                    payload: {type: 'register', message: response.data.message || 'Неизвестная ошибка'}
+                    payload: {type: 'register', message: response.data?.message || 'Неизвестная ошибка'}
                 })
             }
         }).catch(e => {

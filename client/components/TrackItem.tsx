@@ -9,20 +9,16 @@ import {makeStyles} from '@material-ui/styles'
 import {TracksAPI} from '../api/tracksAPI'
 import {fetchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
+import classes from './TrackItem.module.css'
 
 interface TrackItemProps {
     track: ITrack
     active?: boolean
 }
 
-const useStyles = makeStyles({
-
-})
-
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
-    const classes = useStyles()
     const dispatch= useDispatch()
     const deleteOne = async (id)=>{
         await TracksAPI.deleteOne(id).then()
@@ -30,11 +26,13 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
     }
     const play = (e) => {
         e.stopPropagation()
+        e.preventDefault()
         setActiveTrack(track)
         playTrack()
     }
     const pause = (e) => {
         e.stopPropagation()
+        e.preventDefault()
 
         setActiveTrack(track)
         pauseTrack()

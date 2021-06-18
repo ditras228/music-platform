@@ -4,7 +4,7 @@ export interface IUser{
     password: string
 }
 export interface UserState{
-    users: IUser[]
+    user: IUser | any
     errors: Array<any>
     isAuth?: boolean
 }
@@ -16,11 +16,11 @@ export enum UsersActionTypes{
 }
 interface Login{
     type: UsersActionTypes.LOGIN
-    payload: IUser[]
+    payload: IUser
 }
 interface FetchUsersAction{
     type: UsersActionTypes.FETCH_USERS
-    payload: IUser[]
+    payload: IUser
 }
 interface FetchUsersErrorAction{
     type: UsersActionTypes.ADD_ERROR

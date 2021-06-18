@@ -22,8 +22,9 @@ const SignupSchema = Yup.object({
 })
 
 const LogIn = () => {
-    withAutoRedirect(true)
     const router = useRouter()
+    const {isAuth} = useTypedSelector(state => state.user)
+    withAutoRedirect(true, isAuth,  router )
     const dispatch = useDispatch()
     const error = useSelector(state =>GetError(state, 'login'))
     const formik = useFormik({
@@ -92,3 +93,4 @@ const LogIn = () => {
 }
 
 export default LogIn
+

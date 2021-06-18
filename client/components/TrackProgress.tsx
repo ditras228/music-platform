@@ -1,14 +1,16 @@
 import React from 'react'
 interface  TrackProgress{
     left: number
-    right: number   
+    right: number
     onChange: (e) => void
+    format?: string
 }
 const TrackProgress: React.FC<TrackProgress> =
     ({
-         left,right,onChange
+         left,right,onChange, format
     }) => {
-    return (
+        function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
+        return (
         <div>
             <input
                 type="range"
@@ -17,7 +19,10 @@ const TrackProgress: React.FC<TrackProgress> =
                 value={left}
                 onChange={onChange}
             />
-            <div>{left}/{right}</div>
+            {format==='time'
+                ?<div>{fmtMSS(left)}/{fmtMSS(right)}</div>
+                :<div>{left}/{right}</div>
+            }
         </div>
     )
 }
