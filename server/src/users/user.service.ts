@@ -74,7 +74,10 @@ export class UserService {
 
     async auth(token) {
         try {
+            console.log(token)
             const parseToken = token.split(' ')
+            console.log(parseToken[1])
+
             const validToken = jwt.verify(parseToken[1], process.env.SECRET)
             if (!validToken) {
                 return new HttpException
