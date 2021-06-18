@@ -47,6 +47,7 @@ export const Auth = () => {
         const token= cookie.get('token')
         await UsersAPI.auth(token)
             .then(response => {
+                console.log(response.data)
                 cookie.set('token', `Bearer ${response.data.token}`)
                 dispatch({
                     type: UsersActionTypes.LOGIN,

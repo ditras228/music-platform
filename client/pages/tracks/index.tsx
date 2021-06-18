@@ -84,6 +84,6 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async ({store}) => {
     const dispatch = store.dispatch as NextThunkDispatch
-    await dispatch( Auth())
+    await dispatch( Auth()) 
     await dispatch( fetchTracks())
 })

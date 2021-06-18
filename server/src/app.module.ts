@@ -21,8 +21,8 @@ import {Role} from './middleware/role.middleware'
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
-            .apply(Role(['ADMIN']))
-            .forRoutes('/auth/users')
+            .apply(Role(['ADMIN', 'USER']))
+            .forRoutes('/tracks', '/comment')
 
     }
 }

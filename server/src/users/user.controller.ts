@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post} from '@nestjs/common'
+import {Body,Headers, Controller, Get, Post} from '@nestjs/common'
 import {UserService} from './user.service'
 import {CreateUserDto} from './dto/create.user.dto'
 
@@ -15,12 +15,8 @@ export class UserController{
         return this.userService.login(dto)
     }
     @Post('/')
-    auth(@Body() token){
+    auth(@Headers() token){
         return this.userService.auth(token)
-    }
-    @Get('/users')
-    users(){
-        return this.userService.getUsers()
     }
     @Post('/install')
     install(){

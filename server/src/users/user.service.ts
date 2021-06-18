@@ -9,8 +9,9 @@ import {Role, RoleDocument} from './schemas/role.schema'
 import {CreateUserDto} from './dto/create.user.dto'
 
 const bcrypt = require('bcryptjs')
-
+import { Request } from '@nestjs/common';
 require('dotenv').config()
+const mailService = require('../services/mailService.ts')
 
 const generateAccessToken = (id, username, roles) => {
     const payload = {
@@ -41,6 +42,8 @@ export class UserService {
             const userRole = await this.roleModel.findOne({value: 'USER'})
             const user = new this.userModel({...dto, password: hashPassword, roles: [userRole.value]})
             await user.save()
+            const hashURL = await bcrypt.hash(dto.username, 5)
+            await mailService.main(dto.username, hashURL)
             new HttpException('Пользователь успешно зарегистрирован', HttpStatus.INTERNAL_SERVER_ERROR)
         } catch (e) {
             console.log(e)
@@ -62,7 +65,7 @@ export class UserService {
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             return {
-                user: {username: user.username, roles: user.roles},
+                user: {_id:user.id,username: user.username, roles: user.roles},
                 token: generateAccessToken(user._id, user.username, user.roles)
             }
         } catch (e) {
@@ -72,26 +75,21 @@ export class UserService {
         }
     }
 
-    async auth(token) {
+    async auth(@Request() request) {
         try {
-            console.log(token)
-            const parseToken = token.split(' ')
-            console.log(parseToken[1])
-
-            const validToken = jwt.verify(parseToken[1], process.env.SECRET)
+            const parseToken = request.authorization.split(' ')
+            const validToken = jwt.verify(parseToken[1], process.env.SECRET) as any
             if (!validToken) {
                 return new HttpException
                 (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            const decodedHeader = jwt.verify(token, process.env.SECRET) as any
-            console.log(decodedHeader)
-            const user = await this.userModel.findOne({_id: decodedHeader._id})
+            const user = await this.userModel.findOne({_id: validToken._id})
             if (!user) {
                 return new HttpException
-                (`Пользователь ${decodedHeader.username} не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
+                (`Пользователь ${validToken.username} не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
             return {
-                user: {username: user.username, roles: user.roles},
+                user: {_id:user.id,  username: user.username, roles: user.roles},
                 token: generateAccessToken(user._id, user.username, user.roles)
             }
         } catch (e) {
@@ -109,16 +107,6 @@ export class UserService {
             await adminRole.save()
         } catch (e) {
             console.log(e)
-        }
-    }
-
-    async getUsers() {
-        try {
-            const users = await this.userModel.find()
-            return users
-        } catch (e) {
-            console.log(e)
-
         }
     }
 }

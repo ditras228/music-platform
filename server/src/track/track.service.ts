@@ -6,6 +6,8 @@ import {CreateTrackDto} from './dto/create.track.dto'
 import {Comment, CommentDocument} from './schemas/comment.schema'
 import {CreateCommentDTO} from './dto/add.comment.dto'
 import {FileService, FileType} from '../file/file.service'
+import {Headers} from '@nestjs/common'
+import jwt = require('jsonwebtoken')
 
 @Injectable()
 export class TrackService {
@@ -41,9 +43,10 @@ export class TrackService {
 
     }
 
-    async addComment(dto: CreateCommentDTO): Promise<Comment> {
+    async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
+        const {userId}= jwt.verify(headers.authorization, process.env.SECRET) as any
         const track = await this.trackModel.findById(dto.trackId)
-        const comment = await this.commentModel.create({...dto})
+        const comment = await this.commentModel.create({userId,...dto})
         track.comments.push(comment._id)
         await track.save()
         return comment

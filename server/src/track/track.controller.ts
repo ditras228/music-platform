@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles, UseInterceptors} from '@nestjs/common'
+import {Headers, Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles, UseInterceptors} from '@nestjs/common'
 import {TrackService} from './track.service'
 import {CreateTrackDto} from './dto/create.track.dto'
 import {ObjectId} from 'mongoose'
@@ -47,8 +47,8 @@ export class TrackController {
         return this.trackService.deleteAll()
     }
     @Post('/comment')
-    addComment(@Body() dto: CreateCommentDTO) {
-        return this.trackService.addComment(dto)
+    addComment(@Headers() headers, @Body() dto: CreateCommentDTO) {
+        return this.trackService.addComment(headers, dto)
     }
 
     @Post('/listen/:id')
