@@ -13,6 +13,9 @@ export class Album {
     @Prop()
     picture: string
 
+    @Prop()
+    author: string
+
     @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Track'}]})
     tracks: Track[]
 }

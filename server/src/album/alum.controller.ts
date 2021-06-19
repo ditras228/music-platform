@@ -8,7 +8,7 @@ import {AlbumService} from './album.service'
 export class TrackController {
     [x: string]: any;
 
-    constructor(private trackService: AlbumService) {
+    constructor(private albumService: AlbumService) {
     }
 
     @Post()
@@ -18,30 +18,33 @@ export class TrackController {
 
     create(@UploadedFiles() files, @Body() dto: CreateAlbumDto) {
         const {picture} = files
-        return this.trackService.create(dto, picture[0])
+        return this.albumService.create(dto, picture[0])
     }
 
     @Get()
     getAll(@Query('count') count: number,
            @Query('offset') offset: number) {
-        return this.trackService.getAll(count, offset)
+        return this.albumService.getAll(count, offset)
     }
     @Get('/search')
     search(@Query('query') query: string) {
-        return this.trackService.search(query)
+        return this.albumService.search(query)
     }
     @Get(':id')
     getOne(@Param('id') id: ObjectId) {
-        return this.trackService.getOne(id)
+        return this.albumService.getOne(id)
     }
-
+    @Post()
+    addTrack(@Headers() headers, @Body() albumId, trackId) {
+        return this.albumService.addTrack(headers, albumId,trackId )
+    }
     @Delete(':id')
     delete(@Param('id') id: ObjectId) {
-        return this.trackService.delete(id)
+        return this.albumService.delete(id)
     }
     @Delete()
     deleteAll() {
-        return this.trackService.deleteAll()
+        return this.albumService.deleteAll()
     }
 
 }
