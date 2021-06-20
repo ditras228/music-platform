@@ -6,8 +6,12 @@
     align-items: center;
 }
 .List_header{
+    padding-right: 10px!important;
     height: 64px;
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto;
+}
+.toolbar{
+    padding-left:20px
 }

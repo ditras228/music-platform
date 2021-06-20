@@ -15,3 +15,10 @@
     grid-template-columns: auto 1fr;
     grid-gap: 10px
 }
+.login{
+    padding-bottom: 10px;
+    text-align: right!important;
+}
+.login:hover{
+    cursor:pointer
+}

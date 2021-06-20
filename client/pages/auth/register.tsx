@@ -96,7 +96,7 @@ const Register = () => {
                         type={'submit'}>
                             Регистрация
                         </Button>
-                        <Link onClick={e=>loginHandler(e)}>
+                        <Link onClick={e=>loginHandler(e)} className={classes.login}>
                             Уже есть аккаунт? Войти
                         </Link>
                     </Grid>

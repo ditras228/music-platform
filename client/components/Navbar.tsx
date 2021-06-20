@@ -55,7 +55,7 @@ export default function Navbar() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" noWrap className={classes.logo}>
+                    <Typography variant="h5" noWrap className={classes.logo}>
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
                 </Toolbar>
@@ -69,6 +69,9 @@ export default function Navbar() {
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
+                    <Typography variant="h5" noWrap className={classes.logo}>
+                        <MusicNoteIcon/>MERNMusic
+                    </Typography>
                 </div>
                 <List>
                     {menuItem.map(({text, href}, index) => (

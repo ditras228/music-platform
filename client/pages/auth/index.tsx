@@ -82,7 +82,7 @@ const LogIn = () => {
                             type={'submit'}>
                             Войти
                         </Button>
-                        <Link onClick={e=>loginHandler(e)}>
+                        <Link onClick={e=>loginHandler(e)} className={classes.login}>
                             Ещё нет аккаунта? Зарегистрируйтесь
                         </Link>
                     </Grid>
