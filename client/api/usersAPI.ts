@@ -5,7 +5,8 @@ export const UsersAPI={
         return instance.get('auth/users')
     },
     auth(token){
-        return instance.post('auth/', token)
+        return instance.get('auth/',
+            {headers: {Authorization: `Bearer ${token}`}})
     },
     login(props){
         return instance.post('auth/login', props)

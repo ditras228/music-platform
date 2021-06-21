@@ -1,7 +1,7 @@
 import {Dispatch} from 'react'
 import {UsersAPI} from '../../api/usersAPI'
 import {UserAction, UsersActionTypes} from '../../types/user'
-import cookie from 'js-cookie'
+    import cookie from 'js-cookie'
 
 export const getUsers = () => {
     return async (dispatch: Dispatch<UserAction>) => {
@@ -23,7 +23,8 @@ export const Login = (username, password) => {
                         payload: {type: 'login', message: response.data?.message || 'Неизвестная ошибка'}
                     })
                 }
-                cookie.set('token', `Bearer ${response.data.token}`)
+                cookie.set('token', `${response.data.token}`, {expires: 1})
+                console.log(  cookie.get('token'))
                 dispatch({
                     type: UsersActionTypes.LOGIN,
                     payload: response.data.user
@@ -35,25 +36,21 @@ export const Login = (username, password) => {
                     payload: {type: 'login', message: e.data.message || 'Неизвестная ошибка'}
                 })
             })
-            .finally(()=>{
-                console.log('12312')
-                console.log(cookie.get('token'))
-            })
-
     }
 }
-export const Auth = () => {
+export const Auth = (token) => {
     return async (dispatch: Dispatch<UserAction>) => {
-        const token= cookie.get('token')
+
         await UsersAPI.auth(token)
             .then(response => {
-                console.log(response.data)
-                cookie.set('token', `Bearer ${response.data.token}`)
-                dispatch({
-                    type: UsersActionTypes.LOGIN,
-                    payload: response.data.user
-                })
-            })
+                cookie.set('token',  `${response.data.token}`, {expires: 1})
+                console.log('good '+ token)
+                console.log('respones '+ JSON.stringify(response.data))
+
+            }).catch(()=>
+                console.log('error '+ token)
+
+            )
 
 
     }

@@ -6,10 +6,13 @@ import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
 import classes from './Player.module.css'
+import {GetServerSideProps} from 'next'
+import cookies from 'next-cookies'
+import {TracksAPI} from '../api/tracksAPI'
 let audio
 
 
-const Player: React.FC = () => {
+const Player: React.FC<any> = ({pauseC, volumeC, activeC, durationC, currentTimeC}) => {
     const {pause, volume, active, duration, currentTime} = useTypedSelector(state => state.player)
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration} = useActions()
 
@@ -17,7 +20,7 @@ const Player: React.FC = () => {
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
-            setCurrentTime ( 0)
+            setCurrentTime ( currentTimeC||0)
         } else {
             setAudio()
             play()
@@ -27,7 +30,7 @@ const Player: React.FC = () => {
         if (active){
         audio.src = baseURL+active.audio
             console.log(audio)
-        audio.volume = volume / 100
+        audio.volume = volumeC || (volume / 100)
         audio.onloadedmetadata = () => {
             setDuration(Math.ceil(audio.duration))
         }
@@ -76,3 +79,21 @@ const Player: React.FC = () => {
 }
 
 export default Player
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const pause = cookies(ctx).pause;
+    const volume = cookies(ctx).volume;
+    const active = cookies(ctx).active;
+    const duration = cookies(ctx).duration;
+    const currentTime= cookies(ctx).currentTime;
+    return {
+        props: {
+            pause:pause,
+            volume:volume,
+            active:active,
+            duration:duration,
+            currentTime:currentTime
+        }
+
+    }
+}

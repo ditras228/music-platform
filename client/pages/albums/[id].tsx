@@ -12,14 +12,14 @@ import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
 
-const TrackPage = ({serverTrack, token}) => {
+const TrackPage = ({serverAlbum, token}) => {
     const router = useRouter()
-    const [track, setTrack] = useState<ITrack>(serverTrack)
+    const [track, setTrack] = useState<ITrack>(serverAlbum)
     const formik = useFormik({
         initialValues: {
             username: '',
             text: '',
-            trackId: serverTrack._id
+            trackId: serverAlbum._id
         },
         onSubmit: async values => {
             const response = TracksAPI.addComment(values, token)
@@ -42,7 +42,7 @@ const TrackPage = ({serverTrack, token}) => {
                 </Button>
                 <Card>
                     <Grid container className={classes.info}>
-                        <img src={baseURL + track.picture} className={classes.img} alt={'Обложка трека'}/>
+                        <img src={baseURL + track.picture} className={classes.img} alt={'Обложка альбома'}/>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
                                 <h2 className={classes.item_title}><Title/>Название</h2>
@@ -63,44 +63,6 @@ const TrackPage = ({serverTrack, token}) => {
                     <h2 className={classes.title}><GTranslate/> Слова к песне</h2>
                     <p className={classes.text}>{track.text}</p>
                 </Card>
-                <Card>
-                    <Grid container className={classes.card}>
-                        <form onSubmit={formik.handleSubmit} className={classes.form}>
-                            <h2 className={classes.title}><InsertComment/> Комментарии</h2>
-                            <Grid className={classes.comments_form}>
-                                <TextField
-                                    value={formik.values.username}
-                                    onChange={formik.handleChange}
-                                    name={'username'}
-                                    label='Ваше имя'
-                                    fullWidth
-                                >
-                                </TextField>
-                                <TextField
-                                    className={classes.comments_input}
-                                    value={formik.values.text}
-                                    onChange={formik.handleChange}
-                                    name={'text'}
-                                    label='Комментарий'
-                                    fullWidth
-                                    multiline
-                                >
-                                </TextField>
-                                <Button
-                                    type={'submit'}
-                                    className={classes.comments_submit}
-                                >Отправить
-                                </Button>
-                            </Grid>
-                        </form>
-                    </Grid>
-
-                    {
-                        serverTrack.comments.map(comment =>
-                            <Comment comment={comment}/>
-                        )
-                    }
-                </Card>
             </Grid>
         </MainLayout>
     )
@@ -112,7 +74,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const response = await TracksAPI.getOne(ctx.params.id, token)
     return {
         props: {
-            serverTrack: response.data,
+            serverAlbum: response.data,
             token: token
         }
 

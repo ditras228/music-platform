@@ -50,7 +50,7 @@ const Create = () => {
                             value={formik.values.name}
                             onChange={formik.handleChange}
                             style={{marginTop: 10}}
-                            label={'Название трека'}
+                            label={'Название альбома'}
 
                         />
                         <TextField
@@ -58,16 +58,7 @@ const Create = () => {
                             value={formik.values.artist}
                             onChange={formik.handleChange}
                             style={{marginTop: 10}}
-                            label={'Имя исполнителя'}
-                        />
-                        <TextField
-                            name={'text'}
-                            value={formik.values.text}
-                            onChange={formik.handleChange}
-                            style={{marginTop: 10}}
-                            label={'Слова к треку'}
-                            multiline
-                            rows={3}
+                            label={'Автор'}
                         />
                 </Grid>
                 </form>
@@ -80,7 +71,7 @@ const Create = () => {
                 }
                 {activeStep === 2 &&
                 <FileUpload setFile={setAudio} accept={'audio/*'}  formik={formik}>
-                    <Button>Загрузить аудио</Button>
+                    <Button>Добавить треки</Button>
                 </FileUpload>
                 }
             </StepWrapper>
@@ -97,6 +88,4 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     token = cookies(ctx).token;
-    await dispatch( Auth(token))
-
 })
