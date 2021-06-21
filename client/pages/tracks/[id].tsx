@@ -11,13 +11,13 @@ import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
+import CommentFC from './comment'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
     const formik = useFormik({
         initialValues: {
-            username: '',
             text: '',
             trackId: serverTrack._id
         },
@@ -32,7 +32,7 @@ const TrackPage = ({serverTrack, token}) => {
             title={'Музыкальная площадка - ' + track.name + ' - ' + track.artist}
             keywords={'Музыка, артисты,' + track.name + track.artist}
         >
-            <Grid container className={classes.grid}>
+            <Grid className={classes.grid}>
                 <Button
                     variant={'outlined'}
                     style={{fontSize: 32}}
@@ -69,14 +69,6 @@ const TrackPage = ({serverTrack, token}) => {
                             <h2 className={classes.title}><InsertComment/> Комментарии</h2>
                             <Grid className={classes.comments_form}>
                                 <TextField
-                                    value={formik.values.username}
-                                    onChange={formik.handleChange}
-                                    name={'username'}
-                                    label='Ваше имя'
-                                    fullWidth
-                                >
-                                </TextField>
-                                <TextField
                                     className={classes.comments_input}
                                     value={formik.values.text}
                                     onChange={formik.handleChange}
@@ -97,7 +89,7 @@ const TrackPage = ({serverTrack, token}) => {
 
                     {
                         serverTrack.comments.map(comment =>
-                            <Comment comment={comment}/>
+                            <CommentFC comment={comment}/>
                         )
                     }
                 </Card>

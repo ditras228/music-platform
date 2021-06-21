@@ -2,7 +2,7 @@ import React from 'react'
 import classes from './[id].module.css'
 import {Avatar, Card} from '@material-ui/core'
 
-const Comment: React.FC<CommentProps> = ({comment}) => {
+const CommentFC: React.FC<CommentProps> = ({comment}) => {
     return (
             <Card className={classes.comment}>
                 <Avatar alt="Remy Sharp" src="/broken-image.jpg" className={classes.orange}>
@@ -20,7 +20,7 @@ const Comment: React.FC<CommentProps> = ({comment}) => {
     )
 }
 
-export default Comment
+export default CommentFC
 
 type CommentProps={
     comment: any

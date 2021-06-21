@@ -33,7 +33,8 @@ export const TracksAPI= {
         })
     },
     addComment(data, token){
-        return instance.post('/tracks/comment', data )
+        return instance.post('/tracks/comment', data,
+            {headers: {Authorization: `Bearer ${token}`}})
 
     }
 }

@@ -57,7 +57,7 @@ const Index = () => {
                         <Grid container justify={'space-between'} direction={'row'}>
                             <h2 className={classes.title}><Search/>Список треков</h2>
                             <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
-                            <Button onClick={() => router.push('/album/create')}>Создать альбом</Button>
+                            <Button onClick={() => router.push('/albums/create')}>Создать альбом</Button>
                         </Grid>
                         <form onSubmit={formik.handleSubmit}>
                             <TextField

@@ -17,7 +17,6 @@ const TrackPage = ({serverAlbum, token}) => {
     const [track, setTrack] = useState<ITrack>(serverAlbum)
     const formik = useFormik({
         initialValues: {
-            username: '',
             text: '',
             trackId: serverAlbum._id
         },

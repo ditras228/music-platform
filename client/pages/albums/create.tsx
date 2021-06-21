@@ -9,9 +9,11 @@ import {router} from 'next/client'
 import {NextThunkDispatch, wrapper} from '../../store'
 import cookies from 'next-cookies'
 import {Auth} from '../../store/action-creators/user'
+import {useRouter} from "next/router";
 let token
 
 const Create = () => {
+    const router = useRouter();
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
     const [audio, setAudio] = useState(null)
@@ -88,4 +90,6 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     token = cookies(ctx).token;
+    await dispatch( Auth(token))
+
 })
