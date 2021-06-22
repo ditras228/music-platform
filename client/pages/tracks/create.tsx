@@ -9,20 +9,23 @@ import {router} from 'next/client'
 import {NextThunkDispatch, wrapper} from '../../store'
 import cookies from 'next-cookies'
 import {Auth} from '../../store/action-creators/user'
+import * as Yup from 'yup'
 let token
+const SignupSchema = Yup.object({
+    name: Yup.string()
+        .required('Обязательно'),
+    artist: Yup.string()
+        .required('Обязательно'),
+    text: Yup.string()
+        .required('Обязательно'),
 
+})
 const Create = () => {
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
     const [audio, setAudio] = useState(null)
 
-        const next = () => {
-        if (activeStep !== 2) {
-            setActiveState(prevState => prevState + 1)
-        } else {
-            formik.handleSubmit()
-        }
-    }
+
     const back = () => {
         setActiveState(prevState => prevState - 1)
     }
@@ -35,7 +38,11 @@ const Create = () => {
             audio: audio
         },
         onSubmit: values => {
-           TracksAPI.createTrack(values, token).then(() => router.push('/tracks'))
+                if (activeStep !== 2) {
+                    setActiveState(prevState => prevState + 1)
+                } else {
+                    TracksAPI.createTrack(values, token).then(() => router.push('/tracks'))
+                }
         }
     })
     return (
@@ -86,7 +93,7 @@ const Create = () => {
             </StepWrapper>
             <Grid container justify={'space-between'}>
                 <Button disabled={activeStep === 0} onClick={back}>Назад</Button>
-                <Button onClick={next}>Далее</Button>
+                <Button onClick={()=>formik.handleSubmit()}>Далее</Button>
             </Grid>
         </MainLayout>
     )

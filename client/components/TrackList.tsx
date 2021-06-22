@@ -8,8 +8,9 @@ import {searchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
 interface TrackListProps{
     tracks: ITrack[]
+    token: string
 }
-const TrackList: React.FC<TrackListProps> = ({tracks}) => {
+const TrackList: React.FC<TrackListProps> = ({tracks,token}) => {
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch()  
     const formik = useFormik({
@@ -51,6 +52,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                         <TrackItem
                             key={track._id}
                             track={track}
+                            token={token}
                         />
                     )}
                 </Box>

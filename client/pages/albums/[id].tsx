@@ -11,25 +11,14 @@ import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
+import TrackList from '../../components/TrackList'
 
 const TrackPage = ({serverAlbum, token}) => {
     const router = useRouter()
-    const [track, setTrack] = useState<ITrack>(serverAlbum)
-    const formik = useFormik({
-        initialValues: {
-            text: '',
-            trackId: serverAlbum._id
-        },
-        onSubmit: async values => {
-            const response = TracksAPI.addComment(values, token)
-            const data = await response.then(res => res.data)
-            setTrack({...track, comments: [...track.comments, data]})
-        }
-    })
     return (
         <MainLayout
-            title={'Музыкальная площадка - ' + track.name + ' - ' + track.artist}
-            keywords={'Музыка, артисты,' + track.name + track.artist}
+            title={'Музыкальная площадка - ' + serverAlbum.name + ' - ' + serverAlbum.artist}
+            keywords={'Музыка, артисты,' + serverAlbum.name + serverAlbum.artist}
         >
             <Grid container className={classes.grid}>
                 <Button
@@ -41,26 +30,27 @@ const TrackPage = ({serverAlbum, token}) => {
                 </Button>
                 <Card>
                     <Grid container className={classes.info}>
-                        <img src={baseURL + track.picture} className={classes.img} alt={'Обложка альбома'}/>
+                        <img src={baseURL + serverAlbum.picture} className={classes.img} alt={'Обложка альбома'}/>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
                                 <h2 className={classes.item_title}><Title/>Название</h2>
-                                <h2 className={classes.item_value}>{track.name}</h2>
+                                <h2 className={classes.item_value}>{serverAlbum.name}</h2>
                             </div>
                             <div className={classes.line}>
                                 <h2 className={classes.item_title}><Person/>Автор</h2>
-                                <h2 className={classes.item_value}>{track.artist}</h2>
+                                <h2 className={classes.item_value}>{serverAlbum.artist}</h2>
                             </div>
                             <div className={classes.line}>
                                 <h2 className={classes.item_title}><Hearing/>Прослушиваний</h2>
-                                <h2 className={classes.item_value}>{track.listens}</h2>
+                                <h2 className={classes.item_value}>{serverAlbum.listens}</h2>
                             </div>
                         </div>
                     </Grid>
                 </Card>
                 <Card className={classes.card}>
-                    <h2 className={classes.title}><GTranslate/> Слова к песне</h2>
-                    <p className={classes.text}>{track.text}</p>
+                    <h2 className={classes.title}><GTranslate/> Описание альбома</h2>
+                    <p className={classes.text}>{serverAlbum.text}</p>
+                    <TrackList tracks={serverAlbum.tracks} token={token}/>
                 </Card>
             </Grid>
         </MainLayout>

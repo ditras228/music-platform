@@ -1,11 +1,10 @@
 import React from 'react'
-import {ITrack} from '../types/track'
+import {ITrack, TrackActionTypes} from '../types/track'
 import {Card, Grid, IconButton} from '@material-ui/core'
-import {Delete, Pause, PlayArrow, Timer} from '@material-ui/icons'
+import {Delete, DeleteRounded, ExposurePlus1, Pause, PlayArrow, Timer} from '@material-ui/icons'
 import {useRouter} from 'next/router'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
-import {makeStyles} from '@material-ui/styles'
 import {TracksAPI} from '../api/tracksAPI'
 import {fetchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
@@ -14,15 +13,28 @@ import classes from './TrackItem.module.css'
 interface TrackItemProps {
     track: ITrack
     active?: boolean
+    token: string
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
+const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
     const dispatch= useDispatch()
-    const deleteOne = async (id)=>{
-        await TracksAPI.deleteOne(id).then()
-        await dispatch(await fetchTracks())
+    const deleteOne = async ()=>{
+         await TracksAPI.deleteOne(track._id, token)
+         dispatch( fetchTracks(token))
+    }
+    const addOne =()=>{
+        dispatch({
+            type: TrackActionTypes.ADD_TRACK_TO_ALBUM,
+            payload: {track}
+        })
+    }
+    const removeOne =()=>{
+        dispatch({
+            type: TrackActionTypes.REMOVE_TRACK_FROM_ALBUM,
+            payload: {track}
+        })
     }
     const play = (e) => {
         e.stopPropagation()
@@ -52,7 +64,13 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
             </Grid>
             <div className={classes.length}><Timer/>5:22</div>
             <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                <Delete onClick={()=>{deleteOne(track._id)}} />
+                <Delete onClick={deleteOne} />
+            </IconButton>
+            <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
+                <ExposurePlus1 onClick={addOne} />
+            </IconButton>
+            <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
+                <DeleteRounded onClick={addOne} />
             </IconButton>
         </Card>
     )

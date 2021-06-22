@@ -8,11 +8,11 @@ import {NextThunkDispatch, wrapper} from '../../store'
 import {fetchTracks, searchTracks} from '../../store/action-creators/track'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
-import {RotateLeft, Search} from '@material-ui/icons'
+import {PlusOne, RotateLeft, Search} from '@material-ui/icons'
 import classes from './index.module.css'
 import {Auth} from '../../store/action-creators/user'
 import cookies from 'next-cookies'
-const Index = () => {
+const Index = ({token}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
 
@@ -56,12 +56,11 @@ const Index = () => {
                 <Card className={classes.card}>
                         <Grid container justify={'space-between'} direction={'row'}>
                             <h2 className={classes.title}><Search/>Список треков</h2>
-                            <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
-                            <Button onClick={() => router.push('/album/create')}>Создать альбом</Button>
+                                <Button onClick={() => router.push('/album/create')}>Новый альбом</Button>
                         </Grid>
                         <form onSubmit={formik.handleSubmit}>
                             <TextField
-                                label={'Найти трек'}
+                                label={'Найти альбом'}
                                 fullWidth
                                 name={'query'}
                                 value={formik.values.query}
@@ -71,7 +70,7 @@ const Index = () => {
                                 }}
                             />
                         </form>
-                    <TrackList tracks={tracks}/>
+                    <TrackList tracks={tracks} token={token}/>
                 </Card>
             </Grid>
         </MainLayout>
@@ -84,7 +83,11 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const token = cookies(ctx).token;
-    console.log(token)
     await dispatch( Auth(token))
     await dispatch( fetchTracks(token))
+    return {
+        props:{
+            token: token
+        }
+    }
 })

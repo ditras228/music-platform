@@ -15,12 +15,23 @@ export interface ITrack{
 }
 export interface TrackState{
     tracks: ITrack[]
+    albumTracks: ITrack[]
     error: string
 }
 
 export enum TrackActionTypes{
     FETCH_TRACKS='FETCH_TRACKS',
-    FETCH_TRACKS_ERROR='FETCH_TRACKS_ERROR'
+    FETCH_TRACKS_ERROR='FETCH_TRACKS_ERROR',
+    ADD_TRACK_TO_ALBUM='ADD_TRACK_TO_ALBUM',
+    REMOVE_TRACK_FROM_ALBUM='REMOVE_TRACK_FROM_ALBUM'
+}
+interface RemoveTrackFromAlbum{
+    type: TrackActionTypes.REMOVE_TRACK_FROM_ALBUM
+    payload: ITrack
+}
+interface AddTrackToAlbum{
+    type: TrackActionTypes.ADD_TRACK_TO_ALBUM
+    payload: ITrack
 }
 interface FetchTracksAction{
     type: TrackActionTypes.FETCH_TRACKS
@@ -30,4 +41,4 @@ interface FetchTracksErrorAction{
     type: TrackActionTypes.FETCH_TRACKS_ERROR
     payload: string
 }
-export type TrackAction = FetchTracksAction | FetchTracksErrorAction
+export type TrackAction = FetchTracksAction | FetchTracksErrorAction | AddTrackToAlbum | AddTrackToAlbum

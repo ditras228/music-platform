@@ -36,5 +36,10 @@ export const TracksAPI= {
         return instance.post('/tracks/comment', data,
             {headers: {Authorization: `Bearer ${token}`}})
 
+    },
+    createAlbum(data, token){
+        return instance.post('/albums/add', data,
+            {headers: {Authorization: `Bearer ${token}`}})
+
     }
 }

@@ -1,21 +1,21 @@
 import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import StepWrapper from '../../components/StepWrapper'
-import {Button, Card, Grid, TextField} from '@material-ui/core'
+import {Box, Button, Grid, TextField} from '@material-ui/core'
 import FileUpload from '../../components/FileUpload'
 import {useFormik} from 'formik'
 import {TracksAPI} from '../../api/tracksAPI'
-import {router} from 'next/client'
 import {NextThunkDispatch, wrapper} from '../../store'
 import cookies from 'next-cookies'
 import {Auth} from '../../store/action-creators/user'
-import {useRouter} from "next/router";
+import {useRouter} from 'next/router'
 import {fetchTracks} from '../../store/action-creators/track'
 import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import * as Yup from 'yup'
 import {Alert} from '@material-ui/lab'
-let token
+import classes from '../../components/TrackList.module.css'
+import TrackItem from '../../components/TrackItem'
 
 const SignupSchema = Yup.object({
     name: Yup.string()
@@ -26,13 +26,11 @@ const SignupSchema = Yup.object({
         .required('Обязательно'),
 
 })
-const Create = () => {
+const Create = ({token}) => {
     const router = useRouter();
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
-    const [audio, setAudio] = useState(null)
-    const {tracks,  error} = useTypedSelector(state => state.track)
-
+    const {tracks,  albumTracks} = useTypedSelector(state => state.track)
 
     const back = () => {
         setActiveState(prevState => prevState - 1)
@@ -43,15 +41,13 @@ const Create = () => {
             artist: '',
             text: '',
             picture : picture,
-            audio: audio
         },
         validationSchema: SignupSchema,
         onSubmit: values => {
                 if (activeStep !== 2) {
                     setActiveState(prevState => prevState + 1)
                 } else {
-                    TracksAPI.createTrack(values, token).then(() => router.push('/tracks'))
-
+                    TracksAPI.createAlbum({values, albumTracks: albumTracks}, token).then(() => router.push('/tracks'))
             }
         }
     })
@@ -109,7 +105,20 @@ const Create = () => {
                 </FileUpload>
                 }
                 {activeStep === 2 &&
-                    <TrackList tracks={tracks}/>
+                    <>
+                        <Grid container direction={'column'} >
+                            <Box p={0} className={classes.box}>
+                                {albumTracks.map(track=>
+                                    <TrackItem
+                                        key={track._id}
+                                        track={track}
+                                        token={token}
+                                    />
+                                )}
+                            </Box>
+                        </Grid>
+                        <TrackList tracks={tracks} token={token}/>
+                    </>
                 }
             </StepWrapper>
             <Grid container justify={'space-between'}>
@@ -129,4 +138,9 @@ export const getServerSideProps = wrapper.getServerSideProps
     console.log(token)
     await dispatch( Auth(token))
     await dispatch( fetchTracks(token))
+    return{
+        props: {
+            token: token
+        }
+    }
 })
