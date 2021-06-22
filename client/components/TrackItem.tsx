@@ -50,7 +50,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
                 <div>{track.name}</div>
                 <div className={classes.author}>{track.artist}</div>
             </Grid>
-            <div className={classes.length}><Timer/> 3:44/5:22</div>
+            <div className={classes.length}><Timer/>5:22</div>
             <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
                 <Delete onClick={()=>{deleteOne(track._id)}} />
             </IconButton>

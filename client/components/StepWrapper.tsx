@@ -1,11 +1,12 @@
 import React from 'react';
 import {Card, Container, Grid, Step, StepLabel, Stepper} from '@material-ui/core'
     interface StepWrapperProps {
+    steps: Array<String>
     activeStep: number
 }
+import classes from './StepWrapper.module.css'
 
-const StepWrapper: React.FC<StepWrapperProps> = ({activeStep, children}) => {
-    const steps = ['Инфо', 'Обложка', 'Аудио']
+const StepWrapper: React.FC<StepWrapperProps> = ({steps, activeStep, children}) => {
     return (
         <Container>
             <Stepper activeStep={activeStep}>
@@ -21,7 +22,7 @@ const StepWrapper: React.FC<StepWrapperProps> = ({activeStep, children}) => {
                 )}
             </Stepper>
             <Grid container justify={'center'} style={{margin: '70px 0', height: 270}}>
-                <Card style={{width: 600}}>
+                <Card className={classes.card}>
                     {children}
                 </Card>
             </Grid>

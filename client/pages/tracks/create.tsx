@@ -40,7 +40,7 @@ const Create = () => {
     })
     return (
         <MainLayout>
-            <StepWrapper activeStep={activeStep}>
+            <StepWrapper steps={ ['Инфо', 'Обложка', 'Аудио']} activeStep={activeStep}>
                 {activeStep === 0 &&
                 <form onSubmit={formik.handleSubmit}>
 

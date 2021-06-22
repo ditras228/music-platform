@@ -16,26 +16,7 @@ const Index = () => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
 
-    const [timer, setTimer] = useState(null)
-    const dispatch = useDispatch()
-    const formik = useFormik({
-        initialValues: {
-            query: ''
-        },
-        onSubmit: async values => {
-            await handleSearch(values)
-        },
-    })
-    const handleSearch = async (values) => {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        setTimer(
-            setTimeout(async () => {
-                await dispatch(await searchTracks(values))
-            }, 500)
-        )
-    }
+
 
     if (error) {
         return (
@@ -59,18 +40,7 @@ const Index = () => {
                             <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
                             <Button onClick={() => router.push('/albums/create')}>Создать альбом</Button>
                         </Grid>
-                        <form onSubmit={formik.handleSubmit}>
-                            <TextField
-                                label={'Найти трек'}
-                                fullWidth
-                                name={'query'}
-                                value={formik.values.query}
-                                onChange={async (e) => {
-                                    formik.handleChange(e)
-                                    await handleSearch(formik.values)
-                                }}
-                            />
-                        </form>
+
                     <TrackList tracks={tracks}/>
                 </Card>
             </Grid>
