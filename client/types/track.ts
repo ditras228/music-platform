@@ -13,6 +13,14 @@ export interface ITrack{
     audio: string
     comments: IComment[]
 }
+export interface IAlbum{
+    _id: number
+    name: string
+    artist: string
+    text: string
+    picture: string
+    tracks: ITrack[]
+}
 export interface TrackState{
     tracks: ITrack[]
     albumTracks: ITrack[]

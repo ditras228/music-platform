@@ -5,7 +5,7 @@ import {useRouter} from 'next/router'
 import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {NextThunkDispatch, wrapper} from '../../store'
-import {fetchTracks, searchTracks} from '../../store/action-creators/track'
+import {fetchAlbums, fetchTracks, searchTracks} from '../../store/action-creators/track'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import {PlusOne, RotateLeft, Search} from '@material-ui/icons'
@@ -50,26 +50,14 @@ const Index = ({token}) => {
         )
     }
     return (
-        <MainLayout title={'Список треков'}>
+        <MainLayout title={'Альбомы'}>
 
             <Grid container justify={'center'}>
                 <Card className={classes.card}>
                         <Grid container justify={'space-between'} direction={'row'}>
-                            <h2 className={classes.title}><Search/>Список треков</h2>
+                            <h2 className={classes.title}><Search/>Список альбомов</h2>
                                 <Button onClick={() => router.push('/album/create')}>Новый альбом</Button>
                         </Grid>
-                        <form onSubmit={formik.handleSubmit}>
-                            <TextField
-                                label={'Найти альбом'}
-                                fullWidth
-                                name={'query'}
-                                value={formik.values.query}
-                                onChange={async (e) => {
-                                    formik.handleChange(e)
-                                    await handleSearch(formik.values)
-                                }}
-                            />
-                        </form>
                     <TrackList tracks={tracks} token={token}/>
                 </Card>
             </Grid>
@@ -84,7 +72,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const token = cookies(ctx).token;
     await dispatch( Auth(token))
-    await dispatch( fetchTracks(token))
+    await dispatch( fetchAlbums(token))
     return {
         props:{
             token: token

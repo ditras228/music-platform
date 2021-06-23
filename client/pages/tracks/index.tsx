@@ -30,7 +30,7 @@ const Index = ({token}) => {
         )
     }
     return (
-        <MainLayout title={'Список треков'}>
+        <MainLayout title={'Треки'}>
 
             <Grid container justify={'center'}>
                 <Card className={classes.card}>

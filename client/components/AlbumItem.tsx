@@ -1,5 +1,5 @@
 import React from 'react'
-import {ITrack} from '../types/track'
+import {IAlbum, ITrack} from '../types/track'
 import {Card, Grid, IconButton} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
 import {useRouter} from 'next/router'
@@ -11,27 +11,26 @@ import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
 
 interface AlbumItemProps {
-    track: ITrack
+    album: IAlbum
     token: string
 }
 
-const AlbumItem: React.FC<AlbumItemProps> = ({track,  token}) => {
-    const {pauseTrack, playTrack, setActiveTrack} = useActions()
+const AlbumItem: React.FC<AlbumItemProps> = ({album,  token}) => {
     const router = useRouter()
     const dispatch= useDispatch()
     const deleteOne = async (id)=>{
-        await TracksAPI.deleteOne(id, token).then()
-        await dispatch(await fetchTracks(token))
+        await TracksAPI.deleteOneAlbum(id, token).then()
+         dispatch( fetchTracks(token))
     }
     return (
-        <Card className={classes.track} onClick={() => router.push('/tracks/' + track._id)}>
-            <img className={classes.image} src={baseURL + track.picture} alt={'Обложка трека'}/>
+        <Card className={classes.track} onClick={() => router.push('/tracks/' + album._id)}>
+            <img className={classes.image} src={baseURL + album.picture} alt={'Обложка трека'}/>
             <Grid className={classes.name} container direction={'column'}>
-                <div>{track.name}</div>
-                <div className={classes.author}>{track.artist}</div>
+                <div>{album.name}</div>
+                <div className={classes.author}>{album.artist}</div>
             </Grid>
             <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                <Delete onClick={()=>{deleteOne(track._id)}} />
+                <Delete onClick={()=>{deleteOne(album._id)}} />
             </IconButton>
         </Card>
     )

@@ -1,16 +1,17 @@
 import React, {useState} from 'react'
-import {ITrack} from '../types/track'
-import {Box, Card, Grid, TextField} from '@material-ui/core'
-import TrackItem from './TrackItem'
+import {Box, Grid, TextField} from '@material-ui/core'
 import classes from './TrackList.module.css'
 import {useFormik} from 'formik'
-import {searchTracks} from '../store/action-creators/track'
+import {searchAlbums} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
-interface TrackListProps{
-    tracks: ITrack[]
+import AlbumItem from './AlbumItem'
+import {IAlbum} from '../types/track'
+
+interface AlbumListProps{
+    albums: IAlbum[]
     token: string
 }
-const TrackList: React.FC<TrackListProps> = ({tracks,token}) => {
+const AlbumList: React.FC<AlbumListProps> = ({albums,token}) => {
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch()  
     const formik = useFormik({
@@ -27,7 +28,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token}) => {
         }
         setTimer(
             setTimeout(async () => {
-                await dispatch( searchTracks(values, token))
+                await dispatch( searchAlbums(values, token))
             }, 500)
         )
     }
@@ -36,7 +37,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token}) => {
         <>
             <form onSubmit={formik.handleSubmit}>
                 <TextField
-                    label={'Найти трек'}
+                    label={'Найти альбом'}
                     fullWidth
                     name={'query'}
                     value={formik.values.query}
@@ -48,10 +49,10 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token}) => {
             </form>
             <Grid container direction={'column'} >
                 <Box p={0} className={classes.box}>
-                    {tracks.map(track=>
-                        <TrackItem
-                            key={track._id}
-                            track={track}
+                    {albums.map(album=>
+                        <AlbumItem
+                            key={album._id}
+                            album={album}
                             token={token}
                         />
                     )}
@@ -62,4 +63,4 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token}) => {
     )
 }
 
-export default TrackList
+export default AlbumList
