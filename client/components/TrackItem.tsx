@@ -70,7 +70,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token}) => 
                 <ExposurePlus1 onClick={addOne} />
             </IconButton>
             <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                <DeleteRounded onClick={addOne} />
+                <DeleteRounded onClick={removeOne} />
             </IconButton>
         </Card>
     )

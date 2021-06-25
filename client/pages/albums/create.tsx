@@ -47,7 +47,8 @@ const Create = ({token}) => {
                 if (activeStep !== 2) {
                     setActiveState(prevState => prevState + 1)
                 } else {
-                    TracksAPI.createAlbum({values, albumTracks: albumTracks}, token).then(() => router.push('/tracks'))
+                    TracksAPI.createAlbum({values, albumTracks: albumTracks.map(album=> album._id)}, token)
+                        .then(() => router.push('/tracks'))
             }
         }
     })

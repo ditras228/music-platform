@@ -1,20 +1,29 @@
-import React, {useState} from 'react'
+import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Button, Card, Grid, makeStyles, TextField} from '@material-ui/core'
+import {Button, Card, Grid} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {GetServerSideProps} from 'next'
 import {TracksAPI} from '../../api/tracksAPI'
 import {baseURL} from '../../api'
-import {useFormik} from 'formik'
-import {ITrack} from '../../types/track'
-import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
-import {withAutoRedirect} from '../../hooks/withAutoRedirect'
+import {ArrowBackIos, GTranslate, Hearing, Person, Title} from '@material-ui/icons'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
 import TrackList from '../../components/TrackList'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {TrackActionTypes} from '../../types/track'
+import {useDispatch} from 'react-redux'
 
-const TrackPage = ({serverAlbum, token}) => {
+const TrackPage = ({serverAlbum, allTracks, token}) => {
     const router = useRouter()
+    const { albumTracks} = useTypedSelector(state => state.track)
+    const dispatch=useDispatch()
+    dispatch({
+        type: TrackActionTypes.ADD_TRACKS_TO_ALBUM,
+        payload: serverAlbum.tracks
+    })
+    const addTracksHandler = async ()=>{
+       await TracksAPI.addTracks(albumTracks.map(track=>track._id),token)
+    }
     return (
         <MainLayout
             title={'Музыкальная площадка - ' + serverAlbum.name + ' - ' + serverAlbum.artist}
@@ -50,7 +59,9 @@ const TrackPage = ({serverAlbum, token}) => {
                 <Card className={classes.card}>
                     <h2 className={classes.title}><GTranslate/> Описание альбома</h2>
                     <p className={classes.text}>{serverAlbum.text}</p>
-                    <TrackList tracks={serverAlbum.tracks} token={token}/>
+                    <TrackList tracks={albumTracks} token={token}/>
+                    <TrackList tracks={allTracks} token={token}/>
+                    <Button onClick={addTracksHandler}>Подтвердить</Button>
                 </Card>
             </Grid>
         </MainLayout>
@@ -61,9 +72,11 @@ export default TrackPage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const token = cookies(ctx).token;
     const response = await TracksAPI.getOne(ctx.params.id, token)
+    const responseTracks = await TracksAPI.getTracks( token)
     return {
         props: {
             serverAlbum: response.data,
+            allTracks: responseTracks.data,
             token: token
         }
 

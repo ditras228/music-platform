@@ -44,12 +44,21 @@ export const TracksAPI= {
         formData.append('text', data.text)
         formData.append('picture', data.picture)
         formData.append('albumTracks', data.albumTracks)
-        return instance.post('/tracks', formData, {
+        return instance.post('/albums', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${token}`
             }
         })
+    },
+    addTracks(data, token){
+        let formData = new FormData()
+        formData.append('name', data.albumId)
+        formData.append('name', data.tracksId)
+
+        return instance.post('/albums/addTracks', data,
+            {headers: {Authorization: `Bearer ${token}`}})
+
     },
     getAlbums(token) {
         return instance.get('/albums',
