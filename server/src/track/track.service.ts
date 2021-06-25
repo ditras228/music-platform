@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common'
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {InjectModel} from '@nestjs/mongoose'
 import {Track, TrackDocument} from './schemas/track.schema'
 import {Model, ObjectId} from 'mongoose'
@@ -23,7 +23,12 @@ export class TrackService {
         return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath})
     }
 
-    async getAll(count = 10, offset = 0): Promise<Track[]> {
+    async getAll(count = 10, offset = 0, headers): Promise<any> {
+        const token = jwt.sign(headers.authorization, process.env.SECRET)
+        if(!token){
+            return new HttpException
+            (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
         return this.trackModel.find().skip(Number(offset)).limit(Number(count))
     }
 

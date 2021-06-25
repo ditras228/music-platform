@@ -14,7 +14,7 @@ export class UserController{
     login(@Body() dto: CreateUserDto){
         return this.userService.login(dto)
     }
-    @Post('/')
+    @Get('/')
     auth(@Headers() token){
         return this.userService.auth(token)
     }
