@@ -13,9 +13,9 @@ import { Request } from '@nestjs/common';
 require('dotenv').config()
 const mailService = require('./mailService')
 
-const generateAccessToken = (id, username, roles) => {
+const generateAccessToken = (_id, username, roles) => {
     const payload = {
-        id,
+        _id,
         username,
         roles
     }
@@ -65,7 +65,7 @@ export class UserService {
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             return {
-                user: {_id:user.id,username: user.username, roles: user.roles},
+                user: {_id:user._id,username: user.username, roles: user.roles},
                 token: generateAccessToken(user._id, user.username, user.roles)
             }
         } catch (e) {
@@ -79,6 +79,8 @@ export class UserService {
         try {
             const parseToken = request.authorization.split(' ')
             const validToken = jwt.verify(parseToken[1], process.env.SECRET) as any
+
+            console.log(validToken)
             if (!validToken) {
                 return new HttpException
                 (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -89,7 +91,7 @@ export class UserService {
                 (`Пользователь ${validToken.username} не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
             return {
-                user: {_id:user.id,  username: user.username, roles: user.roles},
+                user: {_id:user._id,  username: user.username, roles: user.roles},
                 token: generateAccessToken(user._id, user.username, user.roles)
             }
         } catch (e) {
