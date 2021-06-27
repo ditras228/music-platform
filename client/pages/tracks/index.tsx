@@ -10,12 +10,13 @@ import {RotateLeft, Search} from '@material-ui/icons'
 import classes from './index.module.css'
 import {Auth} from '../../store/action-creators/user'
 import cookies from 'next-cookies'
+import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
 const Index = ({token}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
-
-
+    const {isAuth} = useTypedSelector(state=>state.user)
+    withAutoRedirect(false, isAuth, router)
 
     if (error) {
         return (

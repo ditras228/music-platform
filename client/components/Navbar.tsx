@@ -19,17 +19,19 @@ import AlbumIcon from '@material-ui/icons/Album'
 import AppsIcon from '@material-ui/icons/Apps';
 import {LockOpen, Note} from '@material-ui/icons'
 import classes from './NavBar.module.css'
+import {Button} from '@material-ui/core'
+import {useTypedSelector} from '../hooks/useTypedSelector'
 
 const menuItem = [
     {text: 'Треки', href: '/tracks'},
     {text: 'Альбомы', href: '/albums'},
-    {text: 'Логин', href: '/auth'},
 ]
 
 export default function Navbar() {
     const router = useRouter()
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
+    const {isAuth} = useTypedSelector(state=>state.user)
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -37,7 +39,9 @@ export default function Navbar() {
     const handleDrawerClose = () => {
         setOpen(false)
     }
+    const logOutHandler = ()=>{
 
+    }
     return (
         <div>
             <CssBaseline/>
@@ -58,6 +62,11 @@ export default function Navbar() {
                     <Typography variant="h5" noWrap className={classes.logo}>
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
+                    {
+                        !isAuth
+                            ?<Button onClick={()=>router.push('/auth')}>Login</Button>
+                            :<Button onClick={()=>logOutHandler()}>LogoOut</Button>
+                    }
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -93,7 +102,5 @@ const getIcon = (index)=>{
             return <MusicNoteIcon/>
         case 1:
             return <AlbumIcon/>
-        case 2:
-            return <LockOpen/>
     }
 }

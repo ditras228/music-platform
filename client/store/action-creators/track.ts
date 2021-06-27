@@ -4,15 +4,17 @@ import {TracksAPI} from '../../api/tracksAPI'
 
 export const fetchTracks = (token) => {
     return async (dispatch: Dispatch<TrackAction>) => {
-        try {
-            const response = await TracksAPI.getTracks(token)
-            dispatch({type: TrackActionTypes.FETCH_TRACKS, payload: response.data})
-        } catch (e) {
-            dispatch({
-                type: TrackActionTypes.FETCH_TRACKS_ERROR,
-                payload: 'Произошла ошибка загрузки треков'
-            })
-        }
+
+            await TracksAPI.getTracks(token)
+                .then(res=>
+                dispatch({type: TrackActionTypes.FETCH_TRACKS, payload: res.data})
+            )
+                .catch(e=>
+                    dispatch({
+                        type: TrackActionTypes.FETCH_TRACKS_ERROR,
+                        payload: 'Произошла ошибка загрузки треков'
+                    })
+                )
     }
 }
 export const fetchAlbums = (token) => {
