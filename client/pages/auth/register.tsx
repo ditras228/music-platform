@@ -8,9 +8,11 @@ import {VpnKey} from '@material-ui/icons'
 import classes from './register.module.css'
 import {Alert} from '@material-ui/lab'
 import {useDispatch, useSelector} from 'react-redux'
-import {Registration} from '../../store/action-creators/user'
+import {Auth, Registration} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
+import {NextThunkDispatch, wrapper} from '../../store'
+import cookies from 'next-cookies'
 
 const SignupSchema = Yup.object({
     username: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -22,9 +24,9 @@ const SignupSchema = Yup.object({
         .oneOf([Yup.ref('password'), null], 'Пороли не совпадают')
 })
 
-const Register = () => {
-    withAutoRedirect(true)
+const Register = ({isAuth}) => {
     const router = useRouter()
+    withAutoRedirect(true, isAuth,  router )
     const dispatch = useDispatch()
     const error = useSelector(state =>GetError(state, 'register'))
 
@@ -107,3 +109,17 @@ const Register = () => {
 }
 
 export default Register
+
+export const getServerSideProps = wrapper.getServerSideProps
+(async (ctx) => {
+    const dispatch = ctx.store.dispatch as NextThunkDispatch
+    const token = cookies(ctx).token;
+    await dispatch( Auth(token))
+    const isAuth = cookies(ctx).isAuth;
+    return {
+        props:{
+            isAuth: isAuth || null
+        }
+    }
+})
+

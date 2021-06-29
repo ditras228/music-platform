@@ -6,13 +6,19 @@ export interface IUser{
 export interface UserState{
     user: IUser | any
     errors: Array<any>
-    isAuth?: boolean
+    isAuth: boolean
+    isLoading: boolean
 }
 
 export enum UsersActionTypes{
     FETCH_USERS = 'FETCH_USERS',
     ADD_ERROR = 'ADD_ERROR',
-    LOGIN = 'LOGIN'
+    LOGIN = 'LOGIN',
+    IS_LOADING = 'IS_LOADING'
+}
+interface IsLoading{
+    type: UsersActionTypes.IS_LOADING
+    payload: boolean
 }
 interface Login{
     type: UsersActionTypes.LOGIN
@@ -26,4 +32,4 @@ interface FetchUsersErrorAction{
     type: UsersActionTypes.ADD_ERROR
     payload: any
 }
-export type UserAction = FetchUsersAction | FetchUsersErrorAction | Login
+export type UserAction = FetchUsersAction | FetchUsersErrorAction | Login | IsLoading

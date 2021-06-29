@@ -3,16 +3,18 @@ import {UserAction, UsersActionTypes, UserState} from '../../types/user'
 const initialState: UserState={
     user:{} ,
     errors: [],
-    isAuth: false
+    isAuth: false,
+    isLoading: true
 }
 export const usersReducer = (state = initialState, action: UserAction): UserState => {
     switch (action.type) {
         case UsersActionTypes.ADD_ERROR:
             return {...state, errors: [...state.errors, action.payload]}
         case UsersActionTypes.LOGIN:
-            const test = {...state, user: action.payload, isAuth: true}
-            console.log('test'+state.isAuth)
-            return test
+            return  {...state, user: action.payload, isAuth: true}
+        case UsersActionTypes.IS_LOADING:
+            return  {...state, isLoading: action.payload}
+
         default:
             return state
     }

@@ -13,6 +13,12 @@ export const getUsers = () => {
         }
     }
 }
+export const LogOut = () => {
+    return async () => {
+        cookie.set('token', 'null')
+        cookie.set('isAuth', 'false')
+    }
+    }
 export const Login = (username, password) => {
     return async (dispatch: Dispatch<UserAction>) => {
         await UsersAPI.login({username, password})
@@ -23,7 +29,9 @@ export const Login = (username, password) => {
                         payload: {type: 'login', message: response.data?.message || 'Неизвестная ошибка'}
                     })
                 }
-                cookie.set('token', `${response.data.token}`, {expires: 1})
+                cookie.set('token', `${response.data.token}`)
+                cookie.set('isAuth',  'true')
+
                 console.log(  cookie.get('token'))
                 dispatch({
                     type: UsersActionTypes.LOGIN,
@@ -43,7 +51,8 @@ export const Auth = (token) => {
 
         await UsersAPI.auth(token)
             .then(response => {
-                cookie.set('token',  `${response.data.token}`, {expires: 1})
+                cookie.set('token',  `${response.data.token}`)
+                cookie.set('isAuth',  'true')
                 console.log('good '+ token)
                 console.log('respones '+ JSON.stringify(response.data))
 

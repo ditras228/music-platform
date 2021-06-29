@@ -21,17 +21,22 @@ import {LockOpen, Note} from '@material-ui/icons'
 import classes from './NavBar.module.css'
 import {Button} from '@material-ui/core'
 import {useTypedSelector} from '../hooks/useTypedSelector'
+import {NextThunkDispatch, wrapper} from '../store'
+import cookies from 'next-cookies'
+import {Auth, LogOut} from '../store/action-creators/user'
+import {fetchTracks} from '../store/action-creators/track'
+import {useDispatch} from 'react-redux'
 
 const menuItem = [
     {text: 'Треки', href: '/tracks'},
     {text: 'Альбомы', href: '/albums'},
 ]
 
-export default function Navbar() {
+export default function Navbar({isAuth}) {
     const router = useRouter()
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
-    const {isAuth} = useTypedSelector(state=>state.user)
+    const dispatch = useDispatch()
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -40,7 +45,7 @@ export default function Navbar() {
         setOpen(false)
     }
     const logOutHandler = ()=>{
-
+        dispatch(LogOut())
     }
     return (
         <div>
@@ -63,9 +68,9 @@ export default function Navbar() {
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
                     {
-                        !isAuth
+                        isAuth
                             ?<Button onClick={()=>router.push('/auth')}>Login</Button>
-                            :<Button onClick={()=>logOutHandler()}>LogoOut</Button>
+                            :<Button onClick={()=>logOutHandler()}>LogOut</Button>
                     }
                 </Toolbar>
             </AppBar>
@@ -104,3 +109,4 @@ const getIcon = (index)=>{
             return <AlbumIcon/>
     }
 }
+

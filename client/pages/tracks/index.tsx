@@ -12,12 +12,15 @@ import {Auth} from '../../store/action-creators/user'
 import cookies from 'next-cookies'
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 
-const Index = ({token}) => {
+const Index = ({token,isAuth}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
-    const {isAuth} = useTypedSelector(state=>state.user)
-    withAutoRedirect(false, isAuth, router)
+    const { isFallback } = router
 
+    if (isFallback) {
+        return <div>Loading...</div>
+    }
+    withAutoRedirect(false, isAuth, router)
     if (error) {
         return (
             <MainLayout title={error}>
@@ -53,11 +56,14 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const token = cookies(ctx).token;
+    const isAuth = cookies(ctx).isAuth;
     await dispatch( Auth(token))
     await dispatch( fetchTracks(token))
+
     return {
         props:{
-            token: token
+            token: token || null,
+            isAuth: isAuth || null
         }
     }
 })
