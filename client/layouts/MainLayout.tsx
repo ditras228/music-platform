@@ -49,9 +49,7 @@ export default MainLayout
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const token = cookies(ctx).token;
     const isAuth = cookies(ctx).isAuth;
-    await dispatch( Auth(token))
 
     return {
         props:{

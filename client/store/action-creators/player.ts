@@ -1,5 +1,6 @@
 import {PlayerActions, PlayerActionTypes} from '../../types/player'
 import {ITrack} from '../../types/track'
+import cookie from 'js-cookie'
 
 export const playTrack=(): PlayerActions=>{
     return {type: PlayerActionTypes.PLAY}
@@ -18,4 +19,9 @@ export const setCurrentTime=(payload: number): PlayerActions=>{
 }
 export const setActiveTrack=(payload: ITrack): PlayerActions=>{
     return {type: PlayerActionTypes.SET_ACTIVE, payload}
+}
+export const savePlayer = ({player}) => {
+    return async () => {
+        cookie.save('player', player)
+    }
 }

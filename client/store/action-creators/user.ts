@@ -15,8 +15,8 @@ export const getUsers = () => {
 }
 export const LogOut = () => {
     return async () => {
-        cookie.set('token', 'null')
-        cookie.set('isAuth', 'false')
+        cookie.remove('token')
+        cookie.remove('isAuth')
     }
     }
 export const Login = (username, password) => {

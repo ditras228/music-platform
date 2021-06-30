@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useTheme} from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -16,15 +16,9 @@ import ListItemText from '@material-ui/core/ListItemText'
 import {useRouter} from 'next/router'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
-import AppsIcon from '@material-ui/icons/Apps';
-import {LockOpen, Note} from '@material-ui/icons'
 import classes from './NavBar.module.css'
 import {Button} from '@material-ui/core'
-import {useTypedSelector} from '../hooks/useTypedSelector'
-import {NextThunkDispatch, wrapper} from '../store'
-import cookies from 'next-cookies'
-import {Auth, LogOut} from '../store/action-creators/user'
-import {fetchTracks} from '../store/action-creators/track'
+import {LogOut} from '../store/action-creators/user'
 import {useDispatch} from 'react-redux'
 
 const menuItem = [
@@ -37,6 +31,9 @@ export default function Navbar({isAuth}) {
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
     const dispatch = useDispatch()
+    useEffect(()=>{
+        console.log('isAuth + '+isAuth)
+    },[isAuth])
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -68,7 +65,7 @@ export default function Navbar({isAuth}) {
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
                     {
-                        isAuth
+                        isAuth!=='true'
                             ?<Button onClick={()=>router.push('/auth')}>Login</Button>
                             :<Button onClick={()=>logOutHandler()}>LogOut</Button>
                     }
