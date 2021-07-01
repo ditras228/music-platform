@@ -23,6 +23,14 @@ export const playerReducer=(state = initialState, action: PlayerActions  )=>{
             return{...state, currentTime: action.payload}
         case PlayerActionTypes.SET_VOLUME:
             return{...state, volume: action.payload}
+        case PlayerActionTypes.SET_PLAYER:
+            return{...state,
+                currentTime: action.payload.currentTime,
+                duration: action.payload.duration,
+                active: action.payload.active,
+                pause: action.payload.pause,
+                volume: action.payload.volume
+                }
         default:
             return state
     }

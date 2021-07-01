@@ -13,7 +13,12 @@ export enum PlayerActionTypes{
     SET_ACTIVE = 'SET_ACTIVE',
     SET_DURATION = 'SET_DURATION',
     SET_CURRENT_TIME = 'SET_CURRENT_TIME',
-    SET_VOLUME = 'SET_VOLUME'
+    SET_VOLUME = 'SET_VOLUME',
+    SET_PLAYER = 'SET_PLAYER'
+}
+interface PlayerAction{
+    type: PlayerActionTypes.SET_PLAYER
+    payload: any
 }
 interface PlayAction{
     type: PlayerActionTypes.PLAY
@@ -44,3 +49,4 @@ export type PlayerActions=
     | SetDurationAction
     | SetCurrentTimeAction
     | SetVolumeAction
+    |PlayerAction

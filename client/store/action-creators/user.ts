@@ -53,15 +53,9 @@ export const Auth = (token) => {
             .then(response => {
                 cookie.set('token',  `${response.data.token}`)
                 cookie.set('isAuth',  'true')
-                console.log('good '+ token)
-                console.log('respones '+ JSON.stringify(response.data))
-
             }).catch(()=>
                 console.log('error '+ token)
-
             )
-
-
     }
 }
 export const Registration = (username, password) => {

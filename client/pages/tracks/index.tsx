@@ -11,15 +11,12 @@ import classes from './index.module.css'
 import {Auth} from '../../store/action-creators/user'
 import cookies from 'next-cookies'
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
+import {setPlayer} from '../../store/action-creators/player'
 
 const Index = ({token,isAuth}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
-    const { isFallback } = router
 
-    if (isFallback) {
-        return <div>Loading...</div>
-    }
     withAutoRedirect(false, isAuth, router)
     if (error) {
         return (
@@ -57,13 +54,15 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const token = cookies(ctx).token;
     const isAuth = cookies(ctx).isAuth;
+    const player = cookies(ctx).player;
     await dispatch( Auth(token))
     await dispatch( fetchTracks(token))
+    await dispatch( setPlayer(player))
 
     return {
         props:{
             token: token || null,
-            isAuth: isAuth || null
+            isAuth: isAuth || null,
         }
     }
 })

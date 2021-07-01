@@ -6,22 +6,26 @@ import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
 import classes from './Player.module.css'
-import {GetServerSideProps} from 'next'
 import cookies from 'next-cookies'
 import {savePlayer} from '../store/action-creators/player'
 import {useDispatch} from 'react-redux'
+import {NextThunkDispatch, wrapper} from '../store'
+import {useRouter} from 'next/router'
+import {ITrack} from '../types/track'
 
 let audio
 
 
-const Player: React.FC<any> = ({player}) => {
-    const {pause, volume, active, duration, currentTime} = player || useTypedSelector(state => state.player)
-    const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration} = useActions()
-    const dispatch=useDispatch()
+const Player = () => {
+    const player = useTypedSelector(state => state.player)
+    const {pause, volume, active, duration, currentTime} = player
+    const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
 
-    useEffect(() => {
-        dispatch(savePlayer(player))
-    }, [pause, volume, active, duration, currentTime])
+    useEffect(()=>{
+        savePlayer(player)
+        console.log(player)
+        }
+    ,[pause, volume, active, duration, currentTime])
 
     useEffect(() => {
         if (!audio) {
@@ -85,13 +89,3 @@ const Player: React.FC<any> = ({player}) => {
 }
 
 export default Player
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const player = cookies(ctx).player;
-    return {
-        props: {
-            player:{}
-        }
-
-    }
-}

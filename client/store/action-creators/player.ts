@@ -20,8 +20,19 @@ export const setCurrentTime=(payload: number): PlayerActions=>{
 export const setActiveTrack=(payload: ITrack): PlayerActions=>{
     return {type: PlayerActionTypes.SET_ACTIVE, payload}
 }
-export const savePlayer = ({player}) => {
+export const setPlayer=(payload): PlayerActions=>{
+    return {type: PlayerActionTypes.SET_PLAYER, payload}
+}
+export const savePlayer = (player) => {
     return async () => {
-        cookie.save('player', player)
+        cookie.set('player', `${JSON.stringify(player)}`)
+        console.log('cookie')
+        console.log( cookie.get('player'))
     }
 }
+
+
+
+
+
+

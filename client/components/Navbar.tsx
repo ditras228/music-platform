@@ -26,14 +26,12 @@ const menuItem = [
     {text: 'Альбомы', href: '/albums'},
 ]
 
-export default function Navbar({isAuth}) {
+export default function Navbar() {
     const router = useRouter()
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
     const dispatch = useDispatch()
-    useEffect(()=>{
-        console.log('isAuth + '+isAuth)
-    },[isAuth])
+
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -64,11 +62,8 @@ export default function Navbar({isAuth}) {
                     <Typography variant="h5" noWrap className={classes.logo}>
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
-                    {
-                        isAuth!=='true'
-                            ?<Button onClick={()=>router.push('/auth')}>Login</Button>
-                            :<Button onClick={()=>logOutHandler()}>LogOut</Button>
-                    }
+                            <Button onClick={()=>router.push('/auth')}>Login</Button>
+                            <Button onClick={()=>logOutHandler()}>LogOut</Button>
                 </Toolbar>
             </AppBar>
             <Drawer

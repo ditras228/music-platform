@@ -1,18 +1,14 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import {Container, makeStyles} from '@material-ui/core'
+import {Container} from '@material-ui/core'
 import Player from '../components/Player'
 import Head from 'next/head'
 import classes from './MainLayout.module.css'
-import {NextThunkDispatch, wrapper} from '../store'
-import cookies from 'next-cookies'
-import {Auth} from '../store/action-creators/user'
 
 interface MainLayoutProps {
     title?: string
     description?: string
     keywords?: string
-    isAuth?: string
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({
@@ -20,7 +16,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({
                                                    title,
                                                    description,
                                                    keywords,
-                                                   isAuth
                                                }) => {
     return (
         <>
@@ -35,7 +30,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
                       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
 
             </Head>
-            <Navbar isAuth={isAuth}/>
+            <Navbar/>
             <Container className={classes.container}>
                 {children}
             </Container>
@@ -43,17 +38,4 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         </>
     )
 }
-
 export default MainLayout
-
-export const getServerSideProps = wrapper.getServerSideProps
-(async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const isAuth = cookies(ctx).isAuth;
-
-    return {
-        props:{
-            isAuth: isAuth || null
-        }
-    }
-})
