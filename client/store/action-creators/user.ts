@@ -51,8 +51,18 @@ export const Auth = (token) => {
 
         await UsersAPI.auth(token)
             .then(response => {
-                cookie.set('token',  `${response.data.token}`)
-                cookie.set('isAuth',  'true')
+                if(response.data.user){
+
+                    cookie.set('token',  `${response.data.token}`)
+                    cookie.set('isAuth',  'true')
+
+                    dispatch({
+                        type: UsersActionTypes.LOGIN,
+                        payload: response.data.user
+                    })
+
+                }
+
             }).catch(()=>
                 console.log('error '+ token)
             )

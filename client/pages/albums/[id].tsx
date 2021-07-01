@@ -33,7 +33,7 @@ const TrackPage = ({serverAlbum, allTracks, token}) => {
                 <Button
                     variant={'outlined'}
                     style={{fontSize: 32}}
-                    onClick={() => router.push('/tracks')}
+                    onClick={() => router.push('/')}
                 >
                     <ArrowBackIos/> К списку
                 </Button>

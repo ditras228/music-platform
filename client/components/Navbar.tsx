@@ -20,15 +20,17 @@ import classes from './NavBar.module.css'
 import {Button} from '@material-ui/core'
 import {LogOut} from '../store/action-creators/user'
 import {useDispatch} from 'react-redux'
+import {useTypedSelector} from '../hooks/useTypedSelector'
 
 const menuItem = [
-    {text: 'Треки', href: '/tracks'},
+    {text: 'Треки', href: '/'},
     {text: 'Альбомы', href: '/albums'},
 ]
 
 export default function Navbar() {
     const router = useRouter()
     const theme = useTheme()
+    const {isAuth} = useTypedSelector(state => state.user)
     const [open, setOpen] = React.useState(false)
     const dispatch = useDispatch()
 
@@ -50,20 +52,25 @@ export default function Navbar() {
                 color={'secondary'}
                 className={classes.AppBar}
             >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h5" noWrap className={classes.logo}>
-                        <MusicNoteIcon/>MERNMusic
-                    </Typography>
-                            <Button onClick={()=>router.push('/auth')}>Login</Button>
-                            <Button onClick={()=>logOutHandler()}>LogOut</Button>
+                <Toolbar className={classes.toolbar}>
+                    <>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="h5" noWrap className={classes.logo}>
+                            <MusicNoteIcon/>MERNMusic
+                        </Typography>
+                    </>
+                    {
+                        !isAuth
+                            ?<Button onClick={()=>router.push('/auth')}>Login</Button>
+                            :<Button onClick={()=>logOutHandler()}>LogOut</Button>
+                    }
                 </Toolbar>
             </AppBar>
             <Drawer

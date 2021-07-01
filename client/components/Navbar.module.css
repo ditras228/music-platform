@@ -13,5 +13,9 @@
     grid-template-rows: auto;
 }
 .toolbar{
-    padding-left:20px
+    display: grid!important;
+    grid-template-columns: auto 1fr auto!important;
+}
+.log{
+    grid-column: 3/4!important;
 }

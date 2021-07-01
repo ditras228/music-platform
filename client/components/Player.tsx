@@ -20,9 +20,11 @@ const Player = () => {
     const player = useTypedSelector(state => state.player)
     const {pause, volume, active, duration, currentTime} = player
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
+    const dispatch = useDispatch()
+
 
     useEffect(()=>{
-        savePlayer(player)
+        dispatch(savePlayer(player))
         console.log(player)
         }
     ,[pause, volume, active, duration, currentTime])
@@ -30,10 +32,12 @@ const Player = () => {
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
-            setCurrentTime ( currentTime|| 0)
+            console.log('wtf ' +currentTime)
+            setCurrentTime ( currentTime || 0)
+            setAudio()
         } else {
             setAudio()
-            play()
+           // play()
         }
     }, [active])
     const setAudio = () => {

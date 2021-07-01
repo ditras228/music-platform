@@ -37,7 +37,7 @@ const LogIn = ({isAuth}) => {
         validationSchema: SignupSchema,
         onSubmit: async values => {
             dispatch(Login(values.username, values.password))
-             router.push('/tracks')
+             router.push('/')
         }
     })
     const loginHandler=(e: any)=>{

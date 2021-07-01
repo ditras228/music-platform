@@ -114,6 +114,7 @@ const Create = ({token}) => {
                                         key={track._id}
                                         track={track}
                                         token={token}
+                                        view={'create'}
                                     />
                                 )}
                             </Box>

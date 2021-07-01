@@ -12,6 +12,8 @@ import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
 import CommentFC from './comment'
+import {setPlayer} from '../../store/action-creators/player'
+import {NextThunkDispatch, wrapper} from '../../store'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
@@ -36,7 +38,7 @@ const TrackPage = ({serverTrack, token}) => {
                 <Button
                     variant={'outlined'}
                     style={{fontSize: 32}}
-                    onClick={() => router.push('/tracks')}
+                    onClick={() => router.push('/')}
                 >
                     <ArrowBackIos/> К списку
                 </Button>
@@ -99,9 +101,13 @@ const TrackPage = ({serverTrack, token}) => {
 }
 
 export default TrackPage
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = wrapper.getServerSideProps
+(async (ctx) => {
+    const dispatch = ctx.store.dispatch as NextThunkDispatch
     const token = cookies(ctx).token;
     const response = await TracksAPI.getOne(ctx.params.id, token)
+    const player = cookies(ctx).player;
+    await dispatch(setPlayer(player))
     return {
         props: {
             serverTrack: response.data,
@@ -109,4 +115,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         }
 
     }
-}
+})

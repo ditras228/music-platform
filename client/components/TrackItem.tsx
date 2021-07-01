@@ -14,23 +14,24 @@ interface TrackItemProps {
     track: ITrack
     active?: boolean
     token: string
+    view: string
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token}) => {
+const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
-    const dispatch= useDispatch()
-    const deleteOne = async ()=>{
-         await TracksAPI.deleteOne(track._id, token)
-         dispatch( fetchTracks(token))
+    const dispatch = useDispatch()
+    const deleteOne = async () => {
+        await TracksAPI.deleteOne(track._id, token)
+        dispatch(fetchTracks(token))
     }
-    const addOne =()=>{
+    const addOne = () => {
         dispatch({
             type: TrackActionTypes.ADD_TRACK_TO_ALBUM,
             payload: {track}
         })
     }
-    const removeOne =()=>{
+    const removeOne = () => {
         dispatch({
             type: TrackActionTypes.REMOVE_TRACK_FROM_ALBUM,
             payload: {track}
@@ -63,15 +64,25 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token}) => 
                 <div className={classes.author}>{track.artist}</div>
             </Grid>
             <div className={classes.length}><Timer/>5:22</div>
-            <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                <Delete onClick={deleteOne} />
-            </IconButton>
-            <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                <ExposurePlus1 onClick={addOne} />
-            </IconButton>
-            <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                <DeleteRounded onClick={removeOne} />
-            </IconButton>
+            {
+                view !== 'album_item'
+                    ?
+                    <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
+                        <Delete onClick={deleteOne}/>
+                    </IconButton>
+
+                    :
+                    <>
+                        <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
+                            <ExposurePlus1 onClick={addOne}/>
+                        </IconButton>
+                        <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
+                            <DeleteRounded onClick={removeOne}/>
+                        </IconButton>
+                    </>
+
+            }
+
         </Card>
     )
 }
