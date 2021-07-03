@@ -24,20 +24,17 @@ const Player = () => {
 
 
     useEffect(()=>{
-        dispatch(savePlayer(player))
-        console.log(player)
+          dispatch(savePlayer(player))
         }
-    ,[pause, volume, active, duration, currentTime])
+    ,[pause, volume, currentTime])
 
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
-            console.log('wtf ' +currentTime)
-            setCurrentTime ( currentTime || 0)
+            !currentTime&&setCurrentTime ( currentTime)
             setAudio()
         } else {
-            setAudio()
-           // play()
+            audio.play()
         }
     }, [active])
     const setAudio = () => {
@@ -49,7 +46,7 @@ const Player = () => {
             setDuration(Math.ceil(audio.duration))
         }
         audio.ontimeupdate = () => {
-            setCurrentTime(Math.ceil(audio.currentTime))
+            setCurrentTime(audio.currentTime)
         }
     }}
     const play = () => {

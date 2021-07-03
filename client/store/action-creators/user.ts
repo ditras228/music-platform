@@ -1,24 +1,14 @@
 import {Dispatch} from 'react'
 import {UsersAPI} from '../../api/usersAPI'
 import {UserAction, UsersActionTypes} from '../../types/user'
-    import cookie from 'js-cookie'
+import cookie from 'js-cookie'
 
-export const getUsers = () => {
-    return async (dispatch: Dispatch<UserAction>) => {
-        try {
-            const response = await UsersAPI.getUsers()
-            dispatch({type: UsersActionTypes.FETCH_USERS, payload: response.data || 'Неизвестная ошибка'})
-        } catch (e) {
-
-        }
-    }
-}
 export const LogOut = () => {
     return async () => {
         cookie.remove('token')
         cookie.remove('isAuth')
     }
-    }
+}
 export const Login = (username, password) => {
     return async (dispatch: Dispatch<UserAction>) => {
         await UsersAPI.login({username, password})
@@ -29,10 +19,9 @@ export const Login = (username, password) => {
                         payload: {type: 'login', message: response.data?.message || 'Неизвестная ошибка'}
                     })
                 }
-                cookie.set('token', `${response.data.token}`)
-                cookie.set('isAuth',  'true')
+                cookie.set('token', `${response.data.token}`, { expires: 1})
+                cookie.set('isAuth', 'true', { expires: 1})
 
-                console.log(  cookie.get('token'))
                 dispatch({
                     type: UsersActionTypes.LOGIN,
                     payload: response.data.user
@@ -46,25 +35,29 @@ export const Login = (username, password) => {
             })
     }
 }
-export const Auth = (token) => {
+export const Auth = () => {
     return async (dispatch: Dispatch<UserAction>) => {
-
+        const token=cookie.get('token')
         await UsersAPI.auth(token)
             .then(response => {
-                if(response.data.user){
+                if (response.data.status !== 500) {
+                    if (response.data.user) {
 
-                    cookie.set('token',  `${response.data.token}`)
-                    cookie.set('isAuth',  'true')
+                        cookie.set('token', `${response.data.token}`, { expires: 1})
+                        cookie.set('isAuth', 'true', { expires: 1})
 
-                    dispatch({
-                        type: UsersActionTypes.LOGIN,
-                        payload: response.data.user
-                    })
-
+                        dispatch({
+                            type: UsersActionTypes.LOGIN,
+                            payload: response.data.user
+                        })
+                    }
+                    } else {
+                    cookie.remove('token')
+                    cookie.remove('isAuth')
                 }
-
-            }).catch(()=>
-                console.log('error '+ token)
+                }
+            ).catch(() =>
+                console.log('error ' + token)
             )
     }
 }

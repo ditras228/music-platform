@@ -37,45 +37,53 @@ const TrackPage = ({serverTrack, token}) => {
             <Grid className={classes.grid}>
                 <Button
                     variant={'outlined'}
-                    style={{fontSize: 32}}
+                    style={{fontSize: 20}}
                     onClick={() => router.push('/')}
                 >
                     <ArrowBackIos/> К списку
                 </Button>
                 <Card>
-                    <Grid container className={classes.info}>
+
+                    <Grid className={classes.info}>
                         <img src={baseURL + track.picture} className={classes.img} alt={'Обложка трека'}/>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
-                                <h2 className={classes.item_title}><Title/>Название</h2>
-                                <h2 className={classes.item_value}>{track.name}</h2>
+                                <h3 className={classes.item_title}><Title/>Название</h3>
+                                <h3 className={classes.item_value}>{track.name}</h3>
                             </div>
                             <div className={classes.line}>
-                                <h2 className={classes.item_title}><Person/>Автор</h2>
-                                <h2 className={classes.item_value}>{track.artist}</h2>
+                                <h3 className={classes.item_title}><Person/>Автор</h3>
+                                <h3 className={classes.item_value}>{track.artist}</h3>
                             </div>
                             <div className={classes.line}>
-                                <h2 className={classes.item_title}><Hearing/>Прослушиваний</h2>
-                                <h2 className={classes.item_value}>{track.listens}</h2>
+                                <h3 className={classes.item_title}><Hearing/>Прослушиваний</h3>
+                                <h3 className={classes.item_value}>{track.listens}</h3>
                             </div>
                         </div>
                     </Grid>
                 </Card>
-                <Card className={classes.card}>
-                    <h2 className={classes.title}><GTranslate/> Слова к песне</h2>
-                    <p className={classes.text}>{track.text}</p>
-                </Card>
                 <Card>
+                    <div className={classes.card}>
+                        <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
+                        <p className={classes.text}>{track.text}</p>
+                    </div>
+
                     <Grid container className={classes.card}>
                         <form onSubmit={formik.handleSubmit} className={classes.form}>
-                            <h2 className={classes.title}><InsertComment/> Комментарии</h2>
+                            <h3 className={classes.title}>
+                                <InsertComment/> {
+                                serverTrack.comments.length===0
+                                ?'нет комментариев'
+                                :'комментарии'
+                            }
+                            </h3>
                             <Grid className={classes.comments_form}>
                                 <TextField
                                     className={classes.comments_input}
                                     value={formik.values.text}
                                     onChange={formik.handleChange}
                                     name={'text'}
-                                    label='Комментарий'
+                                    label='Оставьте комментарий'
                                     fullWidth
                                     multiline
                                 >
@@ -95,6 +103,7 @@ const TrackPage = ({serverTrack, token}) => {
                         )
                     }
                 </Card>
+
             </Grid>
         </MainLayout>
     )

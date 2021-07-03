@@ -17,6 +17,7 @@ const Index = ({token,isAuth}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
 
+    console.log(token,isAuth)
     withAutoRedirect(false, isAuth, router)
     if (error) {
         return (
@@ -52,10 +53,10 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const token = cookies(ctx).token;
     const isAuth = cookies(ctx).isAuth;
     const player = cookies(ctx).player;
-    await dispatch( Auth(token))
+    await dispatch(Auth())
+    let token = cookies(ctx).token;
     await dispatch( fetchTracks(token))
     await dispatch( setPlayer(player))
 

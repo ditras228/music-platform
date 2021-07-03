@@ -44,6 +44,10 @@ export default function Navbar() {
     const logOutHandler = ()=>{
         dispatch(LogOut())
     }
+    const logInHandler = ()=>{
+        dispatch(LogOut())
+        router.push('/auth')
+    }
     return (
         <div>
             <CssBaseline/>
@@ -68,7 +72,7 @@ export default function Navbar() {
                     </>
                     {
                         !isAuth
-                            ?<Button onClick={()=>router.push('/auth')}>Login</Button>
+                            ?<Button onClick={()=>logInHandler()}>Login</Button>
                             :<Button onClick={()=>logOutHandler()}>LogOut</Button>
                     }
                 </Toolbar>

@@ -6,14 +6,20 @@ export const fetchTracks = (token) => {
     return async (dispatch: Dispatch<TrackAction>) => {
 
             await TracksAPI.getTracks(token)
-                .then(res=>
-                dispatch({type: TrackActionTypes.FETCH_TRACKS, payload: res.data})
+                .then(res=>{
+                    dispatch({type: TrackActionTypes.FETCH_TRACKS, payload: res.data})
+                }
+
             )
-                .catch(e=>
-                    dispatch({
-                        type: TrackActionTypes.FETCH_TRACKS_ERROR,
-                        payload: 'Произошла ошибка загрузки треков'
-                    })
+                .catch(e=>{
+
+                        dispatch({
+                            type: TrackActionTypes.FETCH_TRACKS_ERROR,
+                            payload: 'Произошла ошибка загрузки треков'
+                        })
+
+                }
+
                 )
     }
 }
@@ -25,7 +31,7 @@ export const fetchAlbums = (token) => {
         } catch (e) {
             dispatch({
                 type: TrackActionTypes.FETCH_TRACKS_ERROR,
-                payload: 'Произошла ошибка загрузки треков'
+                payload: 'Произошла ошибка загрузки альбомов'
             })
         }
     }
@@ -38,7 +44,7 @@ export const searchAlbums= (query: string, token: string) => {
         } catch (e) {
             dispatch({
                 type: TrackActionTypes.FETCH_TRACKS_ERROR,
-                payload: 'Произошла ошибка загрузки альбомов'
+                payload: 'Произошла ошибка поиска альбомов'
             })
         }
     }
@@ -51,7 +57,7 @@ export const searchTracks = (query: string, token: string) => {
         } catch (e) {
             dispatch({
                 type: TrackActionTypes.FETCH_TRACKS_ERROR,
-                payload: 'Произошла ошибка загрузки треков'
+                payload: 'Произошла ошибка поиска треков'
             })
         }
     }
