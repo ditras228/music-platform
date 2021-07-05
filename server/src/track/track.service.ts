@@ -18,10 +18,12 @@ export class TrackService {
     ) {
     }
 
-    async create(dto: CreateTrackDto, picture, audio): Promise<Track> {
+    async create(dto: CreateTrackDto, picture, audio, headers): Promise<Track> {
+        const {userId} = jwt.verify(headers.authorization, process.env.SECRET) as any
+
         const audioPath = this.fileService.createFile(FileType.AUDIO, audio)
         const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
-        return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath})
+        return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath, userId:userId})
     }
 
     async getAll(count = 10, offset = 0, headers): Promise<any> {
@@ -42,10 +44,14 @@ export class TrackService {
         return track
     }
 
-    async delete(id: ObjectId): Promise<ObjectId> {
-        const track = await this.trackModel.findByIdAndDelete(id)
-        return track._id
-
+    async delete(id: ObjectId, headers): Promise<any> {
+        const {userId} = jwt.verify(headers.authorization, process.env.SECRET) as any
+        const track = await this.trackModel.findById(id)
+        if(track.userId===userId) {
+            track.remove()
+        }
+        return new HttpException
+        (`Вы не владелец трека`, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     async deleteAll(): Promise<string> {

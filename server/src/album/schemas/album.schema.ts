@@ -8,6 +8,12 @@ export type AlbumDocument = Album & Document;
 @Schema()
 export class Album {
     @Prop()
+    _id: string
+
+    @Prop()
+    userId: string
+
+    @Prop()
     name: string
 
     @Prop()

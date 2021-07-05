@@ -20,8 +20,7 @@ export class TrackController {
 
     create(@Headers()  headers,@UploadedFiles() files, @Body() dto: CreateTrackDto) {
         const {picture, audio} = files
-        return this.trackService.create(dto, picture[0], audio[0
-            ])
+        return this.trackService.create(dto, picture[0], audio[0], headers)
     }
 
     @Get()
@@ -41,7 +40,7 @@ export class TrackController {
 
     @Delete(':id')
     delete(@Headers()  headers,@Param('id') id: ObjectId) {
-        return this.trackService.delete(id)
+        return this.trackService.delete(id, headers)
     }
     @Delete()
     deleteAll(@Headers()  headers) {

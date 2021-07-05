@@ -18,7 +18,7 @@ export class AlbumController {
 
     create(@Headers()  headers,@UploadedFiles() files, @Body() dto: CreateAlbumDto) {
         const {picture} = files
-        return this.albumService.create(dto, picture[0])
+        return this.albumService.create(dto, picture[0], headers)
     }
 
     @Get()
@@ -41,7 +41,7 @@ export class AlbumController {
     }
     @Delete(':id')
     delete(@Headers()  headers, @Param('id') id: ObjectId) {
-        return this.albumService.delete(id)
+        return this.albumService.delete(id, headers)
     }
     @Delete()
     deleteAll(@Headers()  headers) {
