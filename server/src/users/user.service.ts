@@ -42,9 +42,9 @@ export class UserService {
             const userRole = await this.roleModel.findOne({value: 'USER'})
             const user = new this.userModel({...dto, password: hashPassword, roles: [userRole.value]})
             await user.save()
-            const hashURL = await bcrypt.hash(dto.username, 5)
-            await mailService.main(dto.username, hashURL)
-            new HttpException('Пользователь успешно зарегистрирован', HttpStatus.INTERNAL_SERVER_ERROR)
+            //const hashURL = await bcrypt.hash(dto.username, 5)
+            //await mailService.main(dto.username, hashURL)
+            return user
         } catch (e) {
             console.log(e)
             throw  new HttpException('Registration failed', HttpStatus.INTERNAL_SERVER_ERROR)

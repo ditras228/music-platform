@@ -6,6 +6,7 @@ import {ServeStaticModule} from '@nestjs/serve-static'
 import * as path from 'path'
 import {Module, NestModule, MiddlewareConsumer} from '@nestjs/common'
 import {Role} from './middleware/role.middleware'
+import { AlbumModule } from './album/album.module'
 @Module({
     imports: [
         ServeStaticModule.forRoot({
@@ -14,6 +15,7 @@ import {Role} from './middleware/role.middleware'
         MongooseModule.forRoot('mongodb+srv://ditras228:redcommunist5@cluster0.4v2u1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority\n' +
             '\n'),
         TrackModule,
+        AlbumModule,
         FileModule,
         UserModule
     ]   

@@ -5,7 +5,7 @@ import {CreateAlbumDto} from './dto/create.album.dto'
 import {AlbumService} from './album.service'
 
 @Controller('/albums')
-export class TrackController {
+export class AlbumController {
     [x: string]: any;
 
     constructor(private albumService: AlbumService) {
@@ -25,7 +25,7 @@ export class TrackController {
     getAll(@Headers()  headers,
            @Query('count') count: number,
            @Query('offset') offset: number) {
-        return this.albumService.getAll(count, offset)
+        return this.albumService.getAll(count, offset, headers)
     }
     @Get('/search')
     search(@Headers()  headers,@Query('query') query: string) {

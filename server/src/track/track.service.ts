@@ -1,4 +1,4 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
+import {Headers, HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {InjectModel} from '@nestjs/mongoose'
 import {Track, TrackDocument} from './schemas/track.schema'
 import {Model, ObjectId} from 'mongoose'
@@ -6,11 +6,8 @@ import {CreateTrackDto} from './dto/create.track.dto'
 import {Comment, CommentDocument} from './schemas/comment.schema'
 import {CreateCommentDTO} from './dto/add.comment.dto'
 import {FileService, FileType} from '../file/file.service'
-import {Headers} from '@nestjs/common'
-import jwt = require('jsonwebtoken')
-import {IComment} from '../../../client/types/track'
 import {User, UserDocument} from '../users/schemas/user.schema'
-import {IUser} from '../../../client/types/user'
+import jwt = require('jsonwebtoken')
 
 @Injectable()
 export class TrackService {

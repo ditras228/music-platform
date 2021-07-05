@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common'
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {InjectModel} from '@nestjs/mongoose'
 import {Album, AlbumDocument} from './schemas/album.schema'
 import {Model, ObjectId} from 'mongoose'
@@ -6,11 +6,12 @@ import {Track, TrackDocument} from '../track/schemas/track.schema'
 import {FileService, FileType} from '../file/file.service'
 import {Headers} from '@nestjs/common'
 import {CreateAlbumDto} from './dto/create.album.dto'
+import jwt = require('jsonwebtoken')
 
 @Injectable()
 export class AlbumService {
     constructor(@InjectModel(Track.name) private albumModel: Model<AlbumDocument>,
-                @InjectModel(Comment.name) private trackModel: Model<TrackDocument>,
+                private trackModel: Model<TrackDocument>,
                 private fileService: FileService
     ) {
     }
@@ -20,7 +21,12 @@ export class AlbumService {
         return this.albumModel.create({...dto, picture: picturePath})
     }
 
-    async getAll(count = 10, offset = 0): Promise<Album[]>{
+    async getAll(count = 10, offset = 0, headers): Promise<any>{
+        const token = jwt.sign(headers.authorization, process.env.SECRET)
+        if(!token){
+            return new HttpException
+            (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
        return this.albumModel.find().skip(Number(offset)).limit(Number(count))
     }
 
