@@ -10,19 +10,20 @@ import classes from './[id].module.css'
 import cookies from 'next-cookies'
 import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {TrackActionTypes} from '../../types/track'
 import {useDispatch} from 'react-redux'
+import {AlbumActionTypes} from '../../types/album'
+import {AlbumsAPI} from '../../api/albumsAPI'
 
 const TrackPage = ({serverAlbum, allTracks, token}) => {
     const router = useRouter()
-    const { albumTracks} = useTypedSelector(state => state.track)
-    const dispatch=useDispatch()
+    const {albumTracks} = useTypedSelector(state => state.album)
+    const dispatch = useDispatch()
     dispatch({
-        type: TrackActionTypes.ADD_TRACKS_TO_ALBUM,
+        type: AlbumActionTypes.ADD_TRACKS_TO_ALBUM,
         payload: serverAlbum.tracks
     })
-    const addTracksHandler = async ()=>{
-       await TracksAPI.addTracks(albumTracks.map(track=>track._id),token)
+    const addTracksHandler = async () => {
+        await AlbumsAPI.addTracks(albumTracks.map(track => track._id), token)
     }
     return (
         <MainLayout
@@ -70,9 +71,9 @@ const TrackPage = ({serverAlbum, allTracks, token}) => {
 
 export default TrackPage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const token = cookies(ctx).token;
+    const token = cookies(ctx).token
     const response = await TracksAPI.getOne(ctx.params.id, token)
-    const responseTracks = await TracksAPI.getTracks( token)
+    const responseTracks = await TracksAPI.getTracks(token)
     return {
         props: {
             serverAlbum: response.data,

@@ -8,19 +8,17 @@ import {VpnKey} from '@material-ui/icons'
 import classes from './register.module.css'
 import {Alert} from '@material-ui/lab'
 import {useDispatch, useSelector} from 'react-redux'
-import {Auth, Login, Registration} from '../../store/action-creators/user'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {Auth, Login} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
 import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 import {NextThunkDispatch, wrapper} from '../../store'
 import cookies from 'next-cookies'
-import {fetchTracks} from '../../store/action-creators/track'
 
 const SignupSchema = Yup.object({
     username: Yup.string().email('Неккоректный email').required('Обязательно'),
     password: Yup.string()
-        .min(6, 'Должен быть больше 5 симолов')
-        .max(16, 'Должен быть меньше 17 симолов')
+        .min(6, 'Должен быть больше 5 символов')
+        .max(16, 'Должен быть меньше 17 символов')
         .required('Обязательно'),
 })
 
@@ -37,12 +35,12 @@ const LogIn = ({isAuth}) => {
         validationSchema: SignupSchema,
         onSubmit: async values => {
             dispatch(Login(values.username, values.password))
-             router.push('/')
+             await router.push('/')
         }
     })
-    const loginHandler=(e: any)=>{
+    const loginHandler= async (e: any)=>{
         e.preventDefault()
-        router.push('/auth/register')
+        await router.push('/auth/register')
     }
 
     return (
@@ -101,7 +99,7 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const token = cookies(ctx).token;
-    await dispatch( Auth(token))
+    await dispatch( Auth())
     const isAuth = cookies(ctx).isAuth;
     return {
         props:{

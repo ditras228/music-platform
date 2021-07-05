@@ -3,10 +3,12 @@ import {playerReducer} from './playerReducer'
 import {HYDRATE} from 'next-redux-wrapper'
 import {trackReducer} from './trackReducer'
 import {usersReducer} from './userReducer'
+import {albumReducer} from './albumReducer'
 
 export const rootReducer = combineReducers({
     player: playerReducer,
     track: trackReducer,
+    album: albumReducer,
     user: usersReducer
 })
 

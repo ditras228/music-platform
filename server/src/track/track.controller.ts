@@ -18,7 +18,7 @@ export class TrackController {
         {name: 'audio', maxCount: 1},
     ]))
 
-    create(@UploadedFiles() files, @Body() dto: CreateTrackDto) {
+    create(@Headers()  headers,@UploadedFiles() files, @Body() dto: CreateTrackDto) {
         const {picture, audio} = files
         return this.trackService.create(dto, picture[0], audio[0
             ])
@@ -31,7 +31,7 @@ export class TrackController {
         return this.trackService.getAll(count, offset, headers)
     }
     @Get('/search')
-    search(@Query('query') query: string) {
+    search(@Headers()  headers,@Query('query') query: string) {
         return this.trackService.search(query)
     }
     @Get(':id')
@@ -40,11 +40,11 @@ export class TrackController {
     }
 
     @Delete(':id')
-    delete(@Param('id') id: ObjectId) {
+    delete(@Headers()  headers,@Param('id') id: ObjectId) {
         return this.trackService.delete(id)
     }
     @Delete()
-    deleteAll() {
+    deleteAll(@Headers()  headers) {
         return this.trackService.deleteAll()
     }
     @Post('/comment')
@@ -53,7 +53,8 @@ export class TrackController {
     }
 
     @Post('/listen/:id')
-    listen(@Param('id') id: ObjectId) {
+    listen(@Headers()  headers,
+           @Param('id') id: ObjectId) {
         return this.trackService.listen(id)
     }
 }

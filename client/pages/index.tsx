@@ -17,7 +17,6 @@ const Index = ({token,isAuth}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
 
-    console.log(token,isAuth)
     withAutoRedirect(false, isAuth, router)
     if (error) {
         return (

@@ -16,6 +16,7 @@ import * as Yup from 'yup'
 import {Alert} from '@material-ui/lab'
 import classes from '../../components/TrackList.module.css'
 import TrackItem from '../../components/TrackItem'
+import {AlbumsAPI} from '../../api/albumsAPI'
 
 const SignupSchema = Yup.object({
     name: Yup.string()
@@ -47,8 +48,8 @@ const Create = ({token}) => {
                 if (activeStep !== 2) {
                     setActiveState(prevState => prevState + 1)
                 } else {
-                    TracksAPI.createAlbum({values, albumTracks: albumTracks.map(album=> album._id)}, token)
-                        .then(() => router.push('/tracks'))
+                    AlbumsAPI.createAlbum({values, albumTracks: albumTracks.map(album=> album._id)}, token)
+                        .then(() => router.push('/albums'))
             }
         }
     })
@@ -138,7 +139,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const token = cookies(ctx).token;
     console.log(token)
-    await dispatch( Auth(token))
+    await dispatch( Auth())
     await dispatch( fetchTracks(token))
     return{
         props: {

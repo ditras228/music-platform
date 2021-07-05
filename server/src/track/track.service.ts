@@ -8,11 +8,15 @@ import {CreateCommentDTO} from './dto/add.comment.dto'
 import {FileService, FileType} from '../file/file.service'
 import {Headers} from '@nestjs/common'
 import jwt = require('jsonwebtoken')
+import {IComment} from '../../../client/types/track'
+import {User, UserDocument} from '../users/schemas/user.schema'
+import {IUser} from '../../../client/types/user'
 
 @Injectable()
 export class TrackService {
     constructor(@InjectModel(Track.name) private trackModel: Model<TrackDocument>,
                 @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
+                @InjectModel(User.name) private userModel: Model<UserDocument>,
                 private fileService: FileService
     ) {
     }
@@ -33,7 +37,12 @@ export class TrackService {
     }
 
     async getOne(id: ObjectId): Promise<Track> {
-        return this.trackModel.findById(id).populate('comments')
+        const track= this.trackModel.findById(id).populate('comments') as unknown as TrackDocument
+        track.comments.map((comment: any)=> {
+          const {username}=  this.userModel.findById(comment.userId) as unknown as UserDocument
+          comment.username=username
+        })
+        return track
     }
 
     async delete(id: ObjectId): Promise<ObjectId> {
