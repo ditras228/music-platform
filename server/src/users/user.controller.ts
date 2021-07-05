@@ -1,6 +1,7 @@
-import {Body,Headers, Controller, Get, Post} from '@nestjs/common'
+import {Body, Headers, Controller, Get, Post, Param} from '@nestjs/common'
 import {UserService} from './user.service'
 import {CreateUserDto} from './dto/create.user.dto'
+import {ObjectId} from 'mongoose'
 
 @Controller('/auth')
 export class UserController{
@@ -13,6 +14,10 @@ export class UserController{
     @Post('/login')
     login(@Body() dto: CreateUserDto){
         return this.userService.login(dto)
+    }
+    @Get('/:id')
+    getOne(@Param('id') id: ObjectId){
+        return this.userService.getOne(id)
     }
     @Get('/')
     auth(@Headers() token){

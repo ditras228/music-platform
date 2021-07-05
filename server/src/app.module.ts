@@ -20,11 +20,12 @@ import { AlbumModule } from './album/album.module'
         UserModule
     ]   
 })
-export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(Role(['ADMIN', 'USER']))
-            .forRoutes('/tracks', '/comment')
-
-    }
-}
+export class AppModule{}
+// export class AppModule implements NestModule {
+//     configure(consumer: MiddlewareConsumer) {
+//         consumer
+//             .apply(Role(['ADMIN', 'USER']))
+//             .forRoutes('/tracks', '/comment')
+//
+//     }
+// }

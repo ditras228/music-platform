@@ -3,7 +3,7 @@ import {MongooseModule} from '@nestjs/mongoose'
 import {FileService} from '../file/file.service'
 import {User, UserSchema} from '../users/schemas/user.schema'
 import {AlbumService} from './album.service'
-import {AlbumController} from './alum.controller'
+import {AlbumController} from './album.controller'
 import {Track, TrackSchema} from '../track/schemas/track.schema'
 import {Album, AlbumSchema} from './schemas/album.schema'
 

@@ -34,7 +34,9 @@ export class UserService {
             if (!errors.isEmpty()) {
                 return new HttpException(`Ошибка при регистрации ${errors}`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            const candidate = await this.userModel.findOne({username: dto.username})
+            const candidate =
+                await this.userModel.findOne({username: dto.username})
+                || await this.userModel.findOne({nickname: dto.username})
             if (candidate) {
                 return new HttpException('Ник занят', HttpStatus.INTERNAL_SERVER_ERROR)
             }
@@ -74,7 +76,22 @@ export class UserService {
             ('Login failed', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-
+    async getOne(id) {
+        try {
+            const user = await this.userModel.findOne({_id: id})
+            if (!user) {
+                return new HttpException
+                (`Пользователь не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+            return {
+                user: {_id:user._id,nickname:user.nickname,username: user.username, roles: user.roles},
+            }
+        } catch (e) {
+            console.log(e)
+            return new HttpException
+            ('Login failed', HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
     async auth(@Request() request) {
         try {
             const parseToken = request.authorization.split(' ')

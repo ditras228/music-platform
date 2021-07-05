@@ -10,7 +10,9 @@ import jwt = require('jsonwebtoken')
 
 @Injectable()
 export class AlbumService {
-    constructor(@InjectModel(Track.name) private albumModel: Model<AlbumDocument>,
+    constructor(@InjectModel(Album.name)
+                private albumModel: Model<AlbumDocument>,
+                @InjectModel(Track.name)
                 private trackModel: Model<TrackDocument>,
                 private fileService: FileService
     ) {
