@@ -36,8 +36,8 @@ export class AlbumController {
         return this.albumService.getOne(id)
     }
     @Post()
-    addTrack(@Headers() headers, @Body() albumId, trackId) {
-        return this.albumService.addTrack(headers, albumId,trackId )
+    editTracks(@Headers() headers, @Body() albumId, tracks) {
+        return this.albumService.editTracks(headers, albumId,tracks )
     }
     @Delete(':id')
     delete(@Headers()  headers, @Param('id') id: ObjectId) {

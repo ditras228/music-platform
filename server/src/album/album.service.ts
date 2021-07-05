@@ -9,6 +9,7 @@ import {CreateAlbumDto} from './dto/create.album.dto'
 import jwt = require('jsonwebtoken')
 import {IAlbum} from '../../../client/types/album'
 import {UserDocument} from '../users/schemas/user.schema'
+import {ITrack} from '../../../client/types/track'
 
 @Injectable()
 export class AlbumService {
@@ -65,14 +66,21 @@ export class AlbumService {
 
     }
 
-    async addTrack(@Headers() headers, albumId, trackId): Promise<Track> {
+    async editTracks(@Headers() headers, albumId, tracks): Promise<Track[]> {
         const album = await this.albumModel.findById(albumId) as AlbumDocument
-        const track = await this.trackModel.findById(trackId) as TrackDocument
-        album.tracks.push(track._id)
-        track.albumsId.push(album._id)
-        await album.save()
-        await track.save()
-        return track
+        const added=tracks.tracks.filter((e: any)=>album.tracks.findIndex((i:any)=>i._id===e._id)===-1)
+        const deleted=album.tracks.filter((e: any)=>tracks.findIndex((i:any)=>i._id===e._id)===-1)
+
+        added.map(track=>track.albumsId=albumId)
+        deleted.filter(track=>track.albumsId=albumId)
+        const newTracks=added.concat(deleted)
+
+        album.tracks = tracks
+        for(let i=0;i<newTracks.length;i++){
+            await newTracks[i].save()
+
+        }
+        return album.tracks
     }
 
 
