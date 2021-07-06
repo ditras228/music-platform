@@ -11,7 +11,6 @@ import {CreateUserDto} from './dto/create.user.dto'
 const bcrypt = require('bcryptjs')
 import { Request } from '@nestjs/common';
 require('dotenv').config()
-const mailService = require('./mailService')
 
 const generateAccessToken = (_id, username, roles) => {
     const payload = {

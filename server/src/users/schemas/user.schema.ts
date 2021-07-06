@@ -1,7 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
-import {Document} from 'mongoose'
 import * as mongoose from 'mongoose'
-import {IAlbum} from '../../../../client/types/album'
+import {Document} from 'mongoose'
 import {Track} from '../../track/schemas/track.schema'
 
 export type UserDocument = User & Document;

@@ -1,15 +1,12 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
+import {Headers, HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {InjectModel} from '@nestjs/mongoose'
 import {Album, AlbumDocument} from './schemas/album.schema'
 import {Model, ObjectId} from 'mongoose'
 import {Track, TrackDocument} from '../track/schemas/track.schema'
 import {FileService, FileType} from '../file/file.service'
-import {Headers} from '@nestjs/common'
 import {CreateAlbumDto} from './dto/create.album.dto'
+import {User, UserDocument} from '../users/schemas/user.schema'
 import jwt = require('jsonwebtoken')
-import {IAlbum} from '../../../client/types/album'
-import {UserDocument} from '../users/schemas/user.schema'
-import {ITrack} from '../../../client/types/track'
 
 @Injectable()
 export class AlbumService {
@@ -17,6 +14,7 @@ export class AlbumService {
                 private albumModel: Model<AlbumDocument>,
                 @InjectModel(Track.name)
                 private trackModel: Model<TrackDocument>,
+                @InjectModel(User.name)
                 private userModel: Model<UserDocument>,
                 private fileService: FileService
     ) {
@@ -66,21 +64,28 @@ export class AlbumService {
 
     }
 
-    async editTracks(@Headers() headers, albumId, tracks): Promise<Track[]> {
-        const album = await this.albumModel.findById(albumId) as AlbumDocument
-        const added=tracks.tracks.filter((e: any)=>album.tracks.findIndex((i:any)=>i._id===e._id)===-1)
-        const deleted=album.tracks.filter((e: any)=>tracks.findIndex((i:any)=>i._id===e._id)===-1)
+    async edit(headers, albumId, tracks): Promise<Track[]> {
+        try{
+            console.log(albumId, tracks)
+            const album = await this.albumModel.findById(albumId)
+            console.log(album)
+            const added=tracks.filter((e: any)=>album.tracks.findIndex((i:any)=>i._id===e._id)===-1)
+            const deleted=album.tracks.filter((e: any)=>tracks.findIndex((i:any)=>i._id===e._id)===-1)
 
-        added.map(track=>track.albumsId=albumId)
-        deleted.filter(track=>track.albumsId=albumId)
-        const newTracks=added.concat(deleted)
+            added.map(track=>track.albumsId=albumId)
+            deleted.filter(track=>track.albumsId=albumId)
+            const newTracks=added.concat(deleted)
 
-        album.tracks = tracks
-        for(let i=0;i<newTracks.length;i++){
-            await newTracks[i].save()
+            album.tracks = tracks
+            for(let i=0;i<newTracks.length;i++){
+                await newTracks[i].save()
 
+            }
+            return album.tracks
         }
-        return album.tracks
+        catch(e){
+            console.log(e)
+        }
     }
 
 

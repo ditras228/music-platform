@@ -4,9 +4,9 @@ import {FileModule} from './file/file.module'
 import {UserModule} from './users/user.module'
 import {ServeStaticModule} from '@nestjs/serve-static'
 import * as path from 'path'
-import {Module, NestModule, MiddlewareConsumer} from '@nestjs/common'
-import {Role} from './middleware/role.middleware'
-import { AlbumModule } from './album/album.module'
+import {Module} from '@nestjs/common'
+import {AlbumModule} from './album/album.module'
+
 @Module({
     imports: [
         ServeStaticModule.forRoot({

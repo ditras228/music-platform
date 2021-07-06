@@ -1,8 +1,20 @@
-import {Headers, Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles, UseInterceptors} from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Headers,
+    Param,
+    Post,
+    Query,
+    UploadedFiles,
+    UseInterceptors
+} from '@nestjs/common'
 import {ObjectId} from 'mongoose'
 import {FileFieldsInterceptor} from '@nestjs/platform-express'
 import {CreateAlbumDto} from './dto/create.album.dto'
 import {AlbumService} from './album.service'
+import {EditAlbumDto} from './dto/edit.album.dto'
 
 @Controller('/albums')
 export class AlbumController {
@@ -20,7 +32,10 @@ export class AlbumController {
         const {picture} = files
         return this.albumService.create(dto, picture[0], headers)
     }
-
+    @Post('/edit')
+    edit(@Headers()  headers, @Body() dto: EditAlbumDto) {
+        return this.albumService.edit(headers, dto.albumId, dto.tracks)
+    }
     @Get()
     getAll(@Headers()  headers,
            @Query('count') count: number,
@@ -35,10 +50,7 @@ export class AlbumController {
     getOne(@Param('id') id: ObjectId) {
         return this.albumService.getOne(id)
     }
-    @Post()
-    editTracks(@Headers() headers, @Body() albumId, tracks) {
-        return this.albumService.editTracks(headers, albumId,tracks )
-    }
+
     @Delete(':id')
     delete(@Headers()  headers, @Param('id') id: ObjectId) {
         return this.albumService.delete(id, headers)
