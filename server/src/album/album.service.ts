@@ -22,13 +22,11 @@ export class AlbumService {
 
     async create(dto: CreateAlbumDto, picture, headers): Promise<any> {
         const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
-        const album = await this.albumModel.create({...dto, picture: picturePath})
-        const {userId}= jwt.verify(headers.authorization, process.env.SECRET) as any
-
+        const {userId, _id}= jwt.verify(headers.authorization, process.env.SECRET) as any
+        const album = await this.albumModel.create({...dto, userId: _id, picture: picturePath})
         const user = await this.userModel.findById(userId)
         for (let i = 0; i < dto.tracks.length; i++) {
             const track = await this.trackModel.findById(dto.tracks[i])
-            track.albumsId.push(album)
             user.tracks.push(track)
             await track.save()
         }
@@ -64,24 +62,22 @@ export class AlbumService {
 
     }
 
-    async edit(headers, albumId, tracks): Promise<Track[]> {
+    async edit(headers, albumId: ObjectId, tracks: ObjectId[]): Promise<any> {
         try{
-            console.log(albumId, tracks)
+            const {_id} = jwt.verify(headers.authorization, process.env.SECRET) as any
+            const tracksDb =[]
             const album = await this.albumModel.findById(albumId)
-            console.log(album)
-            const added=tracks.filter((e: any)=>album.tracks.findIndex((i:any)=>i._id===e._id)===-1)
-            const deleted=album.tracks.filter((e: any)=>tracks.findIndex((i:any)=>i._id===e._id)===-1)
-
-            added.map(track=>track.albumsId=albumId)
-            deleted.filter(track=>track.albumsId=albumId)
-            const newTracks=added.concat(deleted)
-
-            album.tracks = tracks
-            for(let i=0;i<newTracks.length;i++){
-                await newTracks[i].save()
-
+            if (_id!==album.userId) {
+                return new HttpException
+                (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            return album.tracks
+            for(let i=0; i< tracks.length; i++){
+                const track = await this.trackModel.findById(tracks[i])
+                tracksDb.push(track)
+            }
+            album.tracks= tracksDb
+            await album.save()
+            return album
         }
         catch(e){
             console.log(e)

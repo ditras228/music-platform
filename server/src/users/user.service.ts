@@ -7,6 +7,7 @@ import jwt = require('jsonwebtoken')
 import {validationResult} from 'express-validator'
 import {Role, RoleDocument} from './schemas/role.schema'
 import {CreateUserDto} from './dto/create.user.dto'
+import * as mailService from './mailService'
 
 const bcrypt = require('bcryptjs')
 import { Request } from '@nestjs/common';
@@ -41,17 +42,27 @@ export class UserService {
             }
             const hashPassword = bcrypt.hashSync(dto.password, 7)
             const userRole = await this.roleModel.findOne({value: 'USER'})
-            const user = new this.userModel({...dto, password: hashPassword, roles: [userRole.value]})
+            const hashURL = await bcrypt.hash(dto.username, 5)
+            const user = new this.userModel({...dto, hash: hashURL, password: hashPassword, roles: [userRole.value]})
             await user.save()
-            //const hashURL = await bcrypt.hash(dto.username, 5)
-            //await mailService.main(dto.username, hashURL)
+            await mailService.main(dto.username, hashURL)
             return user
         } catch (e) {
             console.log(e)
             throw  new HttpException('Registration failed', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
-
+    async regConfirm(id){
+        try{
+            const user= await this.userModel.findById(id)
+            user.hash=null
+            user.isConfirm =true
+            user.save()
+            return { url: 'http://localhost:3000/auth' };
+        }catch(e){
+            console.log(e)
+        }
+    }
     async login(dto: CreateUserDto) {
         try {
             const user = await this.userModel.findOne({username: dto.username})

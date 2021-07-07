@@ -11,6 +11,10 @@ export class UserController{
     registration(@Body() dto: CreateUserDto){
         return this.userService.registration(dto)
     }
+    @Post('/registration/:id')
+    regConirm(@Param('id') id: ObjectId){
+        return this.userService.regConfirm(id)
+    }
     @Post('/login')
     login(@Body() dto: CreateUserDto){
         return this.userService.login(dto)

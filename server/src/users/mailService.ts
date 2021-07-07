@@ -10,7 +10,7 @@ export async function main(to: string, hash: string) {
         },
     });
 
-    let link=`http://localhost:3000/regconfirm?hash=${hash}`
+    let link=`http://localhost:5000/regconfirm/${hash}`
 
     await transporter.sendMail({
         from: '"MERNMusic" <druzhinindmitry2020@gmail.com>',

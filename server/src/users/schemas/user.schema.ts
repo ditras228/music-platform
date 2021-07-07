@@ -11,6 +11,12 @@ export class User {
     nickname: string
 
     @Prop()
+    hash: string
+
+    @Prop()
+    isConfirm: boolean
+
+    @Prop()
     username: string
 
     @Prop()
