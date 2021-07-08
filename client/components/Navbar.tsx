@@ -21,6 +21,7 @@ import {Button} from '@material-ui/core'
 import {LogOut} from '../store/action-creators/user'
 import {useDispatch} from 'react-redux'
 import {useTypedSelector} from '../hooks/useTypedSelector'
+import {useSession} from 'next-auth/client'
 
 const menuItem = [
     {text: 'Треки', href: '/'},
@@ -28,9 +29,9 @@ const menuItem = [
 ]
 
 export default function Navbar() {
+    const [ session, loading ] = useSession()
     const router = useRouter()
     const theme = useTheme()
-    const {isAuth} = useTypedSelector(state => state.user)
     const [open, setOpen] = React.useState(false)
     const dispatch = useDispatch()
 
@@ -71,7 +72,7 @@ export default function Navbar() {
                         </Typography>
                     </>
                     {
-                        !isAuth
+                        !session
                             ?<Button onClick={()=>logInHandler()}>Login</Button>
                             :<Button onClick={()=>logOutHandler()}>LogOut</Button>
                     }

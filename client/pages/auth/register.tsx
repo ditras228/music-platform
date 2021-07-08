@@ -8,11 +8,9 @@ import {VpnKey} from '@material-ui/icons'
 import classes from './register.module.css'
 import {Alert} from '@material-ui/lab'
 import {useDispatch, useSelector} from 'react-redux'
-import {Auth, Registration} from '../../store/action-creators/user'
+import {Registration} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
-import {withAutoRedirect} from '../../hooks/withAutoRedirect'
-import {NextThunkDispatch, wrapper} from '../../store'
-import cookies from 'next-cookies'
+import {getSession} from 'next-auth/client'
 
 const SignupSchema = Yup.object({
     username: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -24,9 +22,8 @@ const SignupSchema = Yup.object({
         .oneOf([Yup.ref('password'), null], 'Пороли не совпадают')
 })
 
-const Register = ({isAuth}) => {
+const Register = () => {
     const router = useRouter()
-    withAutoRedirect(true, isAuth,  router )
     const dispatch = useDispatch()
     const error = useSelector(state =>GetError(state, 'register'))
 
@@ -39,12 +36,11 @@ const Register = ({isAuth}) => {
         validationSchema: SignupSchema,
         onSubmit: async values => {
             dispatch(Registration(values.username, values.password))
-          //  router.push('/tracks')
         }
     })
-    const loginHandler=(e: any)=>{
+    const loginHandler= async (e: any)=>{
         e.preventDefault()
-        router.push('/auth')
+        await router.push('/auth')
     }
 
         return (
@@ -110,16 +106,13 @@ const Register = ({isAuth}) => {
 
 export default Register
 
-export const getServerSideProps = wrapper.getServerSideProps
-(async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const token = cookies(ctx).token;
-    await dispatch( Auth(token))
-    const isAuth = cookies(ctx).isAuth;
-    return {
-        props:{
-            isAuth: isAuth || null
-        }
+export async function getServerSideProps({req,res}){
+    const session = await getSession(req)
+    if(session){
+        res.writeHead(307, {location: '/tracks'})
+        res.end()
+        return({props:{}})
     }
-})
+    return({props:{session}})
 
+}

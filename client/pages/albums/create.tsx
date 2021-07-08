@@ -4,19 +4,17 @@ import StepWrapper from '../../components/StepWrapper'
 import {Box, Button, Grid, TextField} from '@material-ui/core'
 import FileUpload from '../../components/FileUpload'
 import {useFormik} from 'formik'
-import {TracksAPI} from '../../api/tracksAPI'
 import {NextThunkDispatch, wrapper} from '../../store'
-import cookies from 'next-cookies'
-import {Auth} from '../../store/action-creators/user'
 import {useRouter} from 'next/router'
 import {fetchTracks} from '../../store/action-creators/track'
-import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import * as Yup from 'yup'
 import {Alert} from '@material-ui/lab'
 import classes from '../../components/TrackList.module.css'
 import TrackItem from '../../components/TrackItem'
 import {AlbumsAPI} from '../../api/albumsAPI'
+import {getSession} from 'next-auth/client'
+import AlbumList from '../../components/AlbumList'
 
 const SignupSchema = Yup.object({
     name: Yup.string()
@@ -31,7 +29,7 @@ const Create = ({token}) => {
     const router = useRouter();
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
-    const {tracks,  albumTracks} = useTypedSelector(state => state.track)
+    const {albums,  albumTracks} = useTypedSelector(state => state.album)
 
     const back = () => {
         setActiveState(prevState => prevState - 1)
@@ -120,13 +118,13 @@ const Create = ({token}) => {
                                 )}
                             </Box>
                         </Grid>
-                        <TrackList tracks={tracks} token={token}/>
+                        <AlbumList albums={albums} token={token}/>
                     </>
                 }
             </StepWrapper>
             <Grid container justify={'space-between'}>
                 <Button disabled={activeStep === 0} onClick={back}>Назад</Button>
-                <Button onClick={()=>                    formik.handleSubmit()
+                <Button onClick={()=>formik.handleSubmit()
                 }>Далее</Button>
             </Grid>
         </MainLayout>
@@ -137,13 +135,16 @@ export default Create
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const token = cookies(ctx).token;
-    console.log(token)
-    await dispatch( Auth())
-    await dispatch( fetchTracks(token))
-    return{
+    const session = await getSession(ctx)
+    if(!session){
+        res.writeHead(307, {location: '/'})
+        res.end()
+        return({props:{}})
+    }
+    await dispatch( fetchTracks(session.accessToken))
+    return {
         props: {
-            token: token
+            token: session.accessToken
         }
     }
 })

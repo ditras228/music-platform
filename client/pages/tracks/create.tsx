@@ -7,10 +7,9 @@ import {useFormik} from 'formik'
 import {TracksAPI} from '../../api/tracksAPI'
 import {router} from 'next/client'
 import {NextThunkDispatch, wrapper} from '../../store'
-import cookies from 'next-cookies'
-import {Auth} from '../../store/action-creators/user'
 import * as Yup from 'yup'
-let token
+import {getSession} from 'next-auth/client'
+
 const SignupSchema = Yup.object({
     name: Yup.string()
         .required('Обязательно'),
@@ -20,7 +19,7 @@ const SignupSchema = Yup.object({
         .required('Обязательно'),
 
 })
-const Create = () => {
+const Create = ({token}) => {
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
     const [audio, setAudio] = useState(null)
@@ -102,8 +101,14 @@ const Create = () => {
 export default Create
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    token = cookies(ctx).token;
-    await dispatch( Auth(token))
+    const session= await getSession(ctx)
+    if(!session){
+        res.writeHead(307, {location: '/auth'})
+        res.end()
+        return({props:{}})
+    }
+    return{
+        token: session.accessToken
+    }
 
 })

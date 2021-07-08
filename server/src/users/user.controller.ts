@@ -23,13 +23,4 @@ export class UserController{
     getOne(@Param('id') id: ObjectId){
         return this.userService.getOne(id)
     }
-    @Get('/')
-    auth(@Headers() token){
-        return this.userService.auth(token)
-    }
-    @Post('/install')
-    install(){
-        return this.userService.install()
-    }
-
 }

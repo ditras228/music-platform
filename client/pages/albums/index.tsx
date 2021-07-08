@@ -2,16 +2,15 @@ import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid} from '@material-ui/core'
 import {useRouter} from 'next/router'
-import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import {RotateLeft, Search} from '@material-ui/icons'
 import classes from './index.module.css'
-import {Auth} from '../../store/action-creators/user'
-import cookies from 'next-cookies'
 import {fetchAlbums, searchAlbums} from '../../store/action-creators/album'
+import {getSession} from 'next-auth/client'
+import AlbumList from '../../components/AlbumList'
 
 const Index = ({token}) => {
     const router = useRouter()
@@ -59,7 +58,7 @@ const Index = ({token}) => {
                             <h2 className={classes.title}><Search/>Список альбомов</h2>
                                 <Button onClick={() => router.push('/album/create')}>Новый альбом</Button>
                         </Grid>
-                    <TrackList tracks={albums} token={token}/>
+                    <AlbumList albums={albums} token={token}/>
                 </Card>
             </Grid>
         </MainLayout>
@@ -71,12 +70,16 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    await dispatch( Auth())
-    const token = cookies(ctx).token;
-    await dispatch( fetchAlbums(token))
-    return {
-        props:{
-            token: token
-        }
+    const session= await getSession(ctx)
+
+    if(!session){
+        res.writeHead(307, {location: '/'})
+        res.end()
+        return({props:{}})
+    }
+
+    await dispatch( fetchAlbums(session.accessToken))
+    return{
+        token: session.accessToken
     }
 })

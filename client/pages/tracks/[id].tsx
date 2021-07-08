@@ -1,19 +1,18 @@
 import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Button, Card, Grid, makeStyles, TextField} from '@material-ui/core'
+import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
-import {GetServerSideProps} from 'next'
 import {TracksAPI} from '../../api/tracksAPI'
 import {baseURL} from '../../api'
 import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
-import {withAutoRedirect} from '../../hooks/withAutoRedirect'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
 import CommentFC from './comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
+import {getSession} from 'next-auth/client'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
@@ -113,14 +112,16 @@ export default TrackPage
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const token = cookies(ctx).token;
-    const response = await TracksAPI.getOne(ctx.params.id, token)
+    const session= await getSession(ctx)
+
     const player = cookies(ctx).player;
     await dispatch(setPlayer(player))
+
+    const response = await TracksAPI.getOne(ctx.params.id, session.accessToken)
     return {
         props: {
             serverTrack: response.data,
-            token: token
+            token: session.accessToken
         }
 
     }

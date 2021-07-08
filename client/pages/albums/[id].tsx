@@ -13,6 +13,7 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useDispatch} from 'react-redux'
 import {AlbumActionTypes} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
+import {getSession} from 'next-auth/client'
 
 const TrackPage = ({serverAlbum, allTracks, token}) => {
     const router = useRouter()
@@ -23,7 +24,7 @@ const TrackPage = ({serverAlbum, allTracks, token}) => {
         payload: serverAlbum.tracks
     })
     const addTracksHandler = async () => {
-        await AlbumsAPI.addTracks(albumTracks.map(track => track._id), token)
+        await AlbumsAPI.editAlbum(albumTracks.map(track => track._id), token)
     }
     return (
         <MainLayout
@@ -71,14 +72,15 @@ const TrackPage = ({serverAlbum, allTracks, token}) => {
 
 export default TrackPage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const token = cookies(ctx).token
-    const response = await TracksAPI.getOne(ctx.params.id, token)
-    const responseTracks = await TracksAPI.getTracks(token)
+    const session= await getSession(ctx)
+
+    const response = await TracksAPI.getOne(ctx.params.id, session.accessToken)
+    const responseTracks = await TracksAPI.getTracks(session.accessToken)
     return {
         props: {
             serverAlbum: response.data,
             allTracks: responseTracks.data,
-            token: token
+            token: session.accessToken
         }
 
     }

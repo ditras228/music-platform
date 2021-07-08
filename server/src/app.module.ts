@@ -12,8 +12,7 @@ import {AlbumModule} from './album/album.module'
         ServeStaticModule.forRoot({
             rootPath: path.resolve(__dirname, 'static'),
         }),
-        MongooseModule.forRoot('mongodb+srv://ditras228:redcommunist5@cluster0.4v2u1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority\n' +
-            '\n'),
+        MongooseModule.forRoot(process.env.DB_URL),
         TrackModule,
         AlbumModule,
         FileModule,
@@ -21,11 +20,3 @@ import {AlbumModule} from './album/album.module'
     ]   
 })
 export class AppModule{}
-// export class AppModule implements NestModule {
-//     configure(consumer: MiddlewareConsumer) {
-//         consumer
-//             .apply(Role(['ADMIN', 'USER']))
-//             .forRoutes('/tracks', '/comment')
-//
-//     }
-// }

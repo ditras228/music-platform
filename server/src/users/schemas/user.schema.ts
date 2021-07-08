@@ -1,32 +1,33 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
-import * as mongoose from 'mongoose'
-import {Document} from 'mongoose'
-import {Track} from '../../track/schemas/track.schema'
-
+import {Document, } from 'mongoose'
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
     @Prop()
-    nickname: string
+    name: string
+
+    @Prop()
+    email: string
 
     @Prop()
     hash: string
 
     @Prop()
-    isConfirm: boolean
+    email_verified: boolean
 
     @Prop()
-    username: string
+    image: string
 
     @Prop()
     password: string
 
-    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Track'}]})
-    tracks: Track[]
+    @Prop()
+    created_at: { type: Date}
 
     @Prop()
-    roles: Array<string>
+    updated_at:{ type: Date}
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

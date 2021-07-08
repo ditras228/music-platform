@@ -2,10 +2,8 @@ import React, {useState} from 'react'
 import {Box, Grid, TextField} from '@material-ui/core'
 import classes from './TrackList.module.css'
 import {useFormik} from 'formik'
-import {searchAlbums} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
 import AlbumItem from './AlbumItem'
-import {IAlbum} from '../types/track'
 
 interface AlbumListProps{
     albums: IAlbum[]
