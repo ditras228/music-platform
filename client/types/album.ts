@@ -8,7 +8,7 @@ export interface IAlbum{
     tracks: ITrack[]
 }
 export interface AlbumState{
-    albums: IAlbum
+    albums: IAlbum[]
     albumTracks: ITrack[]
     error: string
 }

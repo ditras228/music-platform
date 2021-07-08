@@ -1,6 +1,7 @@
 import {AlbumAction, AlbumActionTypes, AlbumState} from '../../types/album'
 
 const initialState: AlbumState={
+    albums:[],
     albumTracks:[],
     error: ''
 }

@@ -24,6 +24,7 @@ export const playerReducer=(state = initialState, action: PlayerActions  )=>{
         case PlayerActionTypes.SET_VOLUME:
             return{...state, volume: action.payload}
         case PlayerActionTypes.SET_PLAYER:
+            if(action.payload)
             return{...state,
                 currentTime: action.payload.currentTime,
                 duration: action.payload.duration,

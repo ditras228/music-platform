@@ -66,7 +66,7 @@ export class UserService {
     async login(dto: CreateUserDto) {
         try {
             const user = await this.userModel.findOne({username: dto.username})
-            if (!user) {
+            if (!user || !user.isConfirm) {
                 return new HttpException
                 (`Пользователь ${dto.username} не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
 

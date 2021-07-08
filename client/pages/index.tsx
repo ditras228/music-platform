@@ -57,7 +57,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     await dispatch(Auth())
     let token = cookies(ctx).token;
     await dispatch( fetchTracks(token))
-    await dispatch( setPlayer(player))
+    await dispatch( setPlayer(player || null))
 
     return {
         props:{

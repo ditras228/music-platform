@@ -32,12 +32,8 @@ export const AlbumsAPI= {
             }
         })
     },
-    addTracks(data, token){
-        let formData = new FormData()
-        formData.append('name', data.albumId)
-        formData.append('name', data.tracksId)
-
-        return instance.post('/albums/addTracks', data,
+    editAlbum(tracksId, token){
+        return instance.post('/albums/edit', tracksId,
             {headers: {Authorization: `Bearer ${token}`}})
 
     },
