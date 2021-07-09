@@ -103,8 +103,8 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const session= await getSession(ctx)
     if(!session){
-        res.writeHead(307, {location: '/auth'})
-        res.end()
+        ctx.res.writeHead(307, {location: '/auth'})
+        ctx.res.end()
         return({props:{}})
     }
     return{

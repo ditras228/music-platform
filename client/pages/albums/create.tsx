@@ -137,8 +137,8 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session = await getSession(ctx)
     if(!session){
-        res.writeHead(307, {location: '/'})
-        res.end()
+        ctx.res.writeHead(307, {location: '/'})
+        ctx.res.end()
         return({props:{}})
     }
     await dispatch( fetchTracks(session.accessToken))

@@ -9,8 +9,9 @@ import {useDispatch} from 'react-redux'
 interface TrackListProps{
     tracks: ITrack[]
     token: string
+    userId: string
 }
-const TrackList: React.FC<TrackListProps> = ({tracks,token}) => {
+const TrackList: React.FC<TrackListProps> = ({tracks,token, userId}) => {
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch()  
     const formik = useFormik({

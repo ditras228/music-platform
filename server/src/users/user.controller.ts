@@ -12,7 +12,7 @@ export class UserController{
         return this.userService.registration(dto)
     }
     @Post('/registration/:id')
-    regConirm(@Param('id') id: ObjectId){
+    regConfirm(@Param('id') id: ObjectId){
         return this.userService.regConfirm(id)
     }
     @Post('/login')

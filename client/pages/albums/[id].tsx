@@ -1,11 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Button, Card, Grid} from '@material-ui/core'
+import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {GetServerSideProps} from 'next'
 import {TracksAPI} from '../../api/tracksAPI'
 import {baseURL} from '../../api'
-import {ArrowBackIos, GTranslate, Hearing, Person, Title} from '@material-ui/icons'
+import {ArrowBackIos, GTranslate, Hearing, Person, Settings, Title} from '@material-ui/icons'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
 import TrackList from '../../components/TrackList'
@@ -14,18 +14,30 @@ import {useDispatch} from 'react-redux'
 import {AlbumActionTypes} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
 import {getSession} from 'next-auth/client'
+import {DefaultSession} from 'next-auth'
 
-const TrackPage = ({serverAlbum, allTracks, token}) => {
+const TrackPage = ({serverAlbum, allTracks, token, userId}) => {
     const router = useRouter()
     const {albumTracks} = useTypedSelector(state => state.album)
+    const [editAlbum, setAlbumEdit] = useState(false)
+    const [albumName, setAlbumName] = useState('')
+    let albumOwner = false
     const dispatch = useDispatch()
+
+
+    if (serverAlbum.userId === userId) {
+        albumOwner = true
+    }
+
+
     dispatch({
         type: AlbumActionTypes.ADD_TRACKS_TO_ALBUM,
         payload: serverAlbum.tracks
     })
-    const addTracksHandler = async () => {
+    const editAlbumHandler = async () => {
         await AlbumsAPI.editAlbum(albumTracks.map(track => track._id), token)
     }
+
     return (
         <MainLayout
             title={'Музыкальная площадка - ' + serverAlbum.name + ' - ' + serverAlbum.artist}
@@ -39,13 +51,41 @@ const TrackPage = ({serverAlbum, allTracks, token}) => {
                 >
                     <ArrowBackIos/> К списку
                 </Button>
+                {albumOwner &&
+                    <Button
+                        variant={'outlined'}
+                        style={{fontSize: 32}}
+                        onClick={() => setAlbumEdit(!editAlbum)}
+                    >
+                        {editAlbum
+                            ? <><Settings/> Редактировать альбом</>
+                            : <><ArrowBackIos/> Отменить редактирование</>
+                        }
+
+                    </Button>
+
+                }
+
                 <Card>
                     <Grid container className={classes.info}>
                         <img src={baseURL + serverAlbum.picture} className={classes.img} alt={'Обложка альбома'}/>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
                                 <h2 className={classes.item_title}><Title/>Название</h2>
-                                <h2 className={classes.item_value}>{serverAlbum.name}</h2>
+                                {editAlbum
+                                    ? <h2 className={classes.item_value}>{serverAlbum.name}</h2>
+                                    : (
+                                        <form>
+                                            <TextField
+                                                label={'Найти альбом'}
+                                                fullWidth
+                                                name={'query'}
+                                                value={albumName}
+                                                onChange={(e: any) => setAlbumName(e)}
+                                            />
+                                        </form>
+                                    )
+                                }
                             </div>
                             <div className={classes.line}>
                                 <h2 className={classes.item_title}><Person/>Автор</h2>
@@ -59,11 +99,11 @@ const TrackPage = ({serverAlbum, allTracks, token}) => {
                     </Grid>
                 </Card>
                 <Card className={classes.card}>
-                    <h2 className={classes.title}><GTranslate/> Описание альбома</h2>
-                    <p className={classes.text}>{serverAlbum.text}</p>
-                    <TrackList tracks={albumTracks} token={token}/>
+                    <TrackList tracks={albumTracks} token={token} userId={userId}/>
+                    editAlbum && (
                     <TrackList tracks={allTracks} token={token}/>
-                    <Button onClick={addTracksHandler}>Подтвердить</Button>
+                    <Button onClick={editAlbumHandler}>Подтвердить</Button>
+                    )
                 </Card>
             </Grid>
         </MainLayout>
@@ -72,7 +112,7 @@ const TrackPage = ({serverAlbum, allTracks, token}) => {
 
 export default TrackPage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session= await getSession(ctx)
+    const session = await getSession(ctx) as Session
 
     const response = await TracksAPI.getOne(ctx.params.id, session.accessToken)
     const responseTracks = await TracksAPI.getTracks(session.accessToken)
@@ -80,8 +120,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         props: {
             serverAlbum: response.data,
             allTracks: responseTracks.data,
-            token: session.accessToken
+            token: session.accessToken,
+            userId: session.user._id
         }
 
     }
+}
+export interface Session extends DefaultSession  {
+    user?: {
+        _id: string | null
+        name?: string | null
+        email?: string | null
+        image?: string | null
+    }
+    expires?: string
 }

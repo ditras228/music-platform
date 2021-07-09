@@ -9,31 +9,37 @@ import {TracksAPI} from '../api/tracksAPI'
 import {fetchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
+import {AlbumActionTypes} from '../types/album'
+import {useSession} from 'next-auth/client'
+import {Session} from '../pages/albums/[id]'
 
 interface TrackItemProps {
     track: ITrack
     active?: boolean
     token: string
     view: string
+    userId?: string
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view}) => {
+const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view, userId}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
     const dispatch = useDispatch()
+    const [session] = useSession() as any
+
     const deleteOne = async () => {
         await TracksAPI.deleteOne(track._id, token)
         dispatch(fetchTracks(token))
     }
     const addOne = () => {
         dispatch({
-            type: TrackActionTypes.ADD_TRACK_TO_ALBUM,
+            type: AlbumActionTypes.ADD_TRACK_TO_ALBUM,
             payload: {track}
         })
     }
     const removeOne = () => {
         dispatch({
-            type: TrackActionTypes.REMOVE_TRACK_FROM_ALBUM,
+            type: AlbumActionTypes.REMOVE_TRACK_FROM_ALBUM,
             payload: {track}
         })
     }
@@ -72,6 +78,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view
                     </IconButton>
 
                     :
+                    session.user._id===userId &&
                     <>
                         <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
                             <ExposurePlus1 onClick={addOne}/>

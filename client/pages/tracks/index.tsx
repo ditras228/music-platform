@@ -1,41 +1,20 @@
-import React, {useState} from 'react'
+import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid} from '@material-ui/core'
 import {useRouter} from 'next/router'
+import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {NextThunkDispatch, wrapper} from '../../store'
-import {useFormik} from 'formik'
-import {useDispatch} from 'react-redux'
+import {fetchTracks} from '../../store/action-creators/track'
 import {RotateLeft, Search} from '@material-ui/icons'
 import classes from './index.module.css'
-import {fetchAlbums, searchAlbums} from '../../store/action-creators/album'
+import cookies from 'next-cookies'
+import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
-import AlbumList from '../../components/AlbumList'
 
 const Index = ({token}) => {
     const router = useRouter()
-    const {albums,  error} = useTypedSelector(state => state.album)
-    const [timer, setTimer] = useState(null)
-    const dispatch = useDispatch()
-
-    useFormik({
-        initialValues: {
-            query: ''
-        },
-        onSubmit: async values => {
-            await handleSearch(values)
-        },
-    })
-    const handleSearch = async (values) => {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        setTimer(
-            setTimeout(async () => {
-                await dispatch(searchAlbums(values, token))
-            }, 500)
-        )
-    }
+    const {tracks,  error} = useTypedSelector(state => state.track)
 
     if (error) {
         return (
@@ -50,15 +29,16 @@ const Index = ({token}) => {
         )
     }
     return (
-        <MainLayout title={'Альбомы'}>
+        <MainLayout title={'Треки'}>
 
             <Grid container justify={'center'}>
                 <Card className={classes.card}>
                         <Grid container justify={'space-between'} direction={'row'}>
-                            <h2 className={classes.title}><Search/>Список альбомов</h2>
-                                <Button onClick={() => router.push('/album/create')}>Новый альбом</Button>
+                            <h2 className={classes.title}><Search/>Список треков</h2>
+                            <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
                         </Grid>
-                    <AlbumList albums={albums} token={token}/>
+
+                    <TrackList tracks={tracks} token={token}/>
                 </Card>
             </Grid>
         </MainLayout>
@@ -71,15 +51,19 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session= await getSession(ctx)
-
     if(!session){
-        ctx.res.writeHead(307, {location: '/'})
+        ctx.res.writeHead(307, {location: '/auth'})
         ctx.res.end()
         return({props:{}})
     }
 
-    await dispatch( fetchAlbums(session.accessToken))
-    return{
-        token: session.accessToken
+    const player = cookies(ctx).player;
+    await dispatch( fetchTracks(session.accessToken))
+    await dispatch( setPlayer(player))
+
+    return {
+        props:{
+            token: session.accessToken
+        }
     }
 })
