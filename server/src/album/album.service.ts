@@ -25,11 +25,6 @@ export class AlbumService {
         const {userId, _id}= jwt.verify(headers.authorization, process.env.SECRET) as any
         const album = await this.albumModel.create({...dto, userId: _id, picture: picturePath})
         const user = await this.userModel.findById(userId)
-        for (let i = 0; i < dto.tracks.length; i++) {
-            const track = await this.trackModel.findById(dto.tracks[i])
-            user.tracks.push(track)
-            await track.save()
-        }
         await user.save()
         return album
     }

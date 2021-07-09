@@ -12,7 +12,7 @@ import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
 
-const Index = ({token}) => {
+const Index = ({token, userId}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
 
@@ -38,7 +38,7 @@ const Index = ({token}) => {
                             <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
                         </Grid>
 
-                    <TrackList tracks={tracks} token={token}/>
+                    <TrackList tracks={tracks} token={token} userId={userId}/>
                 </Card>
             </Grid>
         </MainLayout>
@@ -50,11 +50,14 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session= await getSession(ctx)
+    const session= await getSession({req: ctx.req}) as any
     if(!session){
-        ctx.res.writeHead(307, {location: '/auth'})
-        ctx.res.end()
-        return({props:{}})
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
 
     const player = cookies(ctx).player;
@@ -63,7 +66,8 @@ export const getServerSideProps = wrapper.getServerSideProps
 
     return {
         props:{
-            token: session.accessToken
+            token: session.accessToken,
+            useId: session.user._id
         }
     }
 })

@@ -18,10 +18,8 @@ import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import classes from './NavBar.module.css'
 import {Button} from '@material-ui/core'
-import {LogOut} from '../store/action-creators/user'
 import {useDispatch} from 'react-redux'
-import {useTypedSelector} from '../hooks/useTypedSelector'
-import {useSession} from 'next-auth/client'
+import {signOut, useSession} from 'next-auth/client'
 
 const menuItem = [
     {text: 'Треки', href: '/'},
@@ -43,11 +41,10 @@ export default function Navbar() {
         setOpen(false)
     }
     const logOutHandler = ()=>{
-        dispatch(LogOut())
+        signOut()
     }
-    const logInHandler = ()=>{
-        dispatch(LogOut())
-        router.push('/auth')
+    const logInHandler = async ()=>{
+        await router.push('/auth')
     }
     return (
         <div>

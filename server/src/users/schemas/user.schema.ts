@@ -23,10 +23,10 @@ export class User {
     password: string
 
     @Prop()
-    created_at: { type: Date}
+    created_at: Date
 
     @Prop()
-    updated_at:{ type: Date}
+    updated_at: Date
 
 }
 

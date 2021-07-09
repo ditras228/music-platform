@@ -14,7 +14,7 @@ import AlbumList from '../../components/AlbumList'
 
 const Index = ({token}) => {
     const router = useRouter()
-    const {albums,  error} = useTypedSelector(state => state.album)
+    const {albums, error} = useTypedSelector(state => state.album)
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch()
 
@@ -54,10 +54,10 @@ const Index = ({token}) => {
 
             <Grid container justify={'center'}>
                 <Card className={classes.card}>
-                        <Grid container justify={'space-between'} direction={'row'}>
-                            <h2 className={classes.title}><Search/>Список альбомов</h2>
-                                <Button onClick={() => router.push('/album/create')}>Новый альбом</Button>
-                        </Grid>
+                    <Grid container justify={'space-between'} direction={'row'}>
+                        <h2 className={classes.title}><Search/>Список альбомов</h2>
+                        <Button onClick={() => router.push('/album/create')}>Новый альбом</Button>
+                    </Grid>
                     <AlbumList albums={albums} token={token}/>
                 </Card>
             </Grid>
@@ -69,17 +69,21 @@ export default Index
 
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session= await getSession(ctx)
+        const dispatch = ctx.store.dispatch as NextThunkDispatch
+        const session = await getSession({req: ctx.req})
 
-    if(!session){
-        ctx.res.writeHead(307, {location: '/'})
-        ctx.res.end()
-        return({props:{}})
-    }
+        if (!session) {
+            return {
+                redirect: {
+                    destination: '/',
+                    permanent: false,
+                },
+            }
+        }
 
-    await dispatch( fetchAlbums(session.accessToken))
-    return{
-        token: session.accessToken
+        await dispatch(fetchAlbums(session.accessToken))
+        return {
+            token: session.accessToken
+        }
     }
-})
+)

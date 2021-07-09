@@ -54,7 +54,7 @@ const Register = () => {
                     >
                         <TextField
                             label={'Введите Email'}
-                            name={'username'}
+                            name={'email'}
                             value={formik.values.username}
                             onChange={formik.handleChange}
                         />
@@ -107,7 +107,7 @@ const Register = () => {
 export default Register
 
 export async function getServerSideProps({req,res}){
-    const session = await getSession(req)
+    const session = await getSession({req})
     if(session){
         res.writeHead(307, {location: '/tracks'})
         res.end()

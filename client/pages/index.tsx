@@ -19,9 +19,9 @@ const SignupSchema = Yup.object({
         .required('Обязательно'),
 })
 
-const LogIn = ({session})=> {
+const LogIn = ({session}) => {
     const router = useRouter()
-    const error = useSelector(state =>GetError(state, 'login'))
+    const error = useSelector(state => GetError(state, 'login'))
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -29,10 +29,10 @@ const LogIn = ({session})=> {
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-             await signIn('Login', {email: values.email, password: values.password})
+            await signIn('Login', {email: values.email, password: values.password})
         }
     })
-    const loginHandler= async (e: any)=>{
+    const loginHandler = async (e: any) => {
         e.preventDefault()
         await router.push('/auth/register')
     }
@@ -48,12 +48,12 @@ const LogIn = ({session})=> {
                     >
                         <TextField
                             label={'Введите Email'}
-                            name={'username'}
+                            name={'email'}
                             value={formik.values.email}
                             onChange={formik.handleChange}
                         />
                         {formik.touched.email && formik.errors.email
-                        &&  <Alert variant="filled" severity="error">
+                        && <Alert variant="filled" severity="error">
                             {formik.errors.email}
                         </Alert>}
                         <TextField
@@ -68,20 +68,20 @@ const LogIn = ({session})=> {
                         && <Alert variant="filled" severity="error">
                             {formik.errors.password}
                         </Alert>}
-                        {error?
-                         <Alert variant="filled" severity="error">
-                            {error.message}
-                        </Alert>: null}
+                        {error ?
+                            <Alert variant="filled" severity="error">
+                                {error.message}
+                            </Alert> : null}
                         <Button
                             type={'submit'}>
                             Войти
                         </Button>
                         <Button
-                            onClick={()=>signIn('github')}>
+                            onClick={() => signIn('github')}>
                             <GitHub/>
                             Войти с помощью GitHub
                         </Button>
-                        <Link onClick={e=>loginHandler(e)} className={classes.login}>
+                        <Link onClick={e => loginHandler(e)} className={classes.login}>
                             Ещё нет аккаунта? Зарегистрируйтесь
                         </Link>
                     </Grid>
@@ -94,13 +94,17 @@ const LogIn = ({session})=> {
 export default LogIn
 
 
-export async function getServerSideProps({req,res}){
-    const session = await getSession(req)
-    if(session){
-        res.writeHead(307, {location: '/tracks'})
-        res.end()
-        return({props:{}})
+export async function getServerSideProps({req, res}) {
+    const session = await getSession({req})
+    if (session) {
+        return {
+            redirect: {
+                destination: '/tracks',
+                permanent: false,
+            },
+        }
     }
-    return({props:{session}})
+
+    return ({props: {session}})
 
 }

@@ -38,8 +38,8 @@ export class TrackService {
     async getOne(id: ObjectId): Promise<Track> {
         const track= this.trackModel.findById(id).populate('comments') as unknown as TrackDocument
         track.comments.map((comment: any)=> {
-          const {username}=  this.userModel.findById(comment.userId) as unknown as UserDocument
-          comment.username=username
+          const {name}=  this.userModel.findById(comment.userId) as unknown as UserDocument
+          comment.username=name
         })
         return track
     }

@@ -26,10 +26,10 @@ const SignupSchema = Yup.object({
 
 })
 const Create = ({token}) => {
-    const router = useRouter();
+    const router = useRouter()
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
-    const {albums,  albumTracks} = useTypedSelector(state => state.album)
+    const {albums, albumTracks} = useTypedSelector(state => state.album)
 
     const back = () => {
         setActiveState(prevState => prevState - 1)
@@ -39,25 +39,25 @@ const Create = ({token}) => {
             name: '',
             artist: '',
             text: '',
-            picture : picture,
+            picture: picture,
         },
         validationSchema: SignupSchema,
         onSubmit: values => {
-                if (activeStep !== 2) {
-                    setActiveState(prevState => prevState + 1)
-                } else {
-                    AlbumsAPI.createAlbum({values, albumTracks: albumTracks.map(album=> album._id)}, token)
-                        .then(() => router.push('/albums'))
+            if (activeStep !== 2) {
+                setActiveState(prevState => prevState + 1)
+            } else {
+                AlbumsAPI.createAlbum({values, albumTracks: albumTracks.map(album => album._id)}, token)
+                    .then(() => router.push('/albums'))
             }
         }
     })
     return (
-        <MainLayout >
-            <StepWrapper steps={ ['Инфо', 'Обложка', 'Треки']} activeStep={activeStep} >
+        <MainLayout>
+            <StepWrapper steps={['Инфо', 'Обложка', 'Треки']} activeStep={activeStep}>
                 {activeStep === 0 &&
                 <form onSubmit={formik.handleSubmit}>
 
-                <Grid container direction={'column'}>
+                    <Grid container direction={'column'}>
                         <TextField
                             name={'name'}
                             value={formik.values.name}
@@ -66,65 +66,65 @@ const Create = ({token}) => {
                             label={'Название альбома'}
 
                         />
-                    {formik.errors.name
-                    && <Alert variant="filled" severity="error">
-                        {formik.errors.name}
-                    </Alert>}
+                        {formik.errors.name
+                        && <Alert variant="filled" severity="error">
+                            {formik.errors.name}
+                        </Alert>}
 
-                    <TextField
+                        <TextField
                             name={'artist'}
                             value={formik.values.artist}
                             onChange={formik.handleChange}
                             style={{marginTop: 10}}
                             label={'Автор'}
                         />
-                    {formik.errors.artist
-                    && <Alert variant="filled" severity="error">
-                        {formik.errors.artist}
-                    </Alert>}
-                    <TextField
-                        name={'text'}
-                        value={formik.values.text}
-                        onChange={formik.handleChange}
-                        style={{marginTop: 10}}
-                        label={'Описание'}
+                        {formik.errors.artist
+                        && <Alert variant="filled" severity="error">
+                            {formik.errors.artist}
+                        </Alert>}
+                        <TextField
+                            name={'text'}
+                            value={formik.values.text}
+                            onChange={formik.handleChange}
+                            style={{marginTop: 10}}
+                            label={'Описание'}
 
-                    />
-                    {formik.errors.text
-                    && <Alert variant="filled" severity="error">
-                        {formik.errors.text}
-                    </Alert>}
+                        />
+                        {formik.errors.text
+                        && <Alert variant="filled" severity="error">
+                            {formik.errors.text}
+                        </Alert>}
 
-                </Grid>
+                    </Grid>
                 </form>
 
                 }
                 {activeStep === 1 &&
-                <FileUpload setFile={setPicture} accept={'image/*'} formik={formik}  >
+                <FileUpload setFile={setPicture} accept={'image/*'} formik={formik}>
                     <Button>Загрузить изображение</Button>
                 </FileUpload>
                 }
                 {activeStep === 2 &&
-                    <>
-                        <Grid container direction={'column'} >
-                            <Box p={0} className={classes.box}>
-                                {albumTracks.map(track=>
-                                    <TrackItem
-                                        key={track._id}
-                                        track={track}
-                                        token={token}
-                                        view={'create'}
-                                    />
-                                )}
-                            </Box>
-                        </Grid>
-                        <AlbumList albums={albums} token={token}/>
-                    </>
+                <>
+                    <Grid container direction={'column'}>
+                        <Box p={0} className={classes.box}>
+                            {albumTracks.map(track =>
+                                <TrackItem
+                                    key={track._id}
+                                    track={track}
+                                    token={token}
+                                    view={'create'}
+                                />
+                            )}
+                        </Box>
+                    </Grid>
+                    <AlbumList albums={albums} token={token}/>
+                </>
                 }
             </StepWrapper>
             <Grid container justify={'space-between'}>
                 <Button disabled={activeStep === 0} onClick={back}>Назад</Button>
-                <Button onClick={()=>formik.handleSubmit()
+                <Button onClick={() => formik.handleSubmit()
                 }>Далее</Button>
             </Grid>
         </MainLayout>
@@ -136,12 +136,15 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session = await getSession(ctx)
-    if(!session){
-        ctx.res.writeHead(307, {location: '/'})
-        ctx.res.end()
-        return({props:{}})
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
-    await dispatch( fetchTracks(session.accessToken))
+    await dispatch(fetchTracks(session.accessToken))
     return {
         props: {
             token: session.accessToken

@@ -101,14 +101,16 @@ const Create = ({token}) => {
 export default Create
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const session= await getSession(ctx)
-    if(!session){
-        ctx.res.writeHead(307, {location: '/auth'})
-        ctx.res.end()
-        return({props:{}})
+    const session= await getSession({req: ctx.req})
+    if(!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
-    return{
+    return {
         token: session.accessToken
     }
-
 })
