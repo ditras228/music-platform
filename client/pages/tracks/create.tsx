@@ -26,7 +26,6 @@ const Create = ({token}) => {
     const [audio, setAudio] = useState(null)
     const router = useRouter();
 
-
     const back = () => {
         setActiveState(prevState => prevState - 1)
     }

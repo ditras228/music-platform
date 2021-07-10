@@ -19,11 +19,11 @@ export class TrackService {
     }
 
     async create(dto: CreateTrackDto, picture, audio, headers): Promise<Track> {
-        const {userId} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
+        const {_id} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
 
         const audioPath = this.fileService.createFile(FileType.AUDIO, audio)
         const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
-        return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath, userId:userId})
+        return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath, userId:_id})
     }
 
     async getAll(count = 10, offset = 0, headers): Promise<any> {
@@ -45,9 +45,9 @@ export class TrackService {
     }
 
     async delete(id: ObjectId, headers): Promise<any> {
-        const {userId} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
+        const {_id} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
         const track = await this.trackModel.findById(id)
-        if(track.userId===userId) {
+        if(track.userId===_id) {
             track.remove()
         }
         return new HttpException
@@ -61,9 +61,9 @@ export class TrackService {
     }
 
     async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
-        const {userId}= jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
+        const {_id}= jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
         const track = await this.trackModel.findById(dto.trackId)
-        const comment = await this.commentModel.create({userId,...dto})
+        const comment = await this.commentModel.create({_id,...dto})
         track.comments.push(comment._id)
         await track.save()
         return comment
