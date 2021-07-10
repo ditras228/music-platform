@@ -101,7 +101,7 @@ const TrackPage = ({serverAlbum, allTracks, token, userId}) => {
                 <Card className={classes.card}>
                     <TrackList tracks={albumTracks} token={token} userId={userId}/>
                     editAlbum && (
-                    <TrackList tracks={allTracks} token={token}/>
+                    <TrackList tracks={allTracks} token={token} userId={}/>
                     <Button onClick={editAlbumHandler}>Подтвердить</Button>
                     )
                 </Card>
@@ -112,7 +112,7 @@ const TrackPage = ({serverAlbum, allTracks, token, userId}) => {
 
 export default TrackPage
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session = await getSession(ctx) as Session
+    const session = await getSession(ctx)
 
     const response = await TracksAPI.getOne(ctx.params.id, session.accessToken)
     const responseTracks = await TracksAPI.getTracks(session.accessToken)
@@ -121,17 +121,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             serverAlbum: response.data,
             allTracks: responseTracks.data,
             token: session.accessToken,
-            userId: session.user._id
+            userId: session._id
         }
 
     }
-}
-export interface Session extends DefaultSession  {
-    user?: {
-        _id: string | null
-        name?: string | null
-        email?: string | null
-        image?: string | null
-    }
-    expires?: string
 }

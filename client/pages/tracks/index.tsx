@@ -12,10 +12,10 @@ import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
 
-const Index = ({token, userId}) => {
+const Index = ({token, userId, session}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
-
+    console.log(session)
     if (error) {
         return (
             <MainLayout title={error}>
@@ -50,7 +50,7 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session= await getSession({req: ctx.req}) as any
+    const session= await getSession({req: ctx.req})
     if(!session){
         return {
             redirect: {
@@ -67,7 +67,8 @@ export const getServerSideProps = wrapper.getServerSideProps
     return {
         props:{
             token: session.accessToken,
-            useId: session.user._id
+            userId: session._id,
+            session
         }
     }
 })

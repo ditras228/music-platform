@@ -28,7 +28,7 @@ export default(req, res)=>{
         debug: process.env.NODE_ENV==='development',
         secret: process.env.github_client_secret,
         jwt: {
-            secret: process.env.JWT_SECRET
+            secret: process.env.JWT_SECRET,
         },
         database: process.env.DB_URL,
     })
