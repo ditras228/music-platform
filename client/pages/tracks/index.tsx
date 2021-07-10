@@ -12,10 +12,9 @@ import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
 
-const Index = ({token, userId, session}) => {
+const Index = ({token, userId}) => {
     const router = useRouter()
     const {tracks,  error} = useTypedSelector(state => state.track)
-    console.log(session)
     if (error) {
         return (
             <MainLayout title={error}>
@@ -67,8 +66,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     return {
         props:{
             token: session.accessToken,
-            userId: session._id,
-            session
+            userId: session.id,
         }
     }
 })

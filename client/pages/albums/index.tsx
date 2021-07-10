@@ -83,7 +83,9 @@ export const getServerSideProps = wrapper.getServerSideProps
 
         await dispatch(fetchAlbums(session.accessToken))
         return {
-            token: session.accessToken
+            props: {
+                token: session.accessToken
+            }
         }
     }
 )

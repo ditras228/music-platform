@@ -9,6 +9,7 @@ import {router} from 'next/client'
 import {NextThunkDispatch, wrapper} from '../../store'
 import * as Yup from 'yup'
 import {getSession} from 'next-auth/client'
+import {useRouter} from "next/router";
 
 const SignupSchema = Yup.object({
     name: Yup.string()
@@ -23,6 +24,7 @@ const Create = ({token}) => {
     const [activeStep, setActiveState] = useState(0)
     const [picture, setPicture] = useState(null)
     const [audio, setAudio] = useState(null)
+    const router = useRouter();
 
 
     const back = () => {
@@ -111,6 +113,8 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
     return {
-        token: session.accessToken
+        props: {
+            token: session.accessToken
+        }
     }
 })

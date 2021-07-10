@@ -19,7 +19,7 @@ export class TrackService {
     }
 
     async create(dto: CreateTrackDto, picture, audio, headers): Promise<Track> {
-        const {userId} = jwt.verify(headers.authorization, process.env.SECRET) as any
+        const {userId} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
 
         const audioPath = this.fileService.createFile(FileType.AUDIO, audio)
         const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
@@ -27,7 +27,7 @@ export class TrackService {
     }
 
     async getAll(count = 10, offset = 0, headers): Promise<any> {
-        const token = jwt.sign(headers.authorization, process.env.SECRET)
+        const token = jwt.sign(headers.authorization.split(' ')[1], process.env.SECRET)
         if(!token){
             return new HttpException
             (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -45,7 +45,7 @@ export class TrackService {
     }
 
     async delete(id: ObjectId, headers): Promise<any> {
-        const {userId} = jwt.verify(headers.authorization, process.env.SECRET) as any
+        const {userId} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
         const track = await this.trackModel.findById(id)
         if(track.userId===userId) {
             track.remove()
@@ -61,7 +61,7 @@ export class TrackService {
     }
 
     async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
-        const {userId}= jwt.verify(headers.authorization, process.env.SECRET) as any
+        const {userId}= jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
         const track = await this.trackModel.findById(dto.trackId)
         const comment = await this.commentModel.create({userId,...dto})
         track.comments.push(comment._id)

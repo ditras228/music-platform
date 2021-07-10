@@ -121,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             serverAlbum: response.data,
             allTracks: responseTracks.data,
             token: session.accessToken,
-            userId: session._id
+            userId: session.id,
         }
 
     }
