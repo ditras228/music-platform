@@ -32,10 +32,11 @@ export default(req, res)=>{
         },
         database: process.env.DB_URL,
         callbacks: {
-            session: async (session, user) => {
-                session.id = user.id
+            session: async (session, token) => {
+                session.accessToken = token.accessToken
                 return Promise.resolve(session)
             }
+
         }
     })
 }

@@ -6,12 +6,14 @@ import {Track, TrackSchema} from './schemas/track.schema'
 import {Comment, CommentSchema} from './schemas/comment.schema'
 import {FileService} from '../file/file.service'
 import {User, UserSchema} from '../users/schemas/user.schema'
+import {Session, SessionSchema} from '../users/schemas/session.schema'
 
 @Module({
     imports: [
         MongooseModule.forFeature([{name: Track.name, schema: TrackSchema}]),
         MongooseModule.forFeature([{name: Comment.name, schema: CommentSchema}]),
-        MongooseModule.forFeature([{name: User.name, schema: UserSchema}])
+        MongooseModule.forFeature([{name: User.name, schema: UserSchema}]),
+        MongooseModule.forFeature([{name: Session.name, schema: SessionSchema}])
     ],
     controllers: [TrackController],
     providers: [TrackService, FileService]

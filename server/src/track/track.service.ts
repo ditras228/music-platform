@@ -8,27 +8,29 @@ import {CreateCommentDTO} from './dto/add.comment.dto'
 import {FileService, FileType} from '../file/file.service'
 import {User, UserDocument} from '../users/schemas/user.schema'
 import jwt = require('jsonwebtoken')
+import {Session, SessionDocument} from '../users/schemas/session.schema'
 
 @Injectable()
 export class TrackService {
     constructor(@InjectModel(Track.name) private trackModel: Model<TrackDocument>,
                 @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
                 @InjectModel(User.name) private userModel: Model<UserDocument>,
+                @InjectModel(Session.name) private sessionModel: Model<SessionDocument>,
                 private fileService: FileService
     ) {
     }
 
     async create(dto: CreateTrackDto, picture, audio, headers): Promise<Track> {
-        const {_id} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
+        const session = await this.sessionModel.findOne({sessionToken: headers.authorization.split(' ')[1]})
 
         const audioPath = this.fileService.createFile(FileType.AUDIO, audio)
         const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
-        return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath, userId:_id})
+        return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath, userId:session.userId})
     }
 
     async getAll(count = 10, offset = 0, headers): Promise<any> {
-        const token = jwt.sign(headers.authorization.split(' ')[1], process.env.SECRET)
-        if(!token){
+        const session = await this.sessionModel.findOne(headers.authorization.split(' ')[1])
+        if(!session){
             return new HttpException
             (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -45,9 +47,9 @@ export class TrackService {
     }
 
     async delete(id: ObjectId, headers): Promise<any> {
-        const {_id} = jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
+        const session = await this.sessionModel.findOne({sessionToken: headers.authorization.split(' ')[1]})
         const track = await this.trackModel.findById(id)
-        if(track.userId===_id) {
+        if(track.userId===session.accessToken) {
             track.remove()
         }
         return new HttpException
@@ -61,9 +63,9 @@ export class TrackService {
     }
 
     async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
-        const {_id}= jwt.verify(headers.authorization.split(' ')[1], process.env.SECRET) as any
+        const session = await this.sessionModel.findOne({sessionToken: headers.authorization.split(' ')[1]})
         const track = await this.trackModel.findById(dto.trackId)
-        const comment = await this.commentModel.create({_id,...dto})
+        const comment = await this.commentModel.create({userId: session.userId, ...dto})
         track.comments.push(comment._id)
         await track.save()
         return comment

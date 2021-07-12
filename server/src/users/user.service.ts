@@ -21,14 +21,13 @@ export class UserService {
                 return new HttpException(`Ошибка при регистрации ${errors}`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
             const candidate =
-                await this.userModel.findOne({username: dto.username})
-                || await this.userModel.findOne({nickname: dto.username})
+                await this.userModel.findOne({name: dto.username})
             if (candidate) {
                 return new HttpException('Ник занят', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             const hashPassword = bcrypt.hashSync(dto.password, 7)
             const hashURL = await bcrypt.hash(dto.username, 5)
-            const user = new this.userModel({...dto, hash: hashURL, password: hashPassword})
+            const user = new this.userModel({email: dto.email, name: dto.username, hash: hashURL, password: hashPassword})
             await user.save()
             await mailService.main(dto.username, hashURL)
             return user
@@ -52,7 +51,7 @@ export class UserService {
 
     async login(dto: CreateUserDto) {
         try {
-            const user = await this.userModel.findOne({username: dto.username})
+            const user = await this.userModel.findOne({name: dto.email})
             if (!user || !user.email_verified) {
                 return new HttpException
                 (`Пользователь ${dto.username} не найден`, HttpStatus.INTERNAL_SERVER_ERROR)

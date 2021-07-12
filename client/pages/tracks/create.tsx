@@ -10,6 +10,7 @@ import {NextThunkDispatch, wrapper} from '../../store'
 import * as Yup from 'yup'
 import {getSession} from 'next-auth/client'
 import {useRouter} from "next/router";
+import jwt from "next-auth/jwt"
 
 const SignupSchema = Yup.object({
     name: Yup.string()
@@ -113,7 +114,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     }
     return {
         props: {
-            token: session.accessToken
+            token:  session.sessionToken
         }
     }
 })
