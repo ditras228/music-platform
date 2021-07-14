@@ -1,4 +1,4 @@
-import {Body, Headers, Controller, Get, Post, Param} from '@nestjs/common'
+import {Body, Headers, Controller, Get, Post, Param, Res} from '@nestjs/common'
 import {UserService} from './user.service'
 import {CreateUserDto} from './dto/create.user.dto'
 import {ObjectId} from 'mongoose'
@@ -11,9 +11,9 @@ export class UserController{
     registration(@Body() dto: CreateUserDto){
         return this.userService.registration(dto)
     }
-    @Post('/registration/:id')
-    regConfirm(@Param('id') id: ObjectId){
-        return this.userService.regConfirm(id)
+    @Get('/regconfirm/:id')
+    regConfirm(@Param('id') id: ObjectId, @Res() res){
+        return this.userService.regConfirm(id, res)
     }
     @Post('/login')
     login(@Body() dto: CreateUserDto){

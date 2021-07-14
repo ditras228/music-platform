@@ -13,7 +13,7 @@ import {GetError} from '../../store/selectors'
 import {getSession} from 'next-auth/client'
 
 const SignupSchema = Yup.object({
-    username: Yup.string().email('Неккоректный email').required('Обязательно'),
+    email: Yup.string().email('Неккоректный email').required('Обязательно'),
     password: Yup.string()
         .min(6, 'Должен быть больше 5 симолов')
         .max(16, 'Должен быть меньше 17 симолов')
@@ -29,13 +29,13 @@ const Register = () => {
 
     const formik = useFormik({
         initialValues: {
-            username: '',
+            email: '',
             password: '',
             repeat_password: '',
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-            dispatch(Registration(values.username, values.password))
+            dispatch(Registration(values.email, values.password))
         }
     })
     const loginHandler= async (e: any)=>{
@@ -55,12 +55,12 @@ const Register = () => {
                         <TextField
                             label={'Введите Email'}
                             name={'email'}
-                            value={formik.values.username}
+                            value={formik.values.email}
                             onChange={formik.handleChange}
                         />
-                        {formik.touched.username && formik.errors.username
+                        {formik.touched.email && formik.errors.email
                         &&  <Alert variant="filled" severity="error">
-                            {formik.errors.username}
+                            {formik.errors.email}
                         </Alert>}
                         <TextField
                             label={'Введите пороль'}
@@ -70,7 +70,7 @@ const Register = () => {
                             type={'password'}
 
                         />
-                        {formik.touched.username && formik.errors.password
+                        {formik.touched.email && formik.errors.email
                         && <Alert variant="filled" severity="error">
                             {formik.errors.password}
                         </Alert>}
@@ -81,7 +81,7 @@ const Register = () => {
                             onChange={formik.handleChange}
                             type={'password'}
                         />
-                        {formik.touched.username && formik.errors.password
+                        {formik.touched.password && formik.errors.password
                         &&<Alert variant="filled" severity="error">
                             {formik.errors.repeat_password}
                         </Alert>
@@ -108,11 +108,15 @@ export default Register
 
 export async function getServerSideProps({req,res}){
     const session = await getSession({req})
-    if(session){
-        res.writeHead(307, {location: '/tracks'})
-        res.end()
-        return({props:{}})
+    if(!session){
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
     }
+
     return({props:{session}})
 
 }

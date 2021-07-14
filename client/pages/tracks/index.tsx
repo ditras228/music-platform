@@ -65,8 +65,8 @@ export const getServerSideProps = wrapper.getServerSideProps
 
     return {
         props:{
-            token: session.accessToken,
-            userId: session.id,
+            token: session.accessToken || null,
+            userId: session.id || null,
         }
     }
 })

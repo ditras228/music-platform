@@ -8,7 +8,8 @@ export default(req, res)=>{
             Providers.Credentials({
                 name: 'Login',
                 credentials: {
-                    username: {label: 'Email', type: 'text', placeholder: 'example@gmail.com'},
+                    email: {label: 'Email', type: 'text', placeholder: 'example@gmail.com'},
+                    name: {label: 'Username', type: 'text', placeholder: 'example'},
                     password: {label: 'Password', type: 'password', placeholder: 'password'}
                 },
                 async authorize(credentials) {

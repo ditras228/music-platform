@@ -21,15 +21,15 @@ export class UserService {
                 return new HttpException(`Ошибка при регистрации ${errors}`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
             const candidate =
-                await this.userModel.findOne({name: dto.username})
+                await this.userModel.findOne({name: dto.name})
             if (candidate) {
                 return new HttpException('Ник занят', HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            const hashPassword = bcrypt.hashSync(dto.password, 7)
-            const hashURL = await bcrypt.hash(dto.username, 5)
-            const user = new this.userModel({email: dto.email, name: dto.username, hash: hashURL, password: hashPassword})
+            const hashPassword = await bcrypt.hash(dto.password, 7)
+            const hashURL = await bcrypt.hash(dto.name, 5)
+            const user = new this.userModel({email: dto.email,  name: dto.name, hash: hashURL, password: hashPassword})
             await user.save()
-            await mailService.main(dto.username, hashURL)
+            await mailService.main(dto.email, hashURL)
             return user
         } catch (e) {
             console.log(e)
@@ -37,13 +37,13 @@ export class UserService {
         }
     }
 
-    async regConfirm(id) {
+    async regConfirm(id, res) {
         try {
-            const user = await this.userModel.findById(id)
+            const user = await this.userModel.findOne({hash: id})
             user.hash = null
             user.email_verified = true
             user.save()
-            return {url: 'http://localhost:3000/auth'};
+            return res.redirect('http://localhost:3000/auth');
         } catch (e) {
             console.log(e)
         }
@@ -51,13 +51,18 @@ export class UserService {
 
     async login(dto: CreateUserDto) {
         try {
-            const user = await this.userModel.findOne({name: dto.email})
-            if (!user || !user.email_verified) {
+            const user = await this.userModel.findOne({email: dto.email})
+            if (!user) {
                 return new HttpException
-                (`Пользователь ${dto.username} не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
+                (`Пользователь не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
 
             }
-            const validPassword = bcrypt.compareSync(dto.password, user.password)
+            if (!user.email_verified) {
+                return new HttpException
+                (`Email не подтвержден`, HttpStatus.INTERNAL_SERVER_ERROR)
+
+            }
+            const validPassword = bcrypt.compare(dto.password, user.password)
             if (!validPassword) {
                 return new HttpException
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
