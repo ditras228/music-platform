@@ -70,8 +70,9 @@ export class UserService {
                 return new HttpException
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            return jwt.sign(
-                {user:{name: user.name, email: user.email, image: user.image }}, process.env.SECRET)
+            return `Bearer ${jwt.sign(
+                {user:{name: user.name, email: user.email, image: user.image }},
+                process.env.SECRET)}`
         } catch (e) {
             console.log(e)
             return new HttpException
