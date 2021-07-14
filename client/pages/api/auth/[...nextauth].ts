@@ -28,6 +28,11 @@ export default(req, res)=>{
         ],
         debug: process.env.NODE_ENV==='development',
         secret: process.env.github_client_secret,
+        session: {
+            jwt: true,
+            // Seconds - How long until an idle session expires and is no longer valid.
+            maxAge: 30 * 24 * 60 * 60, // 30 days
+        },
         jwt: {
             secret: process.env.JWT_SECRET,
         },

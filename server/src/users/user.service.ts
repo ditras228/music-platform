@@ -5,13 +5,15 @@ import {Model} from 'mongoose'
 import {validationResult} from 'express-validator'
 import {CreateUserDto} from './dto/create.user.dto'
 import * as mailService from './mailService'
+import {Account, AccountDocument} from './schemas/account.schema'
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {
+    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
+                @InjectModel(Account.name) private accountModel: Model<AccountDocument>) {
     }
 
     async registration(dto: CreateUserDto) {
@@ -27,11 +29,19 @@ export class UserService {
             }
             const hashPassword = await bcrypt.hash(dto.password, 7)
             const hashURL = await bcrypt.hash(dto.name, 5)
+            hashURL.replace(/\//g, '')
+            const hashToken = await bcrypt.hash(dto.email, 5)
             const user = new this.userModel(
                 {email: dto.email,  name: dto.name,
-                    hash: hashURL, password: hashPassword,
-                    created_at: Date(), updated_at:  Date()})
+                     hash: hashURL, password: hashPassword,
+                     created_at: Date(), updated_at:  Date()})
             await user.save()
+
+            const account = new this.accountModel(
+                {userId: user, accessToken: hashToken,
+                    created_at: Date(), updated_at:  Date()})
+            await account.save()
+
             await mailService.main(dto.email, hashURL)
             return user
         } catch (e) {
@@ -55,6 +65,7 @@ export class UserService {
     async login(dto: CreateUserDto) {
         try {
             const user = await this.userModel.findOne({email: dto.email})
+            const account = await this.accountModel.findOne({userId: user._id})
             if (!user) {
                 return new HttpException
                 (`Пользователь не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -71,7 +82,10 @@ export class UserService {
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             return `Bearer ${jwt.sign(
-                {user:{name: user.name, email: user.email, image: user.image }},
+                {user:
+                        {name: user.name, email: user.email,
+                         image: user.image,accessToken : account.accessToken
+                        }},
                 process.env.SECRET)}`
         } catch (e) {
             console.log(e)
