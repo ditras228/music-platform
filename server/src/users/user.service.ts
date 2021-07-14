@@ -27,7 +27,10 @@ export class UserService {
             }
             const hashPassword = await bcrypt.hash(dto.password, 7)
             const hashURL = await bcrypt.hash(dto.name, 5)
-            const user = new this.userModel({email: dto.email,  name: dto.name, hash: hashURL, password: hashPassword})
+            const user = new this.userModel(
+                {email: dto.email,  name: dto.name,
+                    hash: hashURL, password: hashPassword,
+                    created_at: Date(), updated_at:  Date()})
             await user.save()
             await mailService.main(dto.email, hashURL)
             return user
