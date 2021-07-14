@@ -5,7 +5,7 @@ import {Model} from 'mongoose'
 import {validationResult} from 'express-validator'
 import {CreateUserDto} from './dto/create.user.dto'
 import * as mailService from './mailService'
-
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
 
@@ -46,7 +46,7 @@ export class UserService {
             user.hash = null
             user.email_verified = true
             user.save()
-            return res.redirect('http://localhost:3000/auth');
+            return res.redirect('http://localhost:3000/');
         } catch (e) {
             console.log(e)
         }
@@ -70,7 +70,8 @@ export class UserService {
                 return new HttpException
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            return user
+            return jwt.sign(
+                {user:{name: user.name, email: user.email, image: user.image }}, process.env.SECRET)
         } catch (e) {
             console.log(e)
             return new HttpException
