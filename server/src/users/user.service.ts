@@ -6,6 +6,7 @@ import {validationResult} from 'express-validator'
 import {CreateUserDto} from './dto/create.user.dto'
 import * as mailService from './mailService'
 import {Account, AccountDocument} from './schemas/account.schema'
+import {Session, SessionDocument} from "./schemas/session.schema";
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -13,7 +14,9 @@ require('dotenv').config()
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
-                @InjectModel(Account.name) private accountModel: Model<AccountDocument>) {
+                @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
+                @InjectModel(Session.name) private sessionModel: Model<SessionDocument>,
+) {
     }
 
     async registration(dto: CreateUserDto) {
@@ -66,10 +69,21 @@ export class UserService {
         try {
             const user = await this.userModel.findOne({email: dto.email})
             const account = await this.accountModel.findOne({userId: user._id})
+            const session = await this.sessionModel.findOne({userId: user._id})
             if (!user) {
                 return new HttpException
                 (`Пользователь не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
 
+            }
+            if(!session){
+                const newSession = new this.sessionModel(
+                    {userId: user._id, sessionToken:await bcrypt.hash(user.email, 5), accessToken: account.accessToken,
+                        created_at: Date(), updated_at:  Date()})
+                await newSession.save()
+            }else{
+                session.sessionToken= bcrypt.hash(user.email, 5)
+                session.updated_at = new Date()
+                await session.save()
             }
             if (!user.email_verified) {
                 return new HttpException
@@ -81,12 +95,7 @@ export class UserService {
                 return new HttpException
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            return `Bearer ${jwt.sign(
-                {user:
-                        {name: user.name, email: user.email,
-                         image: user.image,accessToken : account.accessToken
-                        }},
-                process.env.SECRET)}`
+            return {name: user.name, email: user.email, image: user.image, accessToken: account.accessToken}
         } catch (e) {
             console.log(e)
             return new HttpException

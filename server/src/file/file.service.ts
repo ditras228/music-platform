@@ -1,7 +1,7 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import * as path from 'path'
 import * as fs from 'fs'
-import * as uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
 export enum FileType {
     AUDIO = 'audio',
@@ -12,7 +12,7 @@ export class FileService {
     createFile(type: FileType, file): string {
         try {
             const fileExtension = file.originalname.split('.').pop()
-            const fileName = uuid.v4() + '.' + fileExtension
+            const fileName = uuidv4() + '.' + fileExtension
             const filePath = path.resolve(__dirname, '..', 'static', type)
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, {recursive: true})

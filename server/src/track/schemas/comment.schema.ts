@@ -11,6 +11,9 @@ export class Comment {
     userId: string
 
     @Prop()
+    username: string
+
+    @Prop()
     text: string
 
     @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Track'})
