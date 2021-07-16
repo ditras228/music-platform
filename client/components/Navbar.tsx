@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import {useTheme} from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import AppBar from '@material-ui/core/AppBar'
@@ -18,21 +17,27 @@ import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import classes from './NavBar.module.css'
 import {Avatar, Button, Card} from '@material-ui/core'
-import {useDispatch} from 'react-redux'
 import {signOut, useSession} from 'next-auth/client'
-import DarkModeToggle from "react-dark-mode-toggle";    
+import DarkModeToggle from "react-dark-mode-toggle";
+import {createMuiTheme} from '@material-ui/core/styles'
+import {useSelector} from 'react-redux'
 const menuItem = [
     {text: 'Треки', href: '/'},
     {text: 'Альбомы', href: '/albums'},
 ]
+export function initTheme(){
+    const session = useSession() as any
+     return createMuiTheme({
+        palette: {
+            type: session.isDark? 'dark':'light'
+        }
+    });
+}
 
 export default function Navbar() {
     const [ session, loading ] = useSession()
     const router = useRouter()
-    const theme = useTheme()
     const [open, setOpen] = React.useState(false)
-    const [isDarkMode, setIsDarkMode] = useState(() => false);
-
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -40,12 +45,16 @@ export default function Navbar() {
     const handleDrawerClose = () => {
         setOpen(false)
     }
-    const logOutHandler = ()=>{
-        signOut()
+    const logOutHandler = async ()=>{
+        await signOut()
     }
     const logInHandler = async ()=>{
         await router.push('/auth')
     }
+    const click = () =>
+    {
+
+    };
     return (
         <div>
             <CssBaseline/>
@@ -64,13 +73,15 @@ export default function Navbar() {
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h5" noWrap className={classes.logo}>
+                        <Typography variant="h6" noWrap className={classes.logo}>
                             <MusicNoteIcon/>MERNMusic
                         </Typography>
                     </>
+                    <div className={classes.log}>
+
                     <DarkModeToggle
-                        onChange={setIsDarkMode}
-                        checked={isDarkMode}
+                        onChange={click}
+                        checked={theme.palette.type !== 'light'}
                         size={80}
                     />
                     {
@@ -80,6 +91,7 @@ export default function Navbar() {
                                 {session.user.name.substring(0,1)}
                             </Avatar>
                     }
+                    </div>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -91,7 +103,7 @@ export default function Navbar() {
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
-                    <Typography variant="h5" noWrap className={classes.logo}>
+                    <Typography variant="h6" noWrap className={classes.logo}>
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
                 </div>

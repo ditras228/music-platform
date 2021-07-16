@@ -48,13 +48,14 @@ export default(req, res)=>{
                 console.log(account)
                 console.log(profile)
                 console.log(isNewUser)
+               // if(account){
+               //     token =await UsersAPI.getOne(user.id).then(res=>res.data)
+               // }
                 if (user?.accessToken) {
                     token.accessToken = user.accessToken
                     token.color = user.color
                 }
-                if(account){
-                   user =await UsersAPI.getOne(user.id).then(res=>res.data)
-                }
+
                 return token
             },
             async session(session, token) {

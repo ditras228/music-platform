@@ -11,9 +11,6 @@ import classes from './index.module.css'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
-import { getToken } from 'next-auth/jwt'
-import jwt from 'next-auth/jwt'
-const secret = process.env.GITHUB_CLIENT_SECRET
 
 const Index = ({token, userId}) => {
     const router = useRouter()
@@ -63,6 +60,7 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
     const player = cookies(ctx).player;
+    console.log('session.accessToken+' + session.accessToken)
     await dispatch( fetchTracks(session.accessToken))
     await dispatch( setPlayer(player))
     return {

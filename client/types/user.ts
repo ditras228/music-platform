@@ -4,10 +4,7 @@ export interface IUser{
     password: string
 }
 export interface UserState{
-    user: IUser | any
     errors: Array<any>
-    isAuth: boolean
-    isLoading: boolean
 }
 
 export enum UsersActionTypes{

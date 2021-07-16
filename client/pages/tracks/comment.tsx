@@ -4,7 +4,7 @@ import {Avatar, Card} from '@material-ui/core'
 
 const CommentFC: React.FC<CommentProps> = ({comment}) => {
     return (
-            <Card className={classes.comment}>
+            <div className={classes.comment}>
                 <Avatar alt="Remy Sharp" src={comment.avatar} className={classes.orange}>
                     {comment.username.substring(0,1)}
                 </Avatar>
@@ -16,7 +16,7 @@ const CommentFC: React.FC<CommentProps> = ({comment}) => {
                 >
                     {comment.text}
                 </div>
-            </Card>
+            </div>
     )
 }
 
