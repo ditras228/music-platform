@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useTheme} from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -17,10 +17,10 @@ import {useRouter} from 'next/router'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import classes from './NavBar.module.css'
-import {Button} from '@material-ui/core'
+import {Avatar, Button, Card} from '@material-ui/core'
 import {useDispatch} from 'react-redux'
 import {signOut, useSession} from 'next-auth/client'
-
+import DarkModeToggle from "react-dark-mode-toggle";    
 const menuItem = [
     {text: 'Треки', href: '/'},
     {text: 'Альбомы', href: '/albums'},
@@ -31,7 +31,7 @@ export default function Navbar() {
     const router = useRouter()
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
-    const dispatch = useDispatch()
+    const [isDarkMode, setIsDarkMode] = useState(() => false);
 
     const handleDrawerOpen = () => {
         setOpen(true)
@@ -68,10 +68,17 @@ export default function Navbar() {
                             <MusicNoteIcon/>MERNMusic
                         </Typography>
                     </>
+                    <DarkModeToggle
+                        onChange={setIsDarkMode}
+                        checked={isDarkMode}
+                        size={80}
+                    />
                     {
                         !session
                             ?<Button onClick={()=>logInHandler()}>Login</Button>
-                            :<Button onClick={()=>logOutHandler()}>LogOut</Button>
+                            :<Avatar alt="Remy Sharp" src={session.user.image} className={classes.orange}>
+                                {session.user.name.substring(0,1)}
+                            </Avatar>
                     }
                 </Toolbar>
             </AppBar>

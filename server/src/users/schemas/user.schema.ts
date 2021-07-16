@@ -11,6 +11,9 @@ export class User {
     email: string
 
     @Prop()
+    color: string
+
+    @Prop()
     hash: string
 
     @Prop()

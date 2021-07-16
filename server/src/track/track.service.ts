@@ -47,6 +47,7 @@ export class TrackService {
         for(let i=0;i<comments.length;i++){
             const user=  await this.userModel.findById(comments[i].userId) as unknown as UserDocument
             comments[i].username=user.name
+            comments[i].color=user.color
         }
         return track
     }

@@ -38,11 +38,11 @@ const Create = ({token}) => {
             picture : picture,
             audio: audio
         },
-        onSubmit: values => {
+        onSubmit: async values => {
                 if (activeStep !== 2) {
                     setActiveState(prevState => prevState + 1)
                 } else {
-                    TracksAPI.createTrack(values, token).then(() => router.push('/tracks'))
+                    await TracksAPI.createTrack(values, token).then(() => router.push('/tracks'))
                 }
         }
     })
@@ -94,7 +94,12 @@ const Create = ({token}) => {
             </StepWrapper>
             <Grid container justify={'space-between'}>
                 <Button disabled={activeStep === 0} onClick={back}>Назад</Button>
+                {activeStep <=1?
                 <Button onClick={()=>formik.handleSubmit()}>Далее</Button>
+                :
+                <Button onClick={()=>formik.handleSubmit()}>Загрузить</Button>
+
+                }
             </Grid>
         </MainLayout>
     )
@@ -114,7 +119,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     }
     return {
         props: {
-            token:  session.sessionToken
+            token: session.accessToken || null,
         }
     }
 })

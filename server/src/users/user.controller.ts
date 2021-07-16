@@ -11,7 +11,7 @@ export class UserController{
     registration(@Body() dto: CreateUserDto){
         return this.userService.registration(dto)
     }
-        @Get('/regconfirm/:id')
+    @Get('/regconfirm/:id')
     regConfirm(@Param('id') id: ObjectId, @Res() res){
         return this.userService.regConfirm(id, res)
     }

@@ -10,7 +10,7 @@ import {Session, SessionDocument} from "./schemas/session.schema";
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
-
+const randomColor = require('randomcolor');
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
@@ -34,9 +34,10 @@ export class UserService {
             const hashURL = await bcrypt.hash(dto.name, 5)
             hashURL.replace(/\//g, '')
             const hashToken = await bcrypt.hash(dto.email, 5)
+            const color = randomColor()
             const user = new this.userModel(
                 {email: dto.email,  name: dto.name,
-                     hash: hashURL, password: hashPassword,
+                     hash: hashURL, password: hashPassword, color: color,
                      created_at: Date(), updated_at:  Date()})
             await user.save()
 
@@ -64,7 +65,6 @@ export class UserService {
             console.log(e)
         }
     }
-
     async login(dto: CreateUserDto) {
         try {
             const user = await this.userModel.findOne({email: dto.email})
@@ -81,7 +81,7 @@ export class UserService {
                         created_at: Date(), updated_at:  Date()})
                 await newSession.save()
             }else{
-                session.sessionToken= bcrypt.hash(user.email, 5)
+                session.sessionToken= await bcrypt.hash(user.email, 5)
                 session.updated_at = new Date()
                 await session.save()
             }
@@ -95,7 +95,7 @@ export class UserService {
                 return new HttpException
                 ('Введен не верный пороль', HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            return {name: user.name, email: user.email, image: user.image, accessToken: account.accessToken}
+            return {name: user.name, email: user.email, image: user.image, color: user.color, accessToken: account.accessToken}
         } catch (e) {
             console.log(e)
             return new HttpException
@@ -106,11 +106,13 @@ export class UserService {
     async getOne(id) {
         try {
             const user = await this.userModel.findOne({_id: id})
+            const account = await this.accountModel.findOne({userId: id})
+
             if (!user) {
                 return new HttpException
                 (`Пользователь не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            return user
+            return {name: user.name, email: user.email, image: user.image, color: user.color, accessToken: account.accessToken}
         } catch (e) {
             console.log(e)
             return new HttpException

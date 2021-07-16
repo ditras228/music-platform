@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
@@ -13,21 +13,43 @@ import CommentFC from './comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
+import Picker, { SKIN_TONE_MEDIUM_DARK } from "emoji-picker-react";
+var WaveSurfer = require('wavesurfer.js');
+
+var wavesurfer = WaveSurfer.create({
+    container: '#waveform',
+    waveColor: 'violet',
+    progressColor: 'purple'
+});
+wavesurfer.on('ready', function () {
+    wavesurfer.play();
+});
+
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
+    const textareaRef = useRef() as  any
+    const cursorPosition = 0;
+    wavesurfer.load(baseURL+serverTrack.audio);
+
     const formik = useFormik({
         initialValues: {
             text: '',
             trackId: serverTrack._id
         },
         onSubmit: async values => {
-            const response = TracksAPI.addComment(values, token)
-            const data = await response.then(res => res.data)
-            setTrack({...track, comments: [...track.comments, data]})
+            const response =  TracksAPI.addComment(values, token)
+            const data = await response.then(res =>
+                setTrack({...track, comments: [...res.data.track.comments, data]})
+            )
         }
     })
+    const onBlur=()=>{
+        textareaRef.current.setSelectionRange(cursorPosition, cursorPosition)
+    }
+    const onEmojiClick = (event, emojiObject) => {
+    };
     return (
         <MainLayout
             title={'Музыкальная площадка - ' + track.name + ' - ' + track.artist}
@@ -62,6 +84,9 @@ const TrackPage = ({serverTrack, token}) => {
                     </Grid>
                 </Card>
                 <Card>
+                    <div id="waveform"></div>
+                </Card>
+                    <Card>
                     <div className={classes.card}>
                         <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
                         <p className={classes.text}>{track.text}</p>
@@ -85,7 +110,9 @@ const TrackPage = ({serverTrack, token}) => {
                                     label='Оставьте комментарий'
                                     fullWidth
                                     multiline
-                                >
+                                    ref={textareaRef}
+                                    onBlur={() =>onBlur()}
+                                        >
                                 </TextField>
                                 <Button
                                     type={'submit'}
@@ -93,6 +120,7 @@ const TrackPage = ({serverTrack, token}) => {
                                 >Отправить
                                 </Button>
                             </Grid>
+                            <Picker onEmojiClick={onEmojiClick} />
                         </form>
                     </Grid>
 

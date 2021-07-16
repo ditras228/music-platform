@@ -4,6 +4,9 @@ export const UsersAPI={
     getUsers(){
         return instance.get('auth/users')
     },
+    getOne(id){
+        return instance.get(`auth/users/${id}`)
+    },
     auth(token){
         return instance.get('auth/',
             {headers: {Authorization: `Bearer ${token}`}})

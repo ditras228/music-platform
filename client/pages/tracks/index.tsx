@@ -11,6 +11,9 @@ import classes from './index.module.css'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
+import { getToken } from 'next-auth/jwt'
+import jwt from 'next-auth/jwt'
+const secret = process.env.GITHUB_CLIENT_SECRET
 
 const Index = ({token, userId}) => {
     const router = useRouter()
@@ -50,6 +53,7 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session= await getSession({req: ctx.req})
+    //const token= await getToken({req: ctx.req})
     if(!session){
         return {
             redirect: {
@@ -58,11 +62,9 @@ export const getServerSideProps = wrapper.getServerSideProps
             },
         }
     }
-
     const player = cookies(ctx).player;
     await dispatch( fetchTracks(session.accessToken))
     await dispatch( setPlayer(player))
-
     return {
         props:{
             token: session.accessToken || null,
