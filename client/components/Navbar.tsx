@@ -20,16 +20,19 @@ import {Avatar, Button, Card} from '@material-ui/core'
 import {signOut, useSession} from 'next-auth/client'
 import DarkModeToggle from "react-dark-mode-toggle";
 import {createMuiTheme} from '@material-ui/core/styles'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import {useTypedSelector} from '../hooks/useTypedSelector'
+import {usersReducer} from '../store/reducers/userReducer'
+import {UsersActionTypes} from '../types/user'
 const menuItem = [
     {text: 'Треки', href: '/'},
     {text: 'Альбомы', href: '/albums'},
 ]
 export function initTheme(){
-    const session = useSession() as any
+    const isDark = useTypedSelector(state=>state.user.isDark) as any
      return createMuiTheme({
         palette: {
-            type: session.isDark? 'dark':'light'
+            type: isDark? 'dark':'light'
         }
     });
 }
@@ -38,6 +41,10 @@ export default function Navbar() {
     const [ session, loading ] = useSession()
     const router = useRouter()
     const [open, setOpen] = React.useState(false)
+    const dispatch = useDispatch()
+    const theme= useTheme()
+    const isDark = useTypedSelector(state=>state.user.isDark) as any
+
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -53,7 +60,12 @@ export default function Navbar() {
     }
     const click = () =>
     {
-
+        dispatch(
+            {
+                type: UsersActionTypes.isDark,
+                payload: !isDark
+            }
+        )
     };
     return (
         <div>
@@ -81,7 +93,6 @@ export default function Navbar() {
 
                     <DarkModeToggle
                         onChange={click}
-                        checked={theme.palette.type !== 'light'}
                         size={80}
                     />
                     {
