@@ -9,7 +9,7 @@ export const usersReducer = (state = initialState, action: UserAction): UserStat
         case UsersActionTypes.ADD_ERROR:
             return {...state, errors: [...state.errors, action.payload]}
         case UsersActionTypes.IS_DARK:
-            return {...state, isDark: action.payload}
+            return {...state, isDark: !state.isDark}
         default:
             return state
     }

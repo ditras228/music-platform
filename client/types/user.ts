@@ -9,10 +9,9 @@ export enum UsersActionTypes{
 }
 interface IsDark{
     type: UsersActionTypes.IS_DARK
-    payload: any
 }
 interface FetchUsersErrorAction{
     type: UsersActionTypes.ADD_ERROR
     payload: any
 }
-export type UserAction =  FetchUsersErrorAction | isDark
+export type UserAction =  FetchUsersErrorAction | IsDark

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import Drawer from '@material-ui/core/Drawer'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import AppBar from '@material-ui/core/AppBar'
@@ -16,27 +16,17 @@ import {useRouter} from 'next/router'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import AlbumIcon from '@material-ui/icons/Album'
 import classes from './NavBar.module.css'
-import {Avatar, Button, Card} from '@material-ui/core'
+import {Avatar, Button, Divider, Menu, MenuItem, useTheme} from '@material-ui/core'
 import {signOut, useSession} from 'next-auth/client'
-import DarkModeToggle from "react-dark-mode-toggle";
-import {createMuiTheme} from '@material-ui/core/styles'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {useTypedSelector} from '../hooks/useTypedSelector'
-import {usersReducer} from '../store/reducers/userReducer'
 import {UsersActionTypes} from '../types/user'
+import {Brightness4, Brightness7} from '@material-ui/icons'
+
 const menuItem = [
     {text: 'Треки', href: '/'},
     {text: 'Альбомы', href: '/albums'},
 ]
-export function initTheme(){
-    const isDark = useTypedSelector(state=>state.user.isDark) as any
-     return createMuiTheme({
-        palette: {
-            type: isDark? 'dark':'light'
-        }
-    });
-}
-
 export default function Navbar() {
     const [ session, loading ] = useSession()
     const router = useRouter()
@@ -44,7 +34,6 @@ export default function Navbar() {
     const dispatch = useDispatch()
     const theme= useTheme()
     const isDark = useTypedSelector(state=>state.user.isDark) as any
-
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -58,21 +47,30 @@ export default function Navbar() {
     const logInHandler = async ()=>{
         await router.push('/auth')
     }
-    const click = () =>
+    const click = (e) =>
     {
+
         dispatch(
             {
-                type: UsersActionTypes.isDark,
-                payload: !isDark
+                type: UsersActionTypes.IS_DARK,
             }
         )
+    };
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
     };
     return (
         <div>
             <CssBaseline/>
             <AppBar
                 position="fixed"
-                color={'secondary'}
+                color={'default'}
                 className={classes.AppBar}
             >
                 <Toolbar className={classes.toolbar}>
@@ -91,16 +89,34 @@ export default function Navbar() {
                     </>
                     <div className={classes.log}>
 
-                    <DarkModeToggle
-                        onChange={click}
-                        size={80}
-                    />
+                    <IconButton
+                    onClick={click}>
+                        {isDark
+                            ?<Brightness7/>
+                            :<Brightness4/>
+                    }
+                    </IconButton>
+
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>My account</MenuItem>
+                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        </Menu>
                     {
                         !session
                             ?<Button onClick={()=>logInHandler()}>Login</Button>
-                            :<Avatar alt="Remy Sharp" src={session.user.image} className={classes.orange}>
-                                {session.user.name.substring(0,1)}
-                            </Avatar>
+                            :(
+                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                <Avatar alt="Remy Sharp" src={session.user.image} className={classes.orange}>
+                                    {session.user.name.substring(0,1)}
+                                </Avatar>
+                            </Button>
+                        )
                     }
                     </div>
                 </Toolbar>
@@ -118,6 +134,8 @@ export default function Navbar() {
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
                 </div>
+                <Divider/>
+
                 <List>
                     {menuItem.map(({text, href}, index) => (
                         <ListItem button key={href} onClick={() => router.push(href)}>
