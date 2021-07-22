@@ -1,25 +1,51 @@
 import React, {useRef, useState} from 'react'
-interface FileUploadProps{
+import {FieldConfig, useField, useFormikContext} from 'formik'
+import {red} from '@material-ui/core/colors'
+
+interface Props extends FieldConfig{
     accept: string
-    formik: any
+    setImage?: any
+    setAudio?: any
+
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({accept,formik, children, error}) => {
+const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props) => {
     const ref = useRef<HTMLInputElement>()
     const [fileName, setFileName] = useState("");
+    const [field, meta] = useField(props)
+    const { setFieldValue} = useFormikContext();
+
     const onChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
-        e.preventDefault();
-        let reader = new FileReader();
         let file = e.target.files[0];
-        if (file) {
-            reader.onloadend = () => setFileName(file.name);
-            reader.readAsDataURL(file);
+        let reader  = new FileReader();
+        reader.onloadend = function () {
+            if(accept==='image/*'){
+                setImage(reader.result)
+            }
+            else{
+                setAudio(reader.result)
+            }
+            setFileName(file.name)
         }
-        if(accept==='image/*')
-        formik.setFieldValue('picture', file)
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            if(accept==='image/*'){
+                setImage('')
+            }
+            else{
+                setAudio('none')
+            }
+        }
+        if(accept==='image/*'){
+            field.value=file
+            setFieldValue(field.name, field.value)
+        }
         if(accept==='audio/*')
-            formik.setFieldValue('audio', file)
-        console.log(formik.values)
+            field.value=file
+            setFieldValue(field.name, field.value)
+
     }
     return (
         <div onClick={()=> ref.current.click()}>
@@ -29,7 +55,10 @@ const FileUpload: React.FC<FileUploadProps> = ({accept,formik, children, error})
                 style={{display: 'none'}}
                 ref={ref}
                 onChange={onChange}
+                {...props}
             />
+            <div>{fileName}</div>
+            <div>{meta.error}</div>
             {children}
 
 

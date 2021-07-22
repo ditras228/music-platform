@@ -1,4 +1,10 @@
-import React from 'react'
+// In my bundle config this is setup to export to window.WaveSurfer
+import dynamic from 'next/dynamic'
+if (typeof window !== "undefined") {
+    var WaveSurfer = require('wavesurfer.js');
+}
+
+import React, {useEffect, useRef, useState} from 'react'
 import {wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {useRouter} from 'next/router'
@@ -7,7 +13,8 @@ import {Button, Grid} from '@material-ui/core'
 import InputField from './create/InputField'
 import * as Yup from 'yup'
 import FileUpload from '../../components/FileUpload'
-import {useFormik} from 'formik'
+import classes from './index.module.css'
+import {TracksAPI} from '../../api/tracksAPI'
 
 const InfoSchema = Yup.object({
     name: Yup.string()
@@ -18,13 +25,8 @@ const InfoSchema = Yup.object({
         .required('Обязательно'),
 
 })
-const ImageSchema = Yup.object({
-    picture: Yup.mixed()
-        .required('Обязательно') .test(
-            "fileSize",
-            "Your video is too big :(",
-            value => value && value.size <= 262144000
-        )
+const ImageSchema = Yup.object().shape({
+    picture: Yup.mixed().required('Обязательно')
 })
 
 const AudioSchema = Yup.object({
@@ -33,25 +35,47 @@ const AudioSchema = Yup.object({
 })
 
 const Create = ({token}) => {
+    const [image, setImage] = useState('http://placehold.it/100')
+    const [audio, setAudio] = useState('none')
     const router = useRouter()
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            artist: '',
-            text: '',
-            picture: undefined,
-            audio: undefined
+    const chart = useRef(null);
+    useEffect(()=>{
+        chart.current.innerHTML = "";
 
-        },
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-        },
-    })
+        if (process.browser) {
+            var wavesurfer = WaveSurfer.create({
+                container: '#waveform',
+                waveColor: 'violet',
+                progressColor: 'purple'
+            });
+            wavesurfer.load(audio);
+        }
+    },[audio])
+
     return (
         <MultiStepForm
-            initialValues={formik.initialValues}
-            onSubmit={formik.submitForm}
+            initialValues={{
+                name: '',
+                artist: '',
+                text: '',
+                picture: undefined,
+                audio: undefined
+
+            }}
+
+            onSubmit={(values)   => {
+                 TracksAPI.createTrack(values, token)
+                     .finally(()=> router.push('/tracks'))
+        }}
         >
+            <FormStep stepName={'Аудио'}
+                      validationSchema={AudioSchema}>
+                <FileUpload  accept={'audio/*'} name={'audio'} setAudio={setAudio}>
+                    <Button>Загрузить аудио</Button>
+                </FileUpload>
+                <div id="waveform" ref={chart}/>
+            </FormStep>
+
             <FormStep stepName={'Инфо'}
                       validationSchema={InfoSchema}>
                 <Grid container direction={'column'} style={{padding: 20, maxWidth: 900}}>
@@ -71,22 +95,19 @@ const Create = ({token}) => {
                     />
                 </Grid>
             </FormStep>
+
             <FormStep stepName={'Обложка'}
                       validationSchema={ImageSchema}>
                 <Grid container direction={'column'} style={{padding: 20, maxWidth: 900}}>
-                    <FileUpload accept={'image/*'} formik={formik}>
+                    <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
                         <Button>Загрузить изображение</Button>
-                        {formik.errors.picture ?
-                            <div>formik.errors.picture</div> : ""}
                     </FileUpload>
+                    <img className={classes.image} src={image} alt=""/>
                 </Grid>
+
             </FormStep>
-            <FormStep stepName={'Аудио'}
-                      validationSchema={AudioSchema}>
-                <FileUpload  accept={'audio/*'} formik={formik}>
-                    <Button>Загрузить аудио</Button>
-                </FileUpload>
-            </FormStep>
+
+           
 
 
         </MultiStepForm>
