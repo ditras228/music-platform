@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {ITrack, TrackActionTypes} from '../types/track'
-import {Card, Grid, IconButton} from '@material-ui/core'
+import {Card, Checkbox, Grid, IconButton} from '@material-ui/core'
 import {Delete, DeleteRounded, ExposurePlus1, Pause, PlayArrow, Timer} from '@material-ui/icons'
 import {useRouter} from 'next/router'
 import {useActions} from '../hooks/useAction'
@@ -11,13 +11,14 @@ import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
 import {AlbumActionTypes} from '../types/album'
 import {useSession} from 'next-auth/client'
-import {Session} from '../pages/albums/[id]'
+import {useFormikContext} from 'formik'
+import {useTypedSelector} from '../hooks/useTypedSelector'
 
 interface TrackItemProps {
     track: ITrack
     active?: boolean
     token: string
-    view: string
+    view?: string
     userId?: string
 }
 
@@ -25,23 +26,31 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
     const dispatch = useDispatch()
-    const [session] = useSession() as any
+    const [checked, setChecked] = useState(false)
+    const tracks = useTypedSelector(state => state.album.albumTracks)
 
     const deleteOne = async () => {
         await TracksAPI.deleteOne(track._id, token)
         dispatch(fetchTracks(token))
     }
-    const addOne = () => {
-        dispatch({
-            type: AlbumActionTypes.ADD_TRACK_TO_ALBUM,
-            payload: {track}
-        })
-    }
-    const removeOne = () => {
-        dispatch({
-            type: AlbumActionTypes.REMOVE_TRACK_FROM_ALBUM,
-            payload: {track}
-        })
+    const editState = () => {
+        setChecked(!checked)
+        checked
+            ?
+            dispatch({
+                type: AlbumActionTypes.ADD_TRACK_TO_ALBUM,
+                payload: {track}
+            })
+            :
+            dispatch({
+                type: AlbumActionTypes.REMOVE_TRACK_FROM_ALBUM,
+                payload: {track}
+            })
+
+        console.log('cringe')
+        console.log(tracks)
+        console.log(track)
+
     }
     const play = (e) => {
         e.stopPropagation()
@@ -57,7 +66,15 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view
         pauseTrack()
     }
     return (
-        <Card className={classes.track} onClick={() => router.push('/tracks/' + track._id)}>
+        <Card className={classes.track} onClick={() => {
+            view !== 'checkbox'
+                ? router.push('/tracks/' + track._id)
+                : editState()
+        }
+        }>
+            <SwitchView view={view} checked={checked}
+                        deleteOne={deleteOne}
+                        editState={editState}/>
             <IconButton className={classes.play}>
                 {active
                     ? <Pause onClick={play}/>
@@ -69,28 +86,22 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view
                 <div>{track.name}</div>
                 <div className={classes.author}>{track.artist}</div>
             </Grid>
-            <div className={classes.length}><Timer/>5:22</div>
-            {
-                view !== 'album_item'
-                    ?
-                    <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                        <Delete onClick={deleteOne}/>
-                    </IconButton>
-
-                    :
-                    session.user._id===userId &&
-                    <>
-                        <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                            <ExposurePlus1 onClick={addOne}/>
-                        </IconButton>
-                        <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                            <DeleteRounded onClick={removeOne}/>
-                        </IconButton>
-                    </>
-
-            }
-
         </Card>
     )
+}
+const SwitchView = ({view, deleteOne, checked, editState}) => {
+    switch (view) {
+        case 'checkbox':
+            return (
+                <Checkbox checked={checked} onChange={editState} name="checkbox"/>
+            )
+        default:
+            return (
+                <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
+                    <Delete onClick={deleteOne}/>
+                </IconButton>
+            )
+
+    }
 }
 export default TrackItem

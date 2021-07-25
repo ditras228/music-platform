@@ -4,13 +4,17 @@ import {TextField} from '@material-ui/core'
 
 interface Props extends FieldConfig{
     label: string
+    rows?: number
+    multiline?:boolean
 }
-const InputField = ({label, ...props}: Props) => {
+const InputField = ({label, rows, multiline, ...props}: Props) => {
     const [field, meta] = useField(props)
     return (
         <TextField
             fullWidth
             label={label}
+            rows={rows}
+            multiline={multiline}
             {...field}
             {...props}
             error={meta.touched && Boolean(meta.error)}

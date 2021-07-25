@@ -14,10 +14,8 @@ const FormNavigation = (props: Props) => {
             marginTop: 50,
             justifyContent: 'space-between'
         }}>
-            {props.hasPrevious && (
-                <Button variant={'contained'} type={'button'} onClick={props.onBackClick}>Back</Button>
-            )}
-            <Button type={'submit'} color={'primary'} >{props.isLastStep?'Submit':'Next'}</Button>
+            <Button disabled={!props.hasPrevious}  variant={'contained'} type={'button'} onClick={props.onBackClick}>Назад</Button>
+            <Button type={'submit'} color={'primary'} >{props.isLastStep?'Готово    ':'Далее'}</Button>
         </div>
     )
 }

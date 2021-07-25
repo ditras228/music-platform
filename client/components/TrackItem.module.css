@@ -9,7 +9,7 @@
 }
 
 .track:hover {
-    background-color: #f2f3f4;
+    opacity: 0.8;
     cursor: pointer
 }
 

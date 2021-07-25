@@ -4,6 +4,7 @@ import {Container} from '@material-ui/core'
 import Player from '../components/Player'
 import Head from 'next/head'
 import classes from './MainLayout.module.css'
+import LoadingModal from '../components/LoadingModal'
 
 interface MainLayoutProps {
     title?: string
@@ -35,6 +36,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
                 {children}
             </Container>
             <Player/>
+            <LoadingModal/>
         </>
     )
 }

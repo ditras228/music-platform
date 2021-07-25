@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react'
 import {FieldConfig, useField, useFormikContext} from 'formik'
 import {red} from '@material-ui/core/colors'
+import {Alert} from '@material-ui/lab'
 
 interface Props extends FieldConfig{
     accept: string
@@ -57,9 +58,12 @@ const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props) => 
                 onChange={onChange}
                 {...props}
             />
-            <div>{fileName}</div>
-            <div>{meta.error}</div>
             {children}
+            {meta.error
+            ?<Alert severity={'error'} >{meta.error}</Alert>
+            : fileName &&
+                <Alert severity={'success'}>{fileName}</Alert>
+            }
 
 
         </div>

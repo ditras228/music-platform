@@ -1,0 +1,9 @@
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center
+
+}
+.progress:focus{
+    outline: none;
+}

@@ -1,132 +1,103 @@
-import React, {useState} from 'react'
-import MainLayout from '../../layouts/MainLayout'
-import StepWrapper from '../../components/StepWrapper'
-import {Box, Button, Grid, TextField} from '@material-ui/core'
-import FileUpload from '../../components/FileUpload'
-import {useFormik} from 'formik'
+import ImagePreview from '../../components/ImagePreview'
+import React, {useEffect, useRef, useState} from 'react'
 import {NextThunkDispatch, wrapper} from '../../store'
-import {useRouter} from 'next/router'
-import {fetchTracks} from '../../store/action-creators/track'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import * as Yup from 'yup'
-import {Alert} from '@material-ui/lab'
-import classes from '../../components/TrackList.module.css'
-import TrackItem from '../../components/TrackItem'
-import {AlbumsAPI} from '../../api/albumsAPI'
 import {getSession} from 'next-auth/client'
-import AlbumList from '../../components/AlbumList'
+import {useRouter} from 'next/router'
+import {Button, Card, Grid} from '@material-ui/core'
+import * as Yup from 'yup'
+import FileUpload from '../../components/FileUpload'
+import MainLayout from '../../layouts/MainLayout'
+import {useDispatch} from 'react-redux'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {CreateAlbum} from '../../store/action-creators/user'
+import MultiStepForm, {FormStep} from '../tracks/create/MultiStepForm'
+import InputField from '../tracks/create/InputField'
+import TrackList from '../../components/TrackList'
+import {fetchTracks} from '../../store/action-creators/track'
+import {setPlayer} from '../../store/action-creators/player'
+import {useFormikContext} from 'formik'
 
-const SignupSchema = Yup.object({
+const InfoSchema = Yup.object({
     name: Yup.string()
         .required('Обязательно'),
     artist: Yup.string()
         .required('Обязательно'),
-    text: Yup.string()
-        .required('Обязательно'),
-
 })
-const Create = ({token}) => {
+const ImageSchema = Yup.object().shape({
+    picture: Yup.mixed().required('Обязательно')
+})
+
+const TrackSchema = Yup.object().shape({
+    tracks: Yup.array()
+        .of(Yup.object())
+        .min(2, 'Минимальное 2')
+        .required('Обязательно')
+})
+
+const Create = ({token, userId}) => {
+    const [image, setImage] = useState('http://placehold.it/100')
     const router = useRouter()
-    const [activeStep, setActiveState] = useState(0)
-    const [picture, setPicture] = useState(null)
-    const {albums, albumTracks} = useTypedSelector(state => state.album)
+    const chart = useRef(null)
+    const redirectTo = useTypedSelector(state => state.user.redirectTo)
+    const {tracks,  error} = useTypedSelector(state => state.track)
+    const dispatch = useDispatch()
 
-    const back = () => {
-        setActiveState(prevState => prevState - 1)
-    }
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            artist: '',
-            text: '',
-            picture: picture,
-        },
-        validationSchema: SignupSchema,
-        onSubmit: values => {
-            if (activeStep !== 2) {
-                setActiveState(prevState => prevState + 1)
-            } else {
-                AlbumsAPI.createAlbum({values, albumTracks: albumTracks.map(album => album._id)}, token)
-                    .then(() => router.push('/albums'))
-            }
-        }
-    })
+
+
+    useEffect(() => {
+        if (redirectTo)
+            router.push(`/albums/${redirectTo}`)
+    }, [redirectTo])
     return (
-        <MainLayout>
-            <StepWrapper steps={['Инфо', 'Обложка', 'Треки']} activeStep={activeStep}>
-                {activeStep === 0 &&
-                <form onSubmit={formik.handleSubmit}>
+        <MainLayout title={'Загрузить альбом'}>
+            <Card>
+                <MultiStepForm
+                    initialValues={{
+                        name: '',
+                        artist: '',
+                        picture: undefined,
+                        tracks: undefined
+                    }}
 
-                    <Grid container direction={'column'}>
-                        <TextField
-                            name={'name'}
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            style={{marginTop: 10}}
-                            label={'Название альбома'}
+                    onSubmit={(values) => {
+                        dispatch(CreateAlbum(values, token))
+                    }}
+                >
+                    <FormStep stepName={'Треки'}
+                              validationSchema={TrackSchema}>
+                        <div style={{padding:'0 40px'}}>
+                            <TrackList tracks={tracks} token={token} userId={userId} view={'checkbox'}/>
+                        </div>
+                    </FormStep>
 
-                        />
-                        {formik.errors.name
-                        && <Alert variant="filled" severity="error">
-                            {formik.errors.name}
-                        </Alert>}
+                    <FormStep stepName={'Инфо'}
+                              validationSchema={InfoSchema}>
+                        <Grid container direction={'column'}
+                              style={{padding: 20, maxWidth: 900, margin: '0 auto'}}>
+                            <InputField
+                                name={'name'}
+                                label={'Название альбома'}
+                            />
+                            <InputField
+                                name={'artist'}
+                                label={'Имя автора'}
+                            />
+                        </Grid>
+                    </FormStep>
 
-                        <TextField
-                            name={'artist'}
-                            value={formik.values.artist}
-                            onChange={formik.handleChange}
-                            style={{marginTop: 10}}
-                            label={'Автор'}
-                        />
-                        {formik.errors.artist
-                        && <Alert variant="filled" severity="error">
-                            {formik.errors.artist}
-                        </Alert>}
-                        <TextField
-                            name={'text'}
-                            value={formik.values.text}
-                            onChange={formik.handleChange}
-                            style={{marginTop: 10}}
-                            label={'Описание'}
+                    <FormStep stepName={'Обложка'}
+                              validationSchema={ImageSchema}>
+                        <Grid container direction={'column'}>
+                            <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
+                                <Button fullWidth>Загрузить изображение</Button>
+                            </FileUpload>
+                        </Grid>
+                        <ImagePreview src={image}/>
+                    </FormStep>
 
-                        />
-                        {formik.errors.text
-                        && <Alert variant="filled" severity="error">
-                            {formik.errors.text}
-                        </Alert>}
+                </MultiStepForm>
+            </Card>
 
-                    </Grid>
-                </form>
-
-                }
-                {activeStep === 1 &&
-                <FileUpload setFile={setPicture} accept={'image/*'} formik={formik}>
-                    <Button>Загрузить изображение</Button>
-                </FileUpload>
-                }
-                {activeStep === 2 &&
-                <>
-                    <Grid container direction={'column'}>
-                        <Box p={0} className={classes.box}>
-                            {albumTracks.map(track =>
-                                <TrackItem
-                                    key={track._id}
-                                    track={track}
-                                    token={token}
-                                    view={'create'}
-                                />
-                            )}
-                        </Box>
-                    </Grid>
-                    <AlbumList albums={albums} token={token}/>
-                </>
-                }
-            </StepWrapper>
-            <Grid container justify={'space-between'}>
-                <Button disabled={activeStep === 0} onClick={back}>Назад</Button>
-                <Button onClick={() => formik.handleSubmit()
-                }>Далее</Button>
-            </Grid>
         </MainLayout>
     )
 }
@@ -135,7 +106,8 @@ export default Create
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session = await getSession(ctx)
+    const session = await getSession({req: ctx.req})
+    await dispatch( fetchTracks(session.accessToken))
     if (!session) {
         return {
             redirect: {
@@ -144,10 +116,10 @@ export const getServerSideProps = wrapper.getServerSideProps
             },
         }
     }
-    await dispatch(fetchTracks(session.accessToken))
     return {
         props: {
-            token: session.accessToken
+            userId: session.id || null,
+            token: session.accessToken || null,
         }
     }
 })

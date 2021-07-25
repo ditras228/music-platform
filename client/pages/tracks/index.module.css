@@ -15,7 +15,3 @@
     grid-template-columns: auto 1fr;
     grid-gap: 10px;
 }
-.image{
-    width:100px;
-    height:100px;
-}

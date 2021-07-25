@@ -10,9 +10,11 @@ interface TrackListProps{
     tracks: ITrack[]
     token: string
     userId: string
+    view?: string
 }
-const TrackList: React.FC<TrackListProps> = ({tracks,token, userId}) => {
+const TrackList: React.FC<TrackListProps> = ({tracks,token, userId,view}) => {
     const [timer, setTimer] = useState(null)
+
     const dispatch = useDispatch()  
     const formik = useFormik({
         initialValues: {
@@ -47,14 +49,14 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token, userId}) => {
                     }}
                 />
             </form>
-            <Grid container direction={'column'} >
-                <Box p={0} className={classes.box}>
+            <Grid className={classes.grid} >
+                <Box className={classes.box}>
                     {tracks.map(track=>
                         <TrackItem
                             key={track._id}
                             track={track}
                             token={token}
-                            view={'list'}
+                            view={view}
                         />
                     )}
                 </Box>
