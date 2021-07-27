@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
-import {Form, Formik, FormikConfig, FormikHelpers, FormikValues} from 'formik'
+import {Form, Formik, FormikConfig, FormikHelpers, FormikValues, useFormik} from 'formik'
 import FormNavigation from './FormNavigation'
 import {Step, StepLabel, Stepper} from '@material-ui/core'
+import {useRouter} from 'next/router'
 
 interface Props extends FormikConfig<FormikValues>{
     children: React.ReactNode
@@ -13,6 +14,8 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
     const totalSteps = steps.length
     const isLastStep = stepNumber===totalSteps-1
     const [snapShot, setSnapshot] = useState(initialValues)
+    const router = useRouter()
+
     const next=(values: FormikValues)=>{
         setStepNumber(stepNumber+1)
         setSnapshot(values)
@@ -22,17 +25,20 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
         setSnapshot(values)
 
     }
-    const handleSubmit = async (values: FormikValues, actions:FormikHelpers<FormikValues>)=>{
+        const handleSubmit = async (values: FormikValues, actions:FormikHelpers<FormikValues>)=>{
         if(step.props.onSubmit){
             await step.props.onSubmit(values)
         }
         if(isLastStep){
-            return onSubmit(values,actions)
+             return onSubmit(values,actions)
+
         }else{
             actions.setTouched({})
             next(values)
         }
     }
+
+
     return <div>
         <Formik
             initialValues={snapShot}

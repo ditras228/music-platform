@@ -9,6 +9,8 @@ export const albumReducer = (state = initialState, action: AlbumAction): AlbumSt
     switch (action.type) {
         case AlbumActionTypes.ADD_TRACK_TO_ALBUM:
             return {...state, albumTracks: [...state.albumTracks, action.payload]}
+        case AlbumActionTypes.REMOVE_TRACK_FROM_ALBUM:
+            return {...state, albumTracks: [...state.albumTracks.filter(item=>item!== action.payload)]}
         case AlbumActionTypes.ADD_TRACKS_TO_ALBUM:
             return {...state, albumTracks: action.payload}
 

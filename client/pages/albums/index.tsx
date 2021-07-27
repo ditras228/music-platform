@@ -56,7 +56,7 @@ const Index = ({token}) => {
                 <Card className={classes.card}>
                     <Grid container justify={'space-between'} direction={'row'}>
                         <h2 className={classes.title}><Search/>Список альбомов</h2>
-                        <Button onClick={() => router.push('/album/create')}>Новый альбом</Button>
+                        <Button onClick={() => router.push('/albums/create')}>Новый альбом</Button>
                     </Grid>
                     <AlbumList albums={albums} token={token}/>
                 </Card>

@@ -1,3 +1,7 @@
 .box:last-child {
     margin-bottom: -5px
 }
+.grid{
+    display: grid;
+    flex-direction: column;
+}
