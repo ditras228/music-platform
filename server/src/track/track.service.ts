@@ -23,18 +23,30 @@ export class TrackService {
     }
 
     async create(dto: CreateTrackDto, picture, audio, headers): Promise<Track> {
-        const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-        console.log('headers')
-        console.log(headers)
-        const audioPath = this.fileService.createFile(FileType.AUDIO, audio)
-        const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
-        return this.trackModel.create({...dto, listens: 0, audio: audioPath, picture: picturePath, userId:session.userId})
+        try {
+            const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
+            console.log('headers')
+            console.log(headers)
+            const audioPath = this.fileService.createFile(FileType.AUDIO, audio)
+            const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
+            return this.trackModel.create({
+                ...dto,
+                listens: 0,
+                audio: audioPath,
+                picture: picturePath,
+                userId: session.userId
+            })
+        } catch (e) {
+            console.log(e)
+
+        }
     }
+
 
     async getAll(count = 10, offset = 0, headers): Promise<any> {
         console.log(headers)
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-        if(!session){
+        if (!session) {
             return new HttpException
             (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -42,21 +54,24 @@ export class TrackService {
     }
 
     async getOne(id: ObjectId): Promise<Track> {
-        const track= await this.accountModel.findById(id).populate('comments') as unknown as TrackDocument
-        const comments = track.comments as unknown as CommentDocument[]
-        for(let i=0;i<comments.length;i++){
-            const user=  await this.userModel.findById(comments[i].userId) as unknown as UserDocument
-            comments[i].username=user.name
-            comments[i].color=user.color
+        const track = await this.trackModel.findById(id).populate('comments') as unknown as TrackDocument
+        const comments = track.comments as any
+        if (comments.length > 0) {
+            for (let i = 0; i < comments.length; i++) {
+                const user = await this.userModel.findById(comments[i].userId) as unknown as UserDocument
+                comments[i].userтname = user.name
+                comments[i].color = user.color
+            }
         }
+
         return track
     }
 
     async delete(id: ObjectId, headers): Promise<any> {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const track = await this.trackModel.findById(id)
-        if(track.userId===session.accessToken) {
-            track.remove()
+        if (track.userId === session.userId._id) {
+            await track.remove()
         }
         return new HttpException
         (`Вы не владелец трека`, HttpStatus.INTERNAL_SERVER_ERROR)

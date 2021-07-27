@@ -7,6 +7,8 @@ import {FileService, FileType} from '../file/file.service'
 import {CreateAlbumDto} from './dto/create.album.dto'
 import {User, UserDocument} from '../users/schemas/user.schema'
 import jwt = require('jsonwebtoken')
+import {Account, AccountDocument} from "../users/schemas/account.schema";
+import {Session, SessionDocument} from "../users/schemas/session.schema";
 
 @Injectable()
 export class AlbumService {
@@ -16,22 +18,23 @@ export class AlbumService {
                 private trackModel: Model<TrackDocument>,
                 @InjectModel(User.name)
                 private userModel: Model<UserDocument>,
+                @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
+
                 private fileService: FileService
+
     ) {
     }
 
     async create(dto: CreateAlbumDto, picture, headers): Promise<any> {
         const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
-        const {userId, _id}= jwt.verify(headers.authorization, process.env.SECRET) as any
-        const album = await this.albumModel.create({...dto, userId: _id, picture: picturePath})
-        const user = await this.userModel.findById(userId)
-        await user.save()
-        return album
+        const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
+        return  await this.albumModel.create({...dto, userId: session.userId._id, picture: picturePath})
+
     }
 
     async getAll(count = 10, offset = 0, headers): Promise<any> {
-        const token = jwt.sign(headers.authorization, process.env.SECRET)
-        if (!token) {
+        const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
+        if (!session) {
             return new HttpException
             (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
         }
@@ -43,9 +46,9 @@ export class AlbumService {
     }
 
     async delete(id: ObjectId, headers): Promise<any> {
-        const {userId} = jwt.verify(headers.authorization, process.env.SECRET) as any
+        const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const album = await this.albumModel.findByIdAndDelete(id)
-        if(album.userId===userId) {
+        if(album.userId==session.userId._id) {
             return await album.remove()
         }
         return new HttpException
@@ -59,10 +62,10 @@ export class AlbumService {
 
     async edit(headers, albumId: ObjectId, tracks: ObjectId[]): Promise<any> {
         try{
-            const {_id} = jwt.verify(headers.authorization, process.env.SECRET) as any
+            const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
             const tracksDb =[]
             const album = await this.albumModel.findById(albumId)
-            if (_id!==album.userId) {
+            if (session.userId._id!==album.userId) {
                 return new HttpException
                 (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
