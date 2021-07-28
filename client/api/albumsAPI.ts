@@ -24,7 +24,7 @@ export const AlbumsAPI= {
         formData.append('artist', data.artist)
         formData.append('text', data.text)
         formData.append('picture', data.picture)
-        formData.append('albumTracks', data.albumTracks)
+        formData.append('tracks', data.tracks)
         return instance.post('/albums', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
@@ -17,16 +17,22 @@ import {getSession} from 'next-auth/client'
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
+
+    useEffect(()=>{
+        const socket=io(baseURL)
+        socket.on('addComment', function (data){
+            setTrack({...track, comments: [...track.comments, data]})
+        })
+    },[])
+
     const formik = useFormik({
         initialValues: {
             text: '',
             trackId: serverTrack._id
         },
+
         onSubmit: async values => {
-            const response =  TracksAPI.addComment(values, token)
-            const data = await response.then(res =>
-                setTrack({...track, comments: [...res.data.track.comments, data]})
-            )
+            TracksAPI.addComment(values, token)
         }
     })
     return (

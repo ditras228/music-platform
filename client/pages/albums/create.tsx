@@ -29,9 +29,12 @@ const ImageSchema = Yup.object().shape({
 
 const TrackSchema = Yup.object().shape({
     tracks: Yup.array()
-        .of(Yup.object())
-        .min(2, 'Минимальное 2')
-        .required('Обязательно')
+        .test({
+            message:'Минимум 2, максимум 16',
+            test: arr  => arr.length >= 2
+        }
+
+        )
 })
 
 const Create = ({token, userId}) => {
@@ -39,11 +42,13 @@ const Create = ({token, userId}) => {
     const router = useRouter()
     const chart = useRef(null)
     const redirectTo = useTypedSelector(state => state.user.redirectTo)
-    const {tracks,  error} = useTypedSelector(state => state.track)
+    const {tracks, error} = useTypedSelector(state => state.track)
     const dispatch = useDispatch()
+    const albumTracks = useTypedSelector(state => state.album.albumTracks)
 
-
-
+    useEffect(()=>{
+        console.log(albumTracks)
+    },[albumTracks])
     useEffect(() => {
         if (redirectTo)
             router.push(`/albums/${redirectTo}`)
@@ -56,20 +61,13 @@ const Create = ({token, userId}) => {
                         name: '',
                         artist: '',
                         picture: undefined,
-                        tracks: undefined
+                        tracks: []
                     }}
 
                     onSubmit={(values) => {
                         dispatch(CreateAlbum(values, token))
                     }}
                 >
-                    <FormStep stepName={'Треки'}
-                              validationSchema={TrackSchema}>
-                        <div style={{padding:'0 40px'}}>
-                            <TrackList tracks={tracks} token={token} userId={userId} view={'checkbox'}/>
-                        </div>
-                    </FormStep>
-
                     <FormStep stepName={'Инфо'}
                               validationSchema={InfoSchema}>
                         <Grid container direction={'column'}
@@ -95,6 +93,13 @@ const Create = ({token, userId}) => {
                         <ImagePreview src={image}/>
                     </FormStep>
 
+                    <FormStep stepName={'Треки'}
+                              validationSchema={TrackSchema}>
+                        <div style={{padding: '0 40px'}}>
+                            
+                            <TrackList tracks={tracks} token={token} userId={userId} view={'checkbox'}/>
+                        </div>
+                    </FormStep>
                 </MultiStepForm>
             </Card>
 
@@ -107,7 +112,7 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session = await getSession({req: ctx.req})
-    await dispatch( fetchTracks(session.accessToken))
+    await dispatch(fetchTracks(session.accessToken))
     if (!session) {
         return {
             redirect: {

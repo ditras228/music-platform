@@ -7,9 +7,9 @@ import {Comment, CommentDocument} from './schemas/comment.schema'
 import {CreateCommentDTO} from './dto/add.comment.dto'
 import {FileService, FileType} from '../file/file.service'
 import {User, UserDocument} from '../users/schemas/user.schema'
-import jwt = require('jsonwebtoken')
 import {Session, SessionDocument} from '../users/schemas/session.schema'
 import {Account, AccountDocument} from "../users/schemas/account.schema";
+import {io} from 'socket.io-client'
 
 @Injectable()
 export class TrackService {
@@ -59,7 +59,7 @@ export class TrackService {
         if (comments.length > 0) {
             for (let i = 0; i < comments.length; i++) {
                 const user = await this.userModel.findById(comments[i].userId) as unknown as UserDocument
-                comments[i].userтname = user.name
+                comments[i].username = user.name
                 comments[i].color = user.color
             }
         }
@@ -89,6 +89,9 @@ export class TrackService {
         const comment = await this.commentModel.create({userId: session.userId, ...dto})
         track.comments.push(comment._id)
         await track.save()
+
+        const socket = io()
+        socket.emit('addComment', track)
         return comment
     }
 

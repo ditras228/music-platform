@@ -13,6 +13,7 @@ export interface ITrack{
     picture: string
     audio: string
     comments: IComment[]
+    checked: boolean
 }
 
 export interface TrackState{
