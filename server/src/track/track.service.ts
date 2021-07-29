@@ -10,8 +10,8 @@ import {User, UserDocument} from '../users/schemas/user.schema'
 import {Session, SessionDocument} from '../users/schemas/session.schema'
 import {Account, AccountDocument} from "../users/schemas/account.schema";
 import {io} from 'socket.io-client'
-const ObjectId = require('mongodb').ObjectID;
 import {CommentsGateway} from '../comment.gateway'
+const ObjectId = require('mongodb').ObjectID;
 
 @Injectable()
 export class TrackService {

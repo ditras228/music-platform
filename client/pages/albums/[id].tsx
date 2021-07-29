@@ -54,7 +54,7 @@ const AlbumPage = ({serverAlbum, allTracks, token}) => {
     const editAlbumHandler = async () => {
         await AlbumsAPI.editAlbum(albumTracks.map(track => track._id), token)
     }
-    const socket=useSocket('ws://192.168.100.4')
+    const socket=useSocket('http://localhost:4001')
 
     useEffect(()=>{
         socket.on('addComment', function (data){
