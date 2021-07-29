@@ -11,6 +11,7 @@ import {Session, SessionDocument} from '../users/schemas/session.schema'
 import {Account, AccountDocument} from "../users/schemas/account.schema";
 import {io} from 'socket.io-client'
 const ObjectId = require('mongodb').ObjectID;
+import {CommentsGateway} from '../comment.gateway'
 
 @Injectable()
 export class TrackService {
@@ -19,7 +20,8 @@ export class TrackService {
                 @InjectModel(User.name) private userModel: Model<UserDocument>,
                 @InjectModel(Session.name) private sessionModel: Model<SessionDocument>,
                 @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
-                private fileService: FileService
+                private fileService: FileService,
+                private commentsGateway: CommentsGateway
     ) {
     }
 
@@ -91,8 +93,7 @@ export class TrackService {
         track.comments.push(comment._id)
         await track.save()
 
-        const socket = io()
-        socket.emit('sendComment', track)
+        this.commentsGateway.server.emit('sendComment', comment)
         return comment
     }
 

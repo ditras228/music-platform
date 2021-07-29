@@ -8,6 +8,7 @@ import {FileService} from '../file/file.service'
 import {User, UserSchema} from '../users/schemas/user.schema'
 import {Session, SessionSchema} from '../users/schemas/session.schema'
 import {Account, AccountSchema} from "../users/schemas/account.schema";
+import {CommentsGateway} from '../comment.gateway'
 
 @Module({
     imports: [
@@ -18,7 +19,7 @@ import {Account, AccountSchema} from "../users/schemas/account.schema";
         MongooseModule.forFeature([{name: Account.name, schema: AccountSchema}]),
     ],
     controllers: [TrackController],
-    providers: [TrackService, FileService]
+    providers: [TrackService, FileService,CommentsGateway]
 
 })
 export class TrackModule {
