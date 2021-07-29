@@ -105,9 +105,13 @@ export class UserService {
 
     async getOne(id) {
         try {
-            const user = await this.userModel.findOne({_id: id})
-            const account = await this.accountModel.findOne({userId: id})
+              console.log(id)
 
+            const user = await this.userModel.findById( id)
+
+            console.log(user)
+
+            const account = await this.accountModel.findOne({userId: id})
             if (!user) {
                 return new HttpException
                 (`Пользователь не найден`, HttpStatus.INTERNAL_SERVER_ERROR)

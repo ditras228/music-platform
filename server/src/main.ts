@@ -6,7 +6,8 @@ const start = async () => {
         const app = await NestFactory.create(AppModule)
         app.enableCors()
         await app.listen(PORT, () => console.log(`server started on port ${PORT} `))
-        const io = require("socket.io").listen(app)
+        const http=require('http').Server(app)
+        const io = require("socket.io")(http)
 
 
 
