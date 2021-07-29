@@ -20,7 +20,7 @@ export class UserController{
         return this.userService.login(dto)
     }
     @Get('/:id')
-    getOne(@Param('id') id: ObjectId){
-        return this.userService.getOne(id)
+    authBy(@Param('id') id: ObjectId){
+        return this.userService.authBy(id)
     }
 }

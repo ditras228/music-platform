@@ -5,7 +5,7 @@ export const UsersAPI={
         return instance.get('auth/users')
     },
     getOne(id){
-        return instance.get(`auth/users/${id}`)
+        return instance.get(`auth/${id}`)
     },
     auth(token){
         return instance.get('auth/',

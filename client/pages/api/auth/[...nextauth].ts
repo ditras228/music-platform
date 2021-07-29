@@ -9,7 +9,6 @@ export default(req, res)=>{
                 name: 'Login',
                 credentials: {
                     email: {label: 'Email', type: 'text', placeholder: 'example@gmail.com'},
-                    name: {label: 'Username', type: 'text', placeholder: 'example'},
                     password: {label: 'Password', type: 'password', placeholder: 'password'}
                 },
                 async authorize(credentials) {
@@ -48,9 +47,9 @@ export default(req, res)=>{
                 console.log(account)
                 console.log(profile)
                 console.log(isNewUser)
-               // if(account){
-               //     token =await UsersAPI.getOne(user.id).then(res=>res.data)
-               // }
+                if(token?.sub){
+                   token =await UsersAPI.getOne(token.sub).then(res=>res.data)
+                }
                 if (user?.accessToken) {
                     token.accessToken = user.accessToken
                     token.color = user.color

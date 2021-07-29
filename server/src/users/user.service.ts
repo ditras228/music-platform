@@ -11,6 +11,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
 const randomColor = require('randomcolor');
+var ObjectId = require('mongodb').ObjectID;
+
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
@@ -103,11 +105,11 @@ export class UserService {
         }
     }
 
-    async getOne(id) {
+    async authBy(id) {
         try {
               console.log(id)
 
-            const user = await this.userModel.findById( id)
+            const user = await this.userModel.findOne(ObjectId(id))
 
             console.log(user)
 
