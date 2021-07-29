@@ -9,6 +9,9 @@ import {User, UserDocument} from '../users/schemas/user.schema'
 import jwt = require('jsonwebtoken')
 import {Account, AccountDocument} from "../users/schemas/account.schema";
 import {Session, SessionDocument} from "../users/schemas/session.schema";
+import {CreateCommentDTO} from '../track/dto/add.comment.dto'
+import {Comment, CommentDocument} from '../track/schemas/comment.schema'
+import {io} from 'socket.io-client'
 
 @Injectable()
 export class AlbumService {
@@ -19,8 +22,8 @@ export class AlbumService {
                 @InjectModel(User.name)
                 private userModel: Model<UserDocument>,
                 @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
-
-                private fileService: FileService
+                private fileService: FileService,
+                @InjectModel(Comment.name) private commentModel: Model<CommentDocument>,
 
     ) {
     }
@@ -80,6 +83,17 @@ export class AlbumService {
         catch(e){
             console.log(e)
         }
+    }
+    async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
+        const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
+        const album = await this.albumModel.findById(dto.albumId)
+        const comment = await this.commentModel.create({userId: session.userId, ...dto})
+        album.comments.push(comment._id)
+        await album.save()
+
+        const socket = io()
+        socket.emit('addComment', album)
+        return comment
     }
 
 

@@ -104,8 +104,7 @@ export default function Navbar() {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                            <MenuItem onClick={logOutHandler}>Logout</MenuItem>
                         </Menu>
                     {
                         !session

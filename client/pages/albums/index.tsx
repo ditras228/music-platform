@@ -11,6 +11,8 @@ import classes from './index.module.css'
 import {fetchAlbums, searchAlbums} from '../../store/action-creators/album'
 import {getSession} from 'next-auth/client'
 import AlbumList from '../../components/AlbumList'
+import cookies from 'next-cookies'
+import {setPlayer} from '../../store/action-creators/player'
 
 const Index = ({token}) => {
     const router = useRouter()
@@ -80,8 +82,10 @@ export const getServerSideProps = wrapper.getServerSideProps
                 },
             }
         }
-
         await dispatch(fetchAlbums(session.accessToken))
+
+        const player = cookies(ctx).player;
+        await dispatch( setPlayer(player))
         return {
             props: {
                 token: session.accessToken

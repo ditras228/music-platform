@@ -16,6 +16,7 @@ import TrackList from '../../components/TrackList'
 import {fetchTracks} from '../../store/action-creators/track'
 import {setPlayer} from '../../store/action-creators/player'
 import {useFormikContext} from 'formik'
+import cookies from 'next-cookies'
 
 const InfoSchema = Yup.object({
     name: Yup.string()
@@ -121,6 +122,8 @@ export const getServerSideProps = wrapper.getServerSideProps
             },
         }
     }
+    const player = cookies(ctx).player;
+    await dispatch( setPlayer(player))
     return {
         props: {
             userId: session.id || null,

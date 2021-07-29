@@ -15,6 +15,7 @@ import {FileFieldsInterceptor} from '@nestjs/platform-express'
 import {CreateAlbumDto} from './dto/create.album.dto'
 import {AlbumService} from './album.service'
 import {EditAlbumDto} from './dto/edit.album.dto'
+import {CreateCommentDTO} from '../track/dto/add.comment.dto'
 
 @Controller('/albums')
 export class AlbumController {
@@ -58,6 +59,10 @@ export class AlbumController {
     @Delete()
     deleteAll(@Headers()  headers) {
         return this.albumService.deleteAll()
+    }
+    @Post('/comment')
+    addComment(@Headers() headers, @Body() dto: CreateCommentDTO) {
+        return this.trackService.addComment(headers, dto)
     }
 
 }

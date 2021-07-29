@@ -21,6 +21,9 @@ export class Album {
 
     @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Track'}]})
     tracks: Track[]
+
+    @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]})
+    comments: Comment[]
 }
 
 export const AlbumSchema = SchemaFactory.createForClass(Album)

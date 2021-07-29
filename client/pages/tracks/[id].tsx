@@ -13,6 +13,7 @@ import CommentFC from './comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
+import {io} from 'socket.io-client'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()

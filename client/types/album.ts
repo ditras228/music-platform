@@ -1,11 +1,14 @@
-import {ITrack} from './track'
+import {IComment, ITrack} from './track'
 
 export interface IAlbum{
-    _id: number
+    _id: string
+    userId: string
     name: string
+    text: string
     artist: string
     picture: string
     tracks: ITrack[]
+    comments: IComment[]
 }
 export interface AlbumState{
     albums: IAlbum[]
