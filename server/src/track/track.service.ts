@@ -10,6 +10,7 @@ import {User, UserDocument} from '../users/schemas/user.schema'
 import {Session, SessionDocument} from '../users/schemas/session.schema'
 import {Account, AccountDocument} from "../users/schemas/account.schema";
 import {io} from 'socket.io-client'
+const ObjectId = require('mongodb').ObjectID;
 
 @Injectable()
 export class TrackService {
@@ -58,9 +59,9 @@ export class TrackService {
         const comments = track.comments as any
         if (comments.length > 0) {
             for (let i = 0; i < comments.length; i++) {
-                const user = await this.userModel.findById(comments[i].userId) as unknown as UserDocument
-                comments[i].username = user.name
-                comments[i].color = user.color
+                const user = await this.userModel.findOne(ObjectId(comments[i].userId)) as unknown as UserDocument
+                comments[i].username = user?.name
+                comments[i].color = user?.color
             }
         }
 
@@ -91,7 +92,7 @@ export class TrackService {
         await track.save()
 
         const socket = io()
-        socket.emit('addComment', track)
+        socket.emit('sendComment', track)
         return comment
     }
 

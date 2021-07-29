@@ -50,6 +50,7 @@ export class CommentsGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     @SubscribeMessage('sendComment')
     handleMessage(@MessageBody() data): void {
         this.server.emit('addComment', data)
+        console.log('test')
     }
 
     afterInit(server: Server) {

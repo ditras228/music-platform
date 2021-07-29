@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
 const randomColor = require('randomcolor');
-var ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 
 @Injectable()
 export class UserService {
