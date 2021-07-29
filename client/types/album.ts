@@ -2,6 +2,7 @@ import {IComment, ITrack} from './track'
 
 export interface IAlbum{
     _id: string
+    listens: number
     userId: string
     name: string
     text: string

@@ -13,19 +13,21 @@ import CommentFC from './comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
+import useSocket from '../../hooks/useSocket'
 import {io} from 'socket.io-client'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
 
+    const socket=io(baseURL)
+
     useEffect(()=>{
-        const socket=io(baseURL)
         socket.on('addComment', function (data){
             setTrack({...track, comments: [...track.comments, data]})
+            console.log('data')
         })
-    },[])
-
+    },[socket])
     const formik = useFormik({
         initialValues: {
             text: '',

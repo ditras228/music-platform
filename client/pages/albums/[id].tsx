@@ -31,6 +31,9 @@ import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {io} from 'socket.io-client'
 import {ITrack} from '../../types/track'
+import SocketIOClient from "socket.io-client";
+import useSocket from '../../hooks/useSocket'
+
 
 const AlbumPage = ({serverAlbum, allTracks, token}) => {
     const router = useRouter()
@@ -51,13 +54,13 @@ const AlbumPage = ({serverAlbum, allTracks, token}) => {
     const editAlbumHandler = async () => {
         await AlbumsAPI.editAlbum(albumTracks.map(track => track._id), token)
     }
+    const socket=useSocket('ws://192.168.100.4')
 
     useEffect(()=>{
-        const socket=io(baseURL)
         socket.on('addComment', function (data){
             setAlbum({...album, comments: [...album.comments, data]})
         })
-    },[])
+    },[socket])
 
     const formik = useFormik({
         initialValues: {

@@ -11,6 +11,7 @@ import {Session, SessionDocument} from '../users/schemas/session.schema'
 import {Account, AccountDocument} from "../users/schemas/account.schema";
 import {io} from 'socket.io-client'
 const ObjectId = require('mongodb').ObjectID;
+import {CommentsGateway} from '../comment.gateway'
 
 @Injectable()
 export class TrackService {
@@ -19,7 +20,8 @@ export class TrackService {
                 @InjectModel(User.name) private userModel: Model<UserDocument>,
                 @InjectModel(Session.name) private sessionModel: Model<SessionDocument>,
                 @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
-                private fileService: FileService
+                private fileService: FileService,
+                private commentsGateway: CommentsGateway
     ) {
     }
 
@@ -84,16 +86,15 @@ export class TrackService {
 
     }
 
-    async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
-        const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-        const track = await this.trackModel.findById(dto.trackId)
-        const comment = await this.commentModel.create({userId: session.userId, ...dto})
-        track.comments.push(comment._id)
-        await track.save()
+    async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<any> {
+        //const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
+        //const track = await this.trackModel.findById(dto.trackId)
+        //const comment = await this.commentModel.create({userId: session.userId, ...dto})
+        //track.comments.push(comment._id)
+        //await track.save()
 
-        const socket = io()
-        socket.emit('sendComment', track)
-        return comment
+        this.commentsGateway.server.emit('sendComment', 'comment')
+       // return comment
     }
 
     async listen(id: ObjectId) {
