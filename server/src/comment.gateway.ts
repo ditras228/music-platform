@@ -1,4 +1,5 @@
 import {
+    ConnectedSocket,
     MessageBody,
     OnGatewayConnection,
     OnGatewayDisconnect,
@@ -14,9 +15,15 @@ export class CommentsGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     @WebSocketServer()
     server
     private logger: Logger = new Logger('CommentsGateway');
-    handleMessage(@MessageBody() data): void {
+
+    @SubscribeMessage('sendComment')
+    handleEvent(
+        @MessageBody() data: string,
+        @ConnectedSocket() client: Socket,
+    ) {
         this.server.emit('addComment', data)
         this.logger.log(`test`);
+       // return data;
     }
 
     afterInit(server: Server) {

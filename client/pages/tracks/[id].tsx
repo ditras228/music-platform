@@ -3,7 +3,7 @@ import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
-import {baseURL} from '../../api'
+import {baseSocketURL, baseURL} from '../../api'
 import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
@@ -13,14 +13,13 @@ import CommentFC from './comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
-import useSocket from '../../hooks/useSocket'
 import {io} from 'socket.io-client'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
 
-    const socket=io(baseURL)
+    const socket=io(baseSocketURL)
 
     useEffect(()=>{
         socket.on('addComment', function (data){

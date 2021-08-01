@@ -93,6 +93,7 @@ export class TrackService {
         track.comments.push(comment._id)
         await track.save()
 
+        
         this.commentsGateway.server.emit('sendComment', comment)
         return comment
     }
