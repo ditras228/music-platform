@@ -18,6 +18,7 @@ import {CommentsGateway} from './comment.gateway'
         AlbumModule,
         FileModule,
         UserModule,
-    ]
+    ],
+    providers:[CommentsGateway]
 })
 export class AppModule{}
