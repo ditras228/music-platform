@@ -70,6 +70,7 @@ const AlbumPage = ({serverAlbum, allTracks, token}) => {
 
         onSubmit: async values => {
             TracksAPI.addComment(values, token)
+            socket.emit('addComment', values)
         }
     })
     return (

@@ -10,30 +10,33 @@ import {
 import {Logger} from '@nestjs/common'
 import {Server, Socket} from 'socket.io'
 
-@WebSocketGateway(4001)
-export class CommentsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-    @WebSocketServer()
-    server
-    private logger: Logger = new Logger('CommentsGateway');
+@WebSocketGateway({ namespace: '/comment' })
+export class CommentGateway implements OnGatewayInit {
 
-    @SubscribeMessage('sendComment')
-    handleEvent(
-        @MessageBody() data: string,
-        @ConnectedSocket() client: Socket,
-    ) {
-        this.server.emit('addComment', data)
-        this.logger.log(`test`);
-       // return data;
+    @WebSocketServer() wss: Server;
+
+    private logger: Logger = new Logger('CommentGateway');
+
+    afterInit(server: any) {
+        this.logger.log('Initialized!');
     }
 
-    afterInit(server: Server) {
-        this.logger.log('Init');
-    }
-    handleDisconnect(client: Socket) {
-        this.logger.log(`Client disconnected: ${client.id}`);
+    @SubscribeMessage('chatToServer')
+    handleMessage(client: Socket, message: { sender: string, room: string, message: string }) {
+        this.wss.to(message.room).emit('chatToClient', message);
     }
 
-    handleConnection(client: Socket, ...args: any[]) {
-        this.logger.log(`Client connected: ${client.id}`);
+    @SubscribeMessage('joinRoom')
+    handleRoomJoin(client: Socket, room: string ) {
+        client.join(room);
+        client.emit('joinedRoom', room);
+        this.logger.log('123');
     }
+
+    @SubscribeMessage('leaveRoom')
+    handleRoomLeave(client: Socket, room: string ) {
+        client.leave(room);
+        client.emit('leftRoom', room);
+    }
+
 }

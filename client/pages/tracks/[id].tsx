@@ -26,7 +26,7 @@ const TrackPage = ({serverTrack, token}) => {
             console.log('data')
         }
         if (socket) {
-            socket.on('addComment', handleEvent)
+            socket.on('chatToClient', handleEvent)
         }
     }, [socket])
 
@@ -38,6 +38,8 @@ const TrackPage = ({serverTrack, token}) => {
 
         onSubmit: async values => {
             TracksAPI.addComment(values, token)
+            socket.emit('chatToServer', values)
+
         }
     })
     return (
