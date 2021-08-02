@@ -33,7 +33,7 @@ export class AlbumService {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const tracks=[]
         for(let i=0; i<dto.tracks; i++){
-            tracks.push(await this.trackModel.findById(mongoose.Types.ObjectId(dto.tracks[i])))
+            tracks.push(mongoose.Types.ObjectId(dto.tracks[i]))
         }
         return  await this.albumModel.create({...dto,tracks: tracks, userId: session.userId._id, picture: picturePath})
 
