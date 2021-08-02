@@ -11,11 +11,11 @@ import {Logger} from '@nestjs/common'
 import {Server, Socket} from 'socket.io'
 
 @WebSocketGateway({ namespace: '/comment' })
-export class CommentGateway implements OnGatewayInit {
+export class CommentsGateway implements OnGatewayInit {
 
     @WebSocketServer() wss: Server;
 
-    private logger: Logger = new Logger('CommentGateway');
+    private logger: Logger = new Logger('CommentsGateway');
 
     afterInit(server: any) {
         this.logger.log('Initialized!');
