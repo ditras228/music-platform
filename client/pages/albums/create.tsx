@@ -66,7 +66,7 @@ const Create = ({token, userId}) => {
                     }}
 
                     onSubmit={(values) => {
-                        dispatch(CreateAlbum({...values, tracks: albumTracks.map(track=>track._id)}, token))
+                        dispatch(CreateAlbum({...values, tracks: JSON.stringify(albumTracks.map(track=>track._id))}, token))
                     }}
                 >
                     <FormStep stepName={'Инфо'}

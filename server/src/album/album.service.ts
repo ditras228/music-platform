@@ -33,8 +33,7 @@ export class AlbumService {
             console.log(dto)
             const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
             const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-            return  await this.albumModel.create({...dto,tracks: dto.tracks as ObjectId, userId: session.userId._id, picture: picturePath})
-
+            return  await this.albumModel.create({...dto,tracks: dto.tracks as Array<ObjectId>, userId: session.userId._id, picture: picturePath})
         }catch(e){
             console.log(e)
         }
