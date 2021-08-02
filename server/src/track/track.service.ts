@@ -94,7 +94,7 @@ export class TrackService {
         await track.save()
 
         
-        this.commentsGateway.server.emit('sendComment', comment)
+        this.commentsGateway.wss.emit('CommentsGateway', comment)
         return comment
     }
 
