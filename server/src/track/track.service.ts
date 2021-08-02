@@ -93,8 +93,11 @@ export class TrackService {
         track.comments.push(comment._id)
         await track.save()
 
-        
-        this.commentsGateway.wss.emit('CommentsGateway', comment)
+        const user = await this.userModel.findOne(ObjectId(comment.userId)) as unknown as UserDocument
+        comment.username = user?.name
+        comment.color = user?.color
+
+        //this.commentsGateway.wss.emit('CommentsGateway', comment)
         return comment
     }
 

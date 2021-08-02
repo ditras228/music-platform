@@ -1,7 +1,7 @@
-import React, {FC, useEffect} from 'react'
-import {AppProps} from 'next/app';
+import React, {FC} from 'react'
+import {AppProps} from 'next/app'
 import {wrapper} from '../store'
-import { Provider } from 'next-auth/client'
+import {Provider} from 'next-auth/client'
 import {ThemeProvider} from '@material-ui/styles'
 
 import {useTypedSelector} from '../hooks/useTypedSelector'

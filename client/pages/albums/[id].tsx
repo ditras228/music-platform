@@ -1,76 +1,34 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
-import {GetServerSideProps} from 'next'
-import {TracksAPI} from '../../api/tracksAPI'
 import {baseURL} from '../../api'
-import {
-    ArrowBackIos,
-    GTranslate,
-    Hearing,
-    InsertComment,
-    MusicNote,
-    Note,
-    Person,
-    Settings,
-    Title
-} from '@material-ui/icons'
+import {ArrowBackIos, GTranslate, Hearing, InsertComment, MusicNote, Person, Title} from '@material-ui/icons'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
 import TrackList from '../../components/TrackList'
-import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {useDispatch} from 'react-redux'
-import {AlbumActionTypes, IAlbum} from '../../types/album'
+import {IAlbum} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
 import {getSession} from 'next-auth/client'
-import {DefaultSession} from 'next-auth'
-import CommentFC from '../tracks/comment'
+import CommentFC from '../../components/comment'
 import {useFormik} from 'formik'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
-import {io} from 'socket.io-client'
-import {ITrack} from '../../types/track'
-import SocketIOClient from "socket.io-client";
-import useSocket from '../../hooks/useSocket'
 
 
-const AlbumPage = ({serverAlbum, allTracks, token}) => {
+const AlbumPage = ({serverAlbum, token}) => {
     const router = useRouter()
-    const {albumTracks} = useTypedSelector(state => state.album)
-    const [editAlbum, setAlbumEdit] = useState(false)
-    const [albumName, setAlbumName] = useState('')
-    let albumOwner = false
-    const dispatch = useDispatch()
     const [album, setAlbum] = useState<IAlbum>(serverAlbum)
-
-
-    if (album.userId === token) {
-        albumOwner = true
-    }
-    console.log(album)
-
-
-    const editAlbumHandler = async () => {
-        await AlbumsAPI.editAlbum(albumTracks.map(track => track._id), token)
-    }
-    const socket=useSocket('http://localhost:4001')
-
-    useEffect(()=>{
-        socket.on('addComment', function (data){
-            setAlbum({...album, comments: [...album.comments, data]})
-        })
-    },[socket])
 
     const formik = useFormik({
         initialValues: {
             text: '',
             trackId: album._id
         },
-
         onSubmit: async values => {
-            TracksAPI.addComment(values, token)
-            socket.emit('addComment', values)
+            AlbumsAPI.addComment(values, token).then((track: any)=>
+                setAlbum({...track, comments: [...track.comments, track.data]})
+            )
         }
     })
     return (
@@ -171,14 +129,12 @@ export const getServerSideProps = wrapper.getServerSideProps
     const session = await getSession(ctx)
 
     const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
-    const responseTracks = await TracksAPI.getTracks(session.accessToken)
 
     const player = cookies(ctx).player;
     await dispatch( setPlayer(player))
     return {
         props: {
             serverAlbum: response.data,
-            allTracks: responseTracks.data,
             token: session.accessToken,
         }
 

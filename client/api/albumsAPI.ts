@@ -37,5 +37,9 @@ export const AlbumsAPI= {
             {headers: {Authorization: `Bearer ${token}`}})
 
     },
+     addComment(data, token) {
+        return instance.post('/albums/comment', data,
+        {headers: {Authorization: `Bearer ${token}`}})
 
+},
 }

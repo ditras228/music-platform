@@ -1,6 +1,6 @@
 import React from 'react'
-import classes from './[id].module.css'
-import {Avatar, Card} from '@material-ui/core'
+import classes from '../pages/tracks/[id].module.css'
+import {Avatar} from '@material-ui/core'
 
 const CommentFC: React.FC<CommentProps> = ({comment}) => {
     return (

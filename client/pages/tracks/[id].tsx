@@ -1,34 +1,22 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
-import {baseSocketURL, baseURL} from '../../api'
+import {baseURL} from '../../api'
 import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
-import CommentFC from './comment'
+import CommentFC from '../../components/comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
-import useSocket from '../../hooks/useSocket'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
-    const socket = useSocket(baseSocketURL)
-
-    useEffect(() => {
-        function handleEvent(payload) {
-            setTrack({...track, comments: [...track.comments, payload]})
-            console.log('data')
-        }
-        if (socket) {
-            socket.on('chatToClient', handleEvent)
-        }
-    }, [socket])
 
     const formik = useFormik({
         initialValues: {
@@ -37,9 +25,11 @@ const TrackPage = ({serverTrack, token}) => {
         },
 
         onSubmit: async values => {
-            TracksAPI.addComment(values, token)
-            socket.emit('chatToServer', values)
+            TracksAPI.addComment(values, token).then((comments: any)=>{
+            setTrack({...track, comments: [comments.data]})
 
+                }
+            )
         }
     })
     return (
@@ -85,7 +75,7 @@ const TrackPage = ({serverTrack, token}) => {
                         <form onSubmit={formik.handleSubmit} className={classes.form}>
                             <h3 className={classes.title}>
                                 <InsertComment/> {
-                                serverTrack.comments.length===0
+                                track.comments.length===0
                                 ?'нет комментариев'
                                 :'комментарии'
                             }
@@ -111,8 +101,8 @@ const TrackPage = ({serverTrack, token}) => {
                     </Grid>
 
                     {
-                        serverTrack.comments.map(comment =>
-                            <CommentFC comment={comment}/>
+                        track.comments.map(comment =>
+                            <CommentFC key={comment._id} comment={comment}/>
                         )
                     }
                 </Card>

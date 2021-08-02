@@ -6,12 +6,8 @@ import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
 import classes from './Player.module.css'
-import cookies from 'next-cookies'
 import {savePlayer} from '../store/action-creators/player'
 import {useDispatch} from 'react-redux'
-import {NextThunkDispatch, wrapper} from '../store'
-import {useRouter} from 'next/router'
-import {ITrack} from '../types/track'
 
 let audio
 

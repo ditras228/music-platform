@@ -19,6 +19,6 @@ import {CommentsGateway} from './comment.gateway'
         FileModule,
         UserModule,
     ],
-    providers:[CommentsGateway]
+   // providers:[CommentsGateway]
 })
 export class AppModule{}

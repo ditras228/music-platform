@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import {GitHub, VpnKey} from '@material-ui/icons'
 import classes from './auth/register.module.css'
 import {Alert} from '@material-ui/lab'
-import {useDispatch, useSelector} from 'react-redux'
+import { useSelector} from 'react-redux'
 import {GetError} from '../store/selectors'
 import {getSession, signIn} from 'next-auth/client'
 

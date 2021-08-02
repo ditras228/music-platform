@@ -1,14 +1,13 @@
 import React from 'react'
-import {IAlbum, ITrack} from '../types/track'
 import {Card, Grid, IconButton} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
 import {useRouter} from 'next/router'
-import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
-import {TracksAPI} from '../api/tracksAPI'
 import {fetchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
+import {AlbumsAPI} from '../api/albumsAPI'
+import {IAlbum} from '../types/album'
 
 interface AlbumItemProps {
     album: IAlbum
@@ -19,7 +18,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album,  token}) => {
     const router = useRouter()
     const dispatch= useDispatch()
     const deleteOne = async (id)=>{
-        await TracksAPI.deleteOneAlbum(id, token).then()
+        await AlbumsAPI.deleteOneAlbum(id, token).then()
          dispatch( fetchTracks(token))
     }
     return (

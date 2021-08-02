@@ -5,6 +5,7 @@ import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import AlbumItem from './AlbumItem'
 import {searchAlbums} from '../store/action-creators/album'
+import {IAlbum} from '../types/album'
 
 interface AlbumListProps{
     albums: IAlbum[]

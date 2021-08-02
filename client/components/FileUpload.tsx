@@ -1,6 +1,5 @@
 import React, {useRef, useState} from 'react'
 import {FieldConfig, useField, useFormikContext} from 'formik'
-import {red} from '@material-ui/core/colors'
 import {Alert} from '@material-ui/lab'
 
 interface Props extends FieldConfig{

@@ -13,8 +13,8 @@ const InputField = ({label, rows, multiline, ...props}: Props) => {
         <TextField
             fullWidth
             label={label}
-            rows={rows}
-            multiline={multiline}
+            rows={rows || 1}
+            multiline={multiline || false}
             {...field}
             {...props}
             error={meta.touched && Boolean(meta.error)}
