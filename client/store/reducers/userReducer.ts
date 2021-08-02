@@ -12,6 +12,8 @@ export const usersReducer = (state = initialState, action: UserAction): UserStat
             return {...state, errors: [...state.errors, action.payload]}
         case UsersActionTypes.IS_DARK:
             return {...state, isDark: !state.isDark}
+        case UsersActionTypes.HANDLE_CHANGE_DARK:
+            return {...state, isDark: action.payload}
         case UsersActionTypes.IS_LOADING:
             return {...state, isLoading: true}
         case UsersActionTypes.REDIRECT_TO:

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Drawer from '@material-ui/core/Drawer'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import AppBar from '@material-ui/core/AppBar'
@@ -22,6 +22,7 @@ import {useDispatch} from 'react-redux'
 import {useTypedSelector} from '../hooks/useTypedSelector'
 import {UsersActionTypes} from '../types/user'
 import {Brightness4, Brightness7} from '@material-ui/icons'
+import {ChangeTheme} from '../store/action-creators/user'
 
 const menuItem = [
     {text: 'Треки', href: '/'},
@@ -34,6 +35,9 @@ export default function Navbar() {
     const dispatch = useDispatch()
     const theme= useTheme()
     const isDark = useTypedSelector(state=>state.user.isDark) as any
+    useEffect(()=>{
+        console.log(isDark)
+    },[isDark])
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -50,11 +54,7 @@ export default function Navbar() {
     const click = (e) =>
     {
 
-        dispatch(
-            {
-                type: UsersActionTypes.IS_DARK,
-            }
-        )
+        dispatch(ChangeTheme(!isDark))
     };
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 

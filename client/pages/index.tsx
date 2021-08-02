@@ -10,6 +10,9 @@ import {Alert} from '@material-ui/lab'
 import { useSelector} from 'react-redux'
 import {GetError} from '../store/selectors'
 import {getSession, signIn} from 'next-auth/client'
+import {UsersActionTypes} from '../types/user'
+import {NextThunkDispatch, wrapper} from '../store'
+import cookies from 'next-cookies'
 
 const SignupSchema = Yup.object({
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -94,8 +97,15 @@ const LogIn = ({session}) => {
 export default LogIn
 
 
-export async function getServerSideProps({req, res}) {
-    const session = await getSession({req})
+export const getServerSideProps = wrapper.getServerSideProps
+(async (ctx) => {
+    const dispatch = ctx.store.dispatch as NextThunkDispatch
+    const theme = cookies(ctx).theme;
+    const session = await getSession({req: ctx.req})
+    dispatch({
+        type: UsersActionTypes.HANDLE_CHANGE_DARK,
+        payload: theme || false
+    })
     if (session) {
         return {
             redirect: {
@@ -107,4 +117,4 @@ export async function getServerSideProps({req, res}) {
 
     return ({props: {session}})
 
-}
+})

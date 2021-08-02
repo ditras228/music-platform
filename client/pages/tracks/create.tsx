@@ -5,7 +5,7 @@ if (typeof window !== 'undefined') {
     }
 
     import React, {useEffect, useRef, useState} from 'react'
-    import {wrapper} from '../../store'
+    import {NextThunkDispatch, wrapper} from '../../store'
     import {getSession} from 'next-auth/client'
     import {useRouter} from 'next/router'
     import MultiStepForm, {FormStep} from '../../components/create/MultiStepForm'
@@ -20,6 +20,8 @@ if (typeof window !== 'undefined') {
 import {useDispatch} from 'react-redux'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateTrack} from '../../store/action-creators/user'
+import cookies from 'next-cookies'
+import {setPlayer} from '../../store/action-creators/player'
 
     const InfoSchema = Yup.object({
         name: Yup.string()
@@ -132,7 +134,16 @@ import {CreateTrack} from '../../store/action-creators/user'
     export default Create
     export const getServerSideProps = wrapper.getServerSideProps
     (async (ctx) => {
+        const dispatch = ctx.store.dispatch as NextThunkDispatch
         const session = await getSession({req: ctx.req})
+        const theme = cookies(ctx).theme;
+        const player = cookies(ctx).player;
+
+        dispatch( setPlayer(player))
+        dispatch({
+            type: UsersActionTypes.HANDLE_CHANGE_DARK,
+            payload: theme || false
+        })
         if (!session) {
             return {
                 redirect: {

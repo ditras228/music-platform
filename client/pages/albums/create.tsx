@@ -17,6 +17,7 @@ import {fetchTracks} from '../../store/action-creators/track'
 import {setPlayer} from '../../store/action-creators/player'
 import {useFormikContext} from 'formik'
 import cookies from 'next-cookies'
+import {UsersActionTypes} from '../../types/user'
 
 const InfoSchema = Yup.object({
     name: Yup.string()
@@ -41,7 +42,6 @@ const TrackSchema = Yup.object().shape({
 const Create = ({token, userId}) => {
     const [image, setImage] = useState('http://placehold.it/100')
     const router = useRouter()
-    const chart = useRef(null)
     const redirectTo = useTypedSelector(state => state.user.redirectTo)
     const {tracks, error} = useTypedSelector(state => state.track)
     const dispatch = useDispatch()
@@ -66,7 +66,7 @@ const Create = ({token, userId}) => {
                     }}
 
                     onSubmit={(values) => {
-                        dispatch(CreateAlbum(values, token))
+                        dispatch(CreateAlbum({...values, tracks: albumTracks.map(track=>track._id)}, token))
                     }}
                 >
                     <FormStep stepName={'Инфо'}
@@ -123,7 +123,13 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
     const player = cookies(ctx).player;
-    await dispatch( setPlayer(player))
+    const theme = cookies(ctx).theme;
+
+    dispatch( setPlayer(player))
+    dispatch({
+        type: UsersActionTypes.HANDLE_CHANGE_DARK,
+        payload: theme || false
+    })
     return {
         props: {
             userId: session.id || null,

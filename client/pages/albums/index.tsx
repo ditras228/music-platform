@@ -13,6 +13,7 @@ import {getSession} from 'next-auth/client'
 import AlbumList from '../../components/AlbumList'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
+import {UsersActionTypes} from '../../types/user'
 
 const Index = ({token}) => {
     const router = useRouter()
@@ -85,7 +86,13 @@ export const getServerSideProps = wrapper.getServerSideProps
         await dispatch(fetchAlbums(session.accessToken))
 
         const player = cookies(ctx).player;
-        await dispatch( setPlayer(player))
+    const theme = cookies(ctx).theme;
+
+    dispatch( setPlayer(player))
+    dispatch({
+        type: UsersActionTypes.HANDLE_CHANGE_DARK,
+        payload: theme || false
+    })
         return {
             props: {
                 token: session.accessToken

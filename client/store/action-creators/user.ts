@@ -3,6 +3,7 @@ import {UsersAPI} from '../../api/usersAPI'
 import {UserAction, UsersActionTypes} from '../../types/user'
 import {TracksAPI} from '../../api/tracksAPI'
 import {AlbumsAPI} from '../../api/albumsAPI'
+import cookie from 'js-cookie'
 
 export const Registration = (username, password) => {
     return async (dispatch: Dispatch<UserAction>) => {
@@ -39,6 +40,16 @@ export const CreateTrack = (values, token) => {
 
     }
 }
+export const ChangeTheme = (theme: boolean) => {
+    return async (dispatch: Dispatch<UserAction>) => {
+         dispatch( {
+             type: UsersActionTypes.HANDLE_CHANGE_DARK,
+             payload: theme
+         })
+        cookie.set('theme', theme)
+    }
+}
+
 export const CreateAlbum = (values, token) => {
     return async (dispatch: Dispatch<UserAction>) => {
         dispatch({

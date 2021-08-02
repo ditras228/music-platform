@@ -9,11 +9,11 @@ import {createMuiTheme} from '@material-ui/core/styles'
 
 
 const WrappedApp: FC<AppProps> = ({Component, pageProps}) => {
-    const isDark = useTypedSelector(state=>state.user.isDark) as any
+    const isDark = useTypedSelector(state=>state.user.isDark) as boolean
 
     const theme= createMuiTheme({
         palette: {
-            type: isDark ? 'dark' : 'light'
+            type: isDark? 'dark' : 'light'
         }
     })
 

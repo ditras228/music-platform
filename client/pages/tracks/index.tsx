@@ -11,6 +11,7 @@ import classes from './index.module.css'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
+import {UsersActionTypes} from '../../types/user'
 
 const Index = ({token, userId}) => {
     const router = useRouter()
@@ -62,7 +63,13 @@ export const getServerSideProps = wrapper.getServerSideProps
     await dispatch( fetchTracks(session.accessToken))
 
     const player = cookies(ctx).player;
-    await dispatch( setPlayer(player))
+    const theme = cookies(ctx).theme;
+
+    dispatch( setPlayer(player))
+    dispatch({
+        type: UsersActionTypes.HANDLE_CHANGE_DARK,
+        payload: theme || false
+    })
     return {
         props:{
             token: session.accessToken || null,

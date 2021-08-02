@@ -13,6 +13,7 @@ import CommentFC from '../../components/comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
+import {UsersActionTypes} from '../../types/user'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
@@ -25,8 +26,8 @@ const TrackPage = ({serverTrack, token}) => {
         },
 
         onSubmit: async values => {
-            TracksAPI.addComment(values, token).then((comments: any)=>{
-            setTrack({...track, comments: [comments.data]})
+            TracksAPI.addComment(values, token).then((comment: any)=>{
+            setTrack({...track, comments: [...track.comments, comment.data]})
 
                 }
             )
@@ -119,7 +120,13 @@ export const getServerSideProps = wrapper.getServerSideProps
     const session= await getSession(ctx)
 
     const player = cookies(ctx).player;
-    await dispatch(setPlayer(player))
+    const theme = cookies(ctx).theme;
+
+    dispatch( setPlayer(player))
+    dispatch({
+        type: UsersActionTypes.HANDLE_CHANGE_DARK,
+        payload: theme || false
+    })
 
     const response = await TracksAPI.getOne(ctx.params.id, session.accessToken)
     return {

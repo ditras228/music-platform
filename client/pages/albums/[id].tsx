@@ -14,6 +14,7 @@ import CommentFC from '../../components/comment'
 import {useFormik} from 'formik'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
+import {UsersActionTypes} from '../../types/user'
 
 
 const AlbumPage = ({serverAlbum, token}) => {
@@ -131,7 +132,13 @@ export const getServerSideProps = wrapper.getServerSideProps
     const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
 
     const player = cookies(ctx).player;
-    await dispatch( setPlayer(player))
+    const theme = cookies(ctx).theme;
+
+    dispatch( setPlayer(player))
+    dispatch({
+        type: UsersActionTypes.HANDLE_CHANGE_DARK,
+        payload: theme || false
+    })
     return {
         props: {
             serverAlbum: response.data,

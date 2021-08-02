@@ -12,7 +12,7 @@ import {Session, SessionDocument} from "../users/schemas/session.schema";
 import {CreateCommentDTO} from '../track/dto/add.comment.dto'
 import {Comment, CommentDocument} from '../track/schemas/comment.schema'
 import {io} from 'socket.io-client'
-
+const  mongoose = require('mongoose');
 @Injectable()
 export class AlbumService {
     constructor(@InjectModel(Album.name)
@@ -31,7 +31,11 @@ export class AlbumService {
     async create(dto: CreateAlbumDto, picture, headers): Promise<any> {
         const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-        return  await this.albumModel.create({...dto, userId: session.userId._id, picture: picturePath})
+        const tracks=[]
+        for(let i=0; i<dto.tracks; i++){
+            tracks.push(await this.trackModel.findById(mongoose.Types.ObjectId(dto.tracks[i])))
+        }
+        return  await this.albumModel.create({...dto,tracks: tracks, userId: session.userId._id, picture: picturePath})
 
     }
 

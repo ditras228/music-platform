@@ -11,6 +11,9 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Registration} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
 import {getSession} from 'next-auth/client'
+import {NextThunkDispatch, wrapper} from '../../store'
+import cookies from 'next-cookies'
+import {UsersActionTypes} from '../../types/user'
 
 const SignupSchema = Yup.object({
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -106,8 +109,15 @@ const Register = () => {
 
 export default Register
 
-export async function getServerSideProps({req,res}){
-    const session = await getSession({req})
+export const getServerSideProps = wrapper.getServerSideProps
+(async (ctx) => {
+    const dispatch = ctx.store.dispatch as NextThunkDispatch
+    const theme = cookies(ctx).theme;
+    const session = await getSession({req: ctx.req})
+    dispatch({
+        type: UsersActionTypes.HANDLE_CHANGE_DARK,
+        payload: theme || false
+    })
     if(!session){
         return {
             redirect: {
