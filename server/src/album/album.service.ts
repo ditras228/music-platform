@@ -29,9 +29,15 @@ export class AlbumService {
     }
 
     async create(dto: CreateAlbumDto, picture, headers): Promise<any> {
-        const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
-        const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-        return  await this.albumModel.create({...dto,tracks: dto.tracks as ObjectId, userId: session.userId._id, picture: picturePath})
+        try{
+            console.log(dto)
+            const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
+            const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
+            return  await this.albumModel.create({...dto,tracks: dto.tracks as ObjectId, userId: session.userId._id, picture: picturePath})
+
+        }catch(e){
+            console.log(e)
+        }
 
     }
 
