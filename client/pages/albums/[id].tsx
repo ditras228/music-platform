@@ -128,13 +128,13 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
 
     const session = await getSession(ctx)
-
-    const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
-
     const player = cookies(ctx).player;
     const theme = cookies(ctx).theme;
 
     dispatch( setPlayer(player))
+    const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
+
+
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false

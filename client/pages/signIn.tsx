@@ -13,6 +13,7 @@ import {getSession, signIn} from 'next-auth/client'
 import {UsersActionTypes} from '../types/user'
 import {NextThunkDispatch, wrapper} from '../store'
 import cookies from 'next-cookies'
+import {UsersAPI} from '../api/usersAPI'
 
 const SignupSchema = Yup.object({
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -32,7 +33,7 @@ const LogIn = ({session}) => {
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-            await signIn('Login', {email: values.email, password: values.password})
+            await UsersAPI.loginByServer(values)
         }
     })
     const loginHandler = async (e: any) => {
@@ -80,8 +81,9 @@ const LogIn = ({session}) => {
                             Войти
                         </Button>
                         <Button
-                            onClick={() => signIn('github')}>
-                            <GitHub/>
+                            onClick={() => signIn('github')}
+                            startIcon={ <GitHub/>}>
+
                             Войти с помощью GitHub
                         </Button>
                         <Link onClick={e => loginHandler(e)} className={classes.login}>

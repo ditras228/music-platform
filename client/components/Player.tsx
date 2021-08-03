@@ -30,6 +30,13 @@ const Player = () => {
             !currentTime&&setCurrentTime ( currentTime)
             setAudio()
         } else {
+            const src = audio.src.replace(baseURL, '')
+            if(src!==active.audio){
+                console.log('________________')
+                console.log(src)
+                console.log(active.audio)
+                setAudio()
+            }
             audio.play()
         }
     }, [active])
@@ -38,6 +45,7 @@ const Player = () => {
         audio.src = baseURL+active.audio
             console.log(audio)
         audio.volume = volume / 100
+       // audio.currentTime=currentTime || 0
         audio.onloadedmetadata = () => {
             setDuration(Math.ceil(audio.duration))
         }

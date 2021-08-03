@@ -1,4 +1,5 @@
 import {instance} from './index'
+import axios from 'axios'
 
 export const UsersAPI={
     getUsers(){
@@ -6,6 +7,9 @@ export const UsersAPI={
     },
     getOne(id){
         return instance.get(`auth/${id}`)
+    },
+    loginByServer(data){
+        return axios.get('/api/auth/signin/Login', data)
     },
     auth(token){
         return instance.get('auth/',

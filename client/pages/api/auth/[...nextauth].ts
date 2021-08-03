@@ -36,6 +36,9 @@ export default(req, res)=>{
         jwt: {
             secret: process.env.JWT_SECRET,
         },
+        pages:{
+            signIn: '/signIn'
+        },
         database: process.env.DB_URL,
         callbacks: {
             async jwt(token, user, account, profile, isNewUser) {
