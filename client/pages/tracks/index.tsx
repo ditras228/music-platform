@@ -52,7 +52,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session= await getSession({req: ctx.req})
     //const token= await getToken({req: ctx.req})
-    if(!session.accessToken ){
+    if(!session){
         return {
             redirect: {
                 destination: '/',
@@ -64,7 +64,7 @@ export const getServerSideProps = wrapper.getServerSideProps
 
     const player = cookies(ctx).player;
     const theme = cookies(ctx).theme;
-    if (player)
+
     dispatch( setPlayer(player))
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,

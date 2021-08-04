@@ -14,13 +14,10 @@ import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {UsersActionTypes} from '../../types/user'
-import {PlayerActionTypes} from '../../types/player'
-import {useDispatch} from 'react-redux'
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
-    const dispatch = useDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -52,8 +49,7 @@ const TrackPage = ({serverTrack, token}) => {
                 <Card>
 
                     <Grid className={classes.info}>
-                        <img src={baseURL + track.picture}
-                             className={classes.img} alt={'Обложка трека'}/>
+                        <img src={baseURL + track.picture} className={classes.img} alt={'Обложка трека'}/>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}><Title/>Название</h3>
