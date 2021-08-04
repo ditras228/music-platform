@@ -6,13 +6,10 @@ import {Track, TrackDocument} from '../track/schemas/track.schema'
 import {FileService, FileType} from '../file/file.service'
 import {CreateAlbumDto} from './dto/create.album.dto'
 import {User, UserDocument} from '../users/schemas/user.schema'
-import jwt = require('jsonwebtoken')
-import {Account, AccountDocument} from "../users/schemas/account.schema";
-import {Session, SessionDocument} from "../users/schemas/session.schema";
+import {Account, AccountDocument} from '../users/schemas/account.schema'
 import {CreateCommentDTO} from '../track/dto/add.comment.dto'
 import {Comment, CommentDocument} from '../track/schemas/comment.schema'
-import {io} from 'socket.io-client'
-const  mongoose = require('mongoose');
+
 @Injectable()
 export class AlbumService {
     constructor(@InjectModel(Album.name)
@@ -36,7 +33,7 @@ export class AlbumService {
             return  await this.albumModel
                 .create(
                     {...dto,
-                       tracks: JSON.parse(dto.tracks),
+                       tracks: JSON.parse(dto.tracks as string),
                        userId: session.userId._id,
                        picture: picturePath,
                        created_at: Date()
@@ -65,7 +62,6 @@ export class AlbumService {
         const album = await this.albumModel.findByIdAndDelete(id)
         if(album.userId==session.userId._id.toString()) {
             return await album.remove()
-            return album
         }
         return new HttpException
         (`Вы не владелец альбома`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -104,8 +100,6 @@ export class AlbumService {
         album.comments.push(comment._id)
         await album.save()
 
-        const socket = io()
-        socket.emit('addComment', album)
         return comment
     }
 

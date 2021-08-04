@@ -8,9 +8,8 @@ import {CreateCommentDTO} from './dto/add.comment.dto'
 import {FileService, FileType} from '../file/file.service'
 import {User, UserDocument} from '../users/schemas/user.schema'
 import {Session, SessionDocument} from '../users/schemas/session.schema'
-import {Account, AccountDocument} from "../users/schemas/account.schema";
-import {io} from 'socket.io-client'
-import {CommentsGateway} from '../comment.gateway'
+import {Account, AccountDocument} from '../users/schemas/account.schema'
+
 const ObjectId = require('mongodb').ObjectID;
 
 @Injectable()
@@ -21,7 +20,6 @@ export class TrackService {
                 @InjectModel(Session.name) private sessionModel: Model<SessionDocument>,
                 @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
                 private fileService: FileService,
-                private commentsGateway: CommentsGateway
     ) {
     }
 
@@ -102,7 +100,6 @@ export class TrackService {
         comment.username = user?.name
         comment.color = user?.color
 
-        //this.commentsGateway.wss.emit('CommentsGateway', comment)
         return comment
     }
 

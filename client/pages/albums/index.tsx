@@ -15,7 +15,7 @@ import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {UsersActionTypes} from '../../types/user'
 
-const Index = ({token}) => {
+const Index = ({token, userId}) => {
     const router = useRouter()
     const {albums, error} = useTypedSelector(state => state.album)
     const [timer, setTimer] = useState(null)
@@ -61,7 +61,7 @@ const Index = ({token}) => {
                         <h2 className={classes.title}><Search/>Список альбомов</h2>
                         <Button onClick={() => router.push('/albums/create')}>Новый альбом</Button>
                     </Grid>
-                    <AlbumList albums={albums} token={token}/>
+                    <AlbumList albums={albums} token={token} userId={userId}/>
                 </Card>
             </Grid>
         </MainLayout>
@@ -93,7 +93,8 @@ export const getServerSideProps = wrapper.getServerSideProps
     })
         return {
             props: {
-                token: session.accessToken
+                token: session.accessToken,
+                userId: session.userId
             }
         }
     }

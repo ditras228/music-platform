@@ -6,7 +6,6 @@ import {ServeStaticModule} from '@nestjs/serve-static'
 import * as path from 'path'
 import {Module} from '@nestjs/common'
 import {AlbumModule} from './album/album.module'
-import {CommentsGateway} from './comment.gateway'
 
 @Module({
     imports: [
@@ -19,6 +18,5 @@ import {CommentsGateway} from './comment.gateway'
         FileModule,
         UserModule,
     ],
-   // providers:[CommentsGateway]
 })
 export class AppModule{}
