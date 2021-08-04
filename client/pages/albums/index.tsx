@@ -84,12 +84,10 @@ export const getServerSideProps = wrapper.getServerSideProps
             }
         }
         await dispatch(fetchAlbums(session.accessToken))
-
         const player = cookies(ctx).player;
-    const theme = cookies(ctx).theme;
-
-    dispatch( setPlayer(player))
-    dispatch({
+        const theme = cookies(ctx).theme;
+        dispatch( setPlayer(player))
+        dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false
     })

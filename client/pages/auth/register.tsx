@@ -118,10 +118,10 @@ export const getServerSideProps = wrapper.getServerSideProps
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false
     })
-    if(!session){
+    if(session){
         return {
             redirect: {
-                destination: '/',
+                destination: '/tracks',
                 permanent: false,
             },
         }
@@ -129,4 +129,4 @@ export const getServerSideProps = wrapper.getServerSideProps
 
     return({props:{session}})
 
-}
+})

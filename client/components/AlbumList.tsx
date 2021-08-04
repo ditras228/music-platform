@@ -10,8 +10,9 @@ import {IAlbum} from '../types/album'
 interface AlbumListProps{
     albums: IAlbum[]
     token: string
+    userId: string
 }
-const AlbumList: React.FC<AlbumListProps> = ({albums,token}) => {
+const AlbumList: React.FC<AlbumListProps> = ({albums,token, userId}) => {
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch()  
     const formik = useFormik({
@@ -54,6 +55,7 @@ const AlbumList: React.FC<AlbumListProps> = ({albums,token}) => {
                             key={album._id}
                             album={album}
                             token={token}
+                            userId={userId}
                         />
                     )}
                 </Box>

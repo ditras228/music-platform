@@ -31,10 +31,10 @@ const Player = () => {
             setAudio()
         } else {
             const src = audio.src.replace(baseURL, '')
-            if(src!==active.audio){
+            if(src!==active?.audio){
                 console.log('________________')
                 console.log(src)
-                console.log(active.audio)
+                console.log(active?.audio)
                 setAudio()
             }
             audio.play()

@@ -35,6 +35,11 @@ export default function Navbar() {
     const dispatch = useDispatch()
     const theme= useTheme()
     const isDark = useTypedSelector(state=>state.user.isDark) as any
+    useEffect( ()=>{
+        if (!session?.user?.email){
+            logOutHandler
+        }
+    },[session])
     useEffect(()=>{
         console.log(isDark)
     },[isDark])
@@ -112,7 +117,7 @@ export default function Navbar() {
                             :(
                             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
                                 <Avatar alt="Remy Sharp" src={session.user.image} className={classes.orange}>
-                                    {session.user.name.substring(0,1)}
+                                    {session.user?.name?.substring(0,1)}
                                 </Avatar>
                             </Button>
                         )
@@ -129,7 +134,7 @@ export default function Navbar() {
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
-                    <Typography variant="h6" noWrap className={classes.logo}>
+                    <Typography variant="h5" noWrap className={classes.logo}>
                         <MusicNoteIcon/>MERNMusic
                     </Typography>
                 </div>

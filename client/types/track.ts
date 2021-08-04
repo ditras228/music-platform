@@ -14,6 +14,7 @@ export interface ITrack{
     audio: string
     comments: IComment[]
     checked: boolean
+    userId: string
 }
 
 export interface TrackState{

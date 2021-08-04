@@ -21,6 +21,9 @@ export class Comment {
 
     @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Track'})
     track: Track
+
+    @Prop()
+    created_at: Date
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment)

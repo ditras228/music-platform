@@ -9,7 +9,11 @@ export const UsersAPI={
         return instance.get(`auth/${id}`)
     },
     loginByServer(data){
-        return axios.get('/api/auth/signin/Login', data)
+        const formData = new FormData()
+        formData.append('csrfToken', data.csrfToken)
+        formData.append('email', data.email)
+        formData.append('password', data.password)
+        return axios.post('/api/auth/callback/credentials', formData, {})
     },
     auth(token){
         return instance.get('auth/',

@@ -1,23 +1,22 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 import {UsersAPI} from '../../../api/usersAPI'
+import {NextThunkDispatch} from '../../../store'
+import {UsersActionTypes} from '../../../types/user'
 
 export default(req, res)=>{
     NextAuth(req,res,{
         providers:[
             Providers.Credentials({
-                name: 'Login',
-                credentials: {
-                    email: {label: 'Email', type: 'text', placeholder: 'example@gmail.com'},
-                    password: {label: 'Password', type: 'password', placeholder: 'password'}
-                },
+                name: 'Credentials',
                 async authorize(credentials) {
                     const response = await UsersAPI.login(credentials)
                     console.log('auth= '+JSON.stringify(response.data))
-                    if(response){
+                    if(response.data.status!==500){
                         return response.data
                     }else{
-                        return null
+                        throw new Error(response.data.message)
+
                     }
                 },
             }),
@@ -36,8 +35,8 @@ export default(req, res)=>{
         jwt: {
             secret: process.env.JWT_SECRET,
         },
-        pages:{
-            signIn: '/signIn'
+        pages: {
+            signIn: '/'
         },
         database: process.env.DB_URL,
         callbacks: {
@@ -64,6 +63,7 @@ export default(req, res)=>{
                 // Add property to session, like an access_token from a provider.
                 session.accessToken = token.accessToken
                 session.color = token.color
+                session.id= token.sub
                 return session
             }
 

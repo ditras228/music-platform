@@ -37,7 +37,8 @@ export class TrackService {
                 listens: 0,
                 audio: audioPath,
                 picture: picturePath,
-                userId: session.userId
+                userId: session.userId,
+                created_at: Date()
             })
         } catch (e) {
             console.log(e)
@@ -57,7 +58,8 @@ export class TrackService {
     }
 
     async getOne(id: ObjectId): Promise<Track> {
-        const track = await this.trackModel.findById(id).populate('comments') as unknown as TrackDocument
+        const track = await this.trackModel
+            .findById(id).populate({path:'comments', sort: {'created_at': -1}}) as unknown as TrackDocument
         const comments = track.comments as any
         if (comments.length > 0) {
             for (let i = 0; i < comments.length; i++) {
@@ -73,8 +75,11 @@ export class TrackService {
     async delete(id: ObjectId, headers): Promise<any> {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const track = await this.trackModel.findById(id)
-        if (track.userId === session.userId._id) {
+        console.log(track.userId)
+        console.log(session.userId._id)
+        if (track.userId==session.userId._id.toString()) {
             await track.remove()
+            return track
         }
         return new HttpException
         (`Вы не владелец трека`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -89,7 +94,7 @@ export class TrackService {
     async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const track = await this.trackModel.findById(dto.trackId)
-        const comment = await this.commentModel.create({userId: session.userId, ...dto})
+        const comment = await this.commentModel.create({userId: session.userId, ...dto, created_at: Date()})
         track.comments.push(comment._id)
         await track.save()
 

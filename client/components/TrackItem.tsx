@@ -18,7 +18,7 @@ interface TrackItemProps {
     active?: boolean
     token: string
     view?: string
-    userId?: string
+    userId: string
 }
 
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view, userId}) => {
@@ -71,7 +71,9 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view
             }
             }>
                 <SwitchView view={view} checked={isChecked}
-                            deleteOne={deleteOne}/>
+                            deleteOne={deleteOne}
+                            track={track}
+                            userId={userId}/>
                 <IconButton className={classes.play}>
                     {active
                         ? <Pause onClick={play}/>
@@ -86,7 +88,8 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view
             </Card>
         )
     }
-    const SwitchView = ({view, deleteOne, checked}) => {
+    const SwitchView = ({view, deleteOne, checked, userId, track}) => {
+    const isOwner= userId==track.userId
         switch (view) {
             case 'checkbox':
                 return (
@@ -94,8 +97,10 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view
                 )
             default:
                 return (
-                    <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                        <Delete onClick={deleteOne}/>
+                    <IconButton disabled={!isOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
+                        {
+                            isOwner && <Delete onClick={deleteOne}/>
+                        }
                     </IconButton>
                 )
 

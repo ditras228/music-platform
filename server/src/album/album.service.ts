@@ -33,7 +33,14 @@ export class AlbumService {
             console.log(dto)
             const picturePath = this.fileService.createFile(FileType.IMAGE, picture)
             const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-            return  await this.albumModel.create({...dto,tracks: JSON.parse(dto.tracks), userId: session.userId._id, picture: picturePath})
+            return  await this.albumModel
+                .create(
+                    {...dto,
+                       tracks: JSON.parse(dto.tracks),
+                       userId: session.userId._id,
+                       picture: picturePath,
+                       created_at: Date()
+                    })
         }catch(e){
             console.log(e)
         }
@@ -56,8 +63,9 @@ export class AlbumService {
     async delete(id: ObjectId, headers): Promise<any> {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const album = await this.albumModel.findByIdAndDelete(id)
-        if(album.userId==session.userId._id) {
+        if(album.userId==session.userId._id.toString()) {
             return await album.remove()
+            return album
         }
         return new HttpException
         (`Вы не владелец альбома`, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -92,7 +100,7 @@ export class AlbumService {
     async addComment(@Headers() headers, dto: CreateCommentDTO): Promise<Comment> {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const album = await this.albumModel.findById(dto.albumId)
-        const comment = await this.commentModel.create({userId: session.userId, ...dto})
+        const comment = await this.commentModel.create({userId: session.userId, ...dto, created_at: Date()})
         album.comments.push(comment._id)
         await album.save()
 

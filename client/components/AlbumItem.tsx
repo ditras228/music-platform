@@ -12,15 +12,18 @@ import {IAlbum} from '../types/album'
 interface AlbumItemProps {
     album: IAlbum
     token: string
+    userId: string
 }
 
-const AlbumItem: React.FC<AlbumItemProps> = ({album,  token}) => {
+const AlbumItem: React.FC<AlbumItemProps> = ({album,  token,userId}) => {
     const router = useRouter()
+    const isOwner = album.userId==userId
     const dispatch= useDispatch()
-    const deleteOne = async (id)=>{
-        await AlbumsAPI.deleteOneAlbum(id, token).then()
+    const deleteOne = async ()=>{
+        await AlbumsAPI.deleteOneAlbum(album._id, token).then()
          dispatch( fetchTracks(token))
     }
+
     return (
         <Card className={classes.track} onClick={() => router.push('/tracks/' + album._id)}>
             <img className={classes.image} src={baseURL + album.picture} alt={'Обложка трека'}/>
@@ -28,8 +31,8 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album,  token}) => {
                 <div>{album.name}</div>
                 <div className={classes.author}>{album.artist}</div>
             </Grid>
-            <IconButton className={classes.delete} onClick={e => e.stopPropagation()}>
-                <Delete onClick={()=>{deleteOne(album._id)}} />
+            <IconButton disabled={!isOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
+                <Delete onClick={deleteOne} />
             </IconButton>
         </Card>
     )

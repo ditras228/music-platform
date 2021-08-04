@@ -58,6 +58,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token, userId,view}) => {
                             track={track}
                             token={token}
                             view={view}
+                            userId={userId}
                         />
                     )}
                 </Box>

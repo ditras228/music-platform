@@ -7,13 +7,15 @@ import * as Yup from 'yup'
 import {GitHub, VpnKey} from '@material-ui/icons'
 import classes from './auth/register.module.css'
 import {Alert} from '@material-ui/lab'
-import { useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {GetError} from '../store/selectors'
-import {getSession, signIn} from 'next-auth/client'
+import {csrfToken, getCsrfToken, getSession, providers, signIn} from 'next-auth/client'
 import {UsersActionTypes} from '../types/user'
 import {NextThunkDispatch, wrapper} from '../store'
 import cookies from 'next-cookies'
+import {use} from 'ast-types'
 import {UsersAPI} from '../api/usersAPI'
+import {baseURL} from '../api'
 
 const SignupSchema = Yup.object({
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -23,9 +25,11 @@ const SignupSchema = Yup.object({
         .required('Обязательно'),
 })
 
-const LogIn = ({session}) => {
+const LogIn = ({session, csrfToken}) => {
     const router = useRouter()
     const error = useSelector(state => GetError(state, 'login'))
+    const dispatch = useDispatch()
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -33,23 +37,33 @@ const LogIn = ({session}) => {
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-            await UsersAPI.loginByServer(values)
+
         }
     })
     const loginHandler = async (e: any) => {
         e.preventDefault()
         await router.push('/auth/register')
     }
-
+    const handleSignIn=async (data)=>{
+        if(typeof data.error === 'string'){
+            dispatch({
+                type: UsersActionTypes.ADD_ERROR,
+                payload: {type: 'login', message: data.error}
+            })
+        }else{
+           await router.push('/tracks')
+        }
+    }
     return (
         <MainLayout>
-            <form onSubmit={formik.handleSubmit}>
+            <form >
                 <Card
                     className={classes.card}>
                     <h2 className={classes.title}><VpnKey/> Вход</h2>
                     <Grid
                         className={classes.form}
                     >
+                        <input name='csrfToken' type='hidden' defaultValue={csrfToken}/>
                         <TextField
                             label={'Введите Email'}
                             name={'email'}
@@ -76,8 +90,15 @@ const LogIn = ({session}) => {
                             <Alert variant="filled" severity="error">
                                 {error.message}
                             </Alert> : null}
+
                         <Button
-                            type={'submit'}>
+                            //type={'submit'}
+                            onClick={() => {
+                                formik.handleSubmit()
+                                signIn('credentials',
+                                    {email: formik.values.email, password: formik.values.password, redirect: false})
+                                    .then(data => handleSignIn(data))
+                            }                                }>
                             Войти
                         </Button>
                         <Button
@@ -104,11 +125,12 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const theme = cookies(ctx).theme;
     const session = await getSession({req: ctx.req})
+    const csrfToken= await getCsrfToken(ctx)
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false
     })
-    if (session) {
+    if (session?.accessToken) {
         return {
             redirect: {
                 destination: '/tracks',
@@ -117,6 +139,22 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
 
-    return ({props: {session}})
+    return ({props: {session, csrfToken}})
 
 })
+// LogIn.getInitialProps= async (context)=>{
+//     const {req,res} = context
+//     const session = await getSession({req})
+//     if(session && res && session.acessToken){
+//         res.writeHead(302, {
+//             Location: '/'
+//         })
+//         res.end()
+//         return
+//     }
+//     return {
+//         session: undefined,
+//         providers: await providers(),
+//         csrfToken: await csrfToken(context)
+//     }
+// }
