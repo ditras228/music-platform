@@ -1,8 +1,9 @@
 import React from 'react'
+import {Slider} from '@material-ui/core'
 interface  TrackProgress{
     left: number
     right: number
-    onChange: (e) => void
+    onChange: any
     format?: string
 }
 const TrackProgress: React.FC<TrackProgress> =
@@ -12,8 +13,8 @@ const TrackProgress: React.FC<TrackProgress> =
         function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
         return (
         <div>
-            <input
-                type="range"
+            <Slider
+                style={{width:'100%'}}
                 min={0}
                 max={right}
                 value={left}

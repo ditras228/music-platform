@@ -36,12 +36,6 @@ const TrackPage = ({serverTrack, token}) => {
             )
         }
     })
-    const imageClickHandler=()=>{
-        dispatch({
-            type: PlayerActionTypes.SET_ACTIVE,
-            action: track
-        })
-    }
     return (
         <MainLayout
             title={'Музыкальная площадка - ' + track.name + ' - ' + track.artist}
@@ -59,8 +53,7 @@ const TrackPage = ({serverTrack, token}) => {
 
                     <Grid className={classes.info}>
                         <img src={baseURL + track.picture}
-                             className={classes.img} alt={'Обложка трека'}
-                             onClick={imageClickHandler}/>
+                             className={classes.img} alt={'Обложка трека'}/>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}><Title/>Название</h3>

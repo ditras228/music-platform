@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Grid, IconButton} from '@material-ui/core'
+import {Box, Grid, IconButton} from '@material-ui/core'
 import {Pause, PlayArrow, VolumeUp} from '@material-ui/icons'
 import TrackProgress from './TrackProgress'
 import {useTypedSelector} from '../hooks/useTypedSelector'
@@ -20,22 +20,22 @@ const Player = () => {
     const dispatch = useDispatch()
 
 
-    useEffect(()=>{
-        dispatch(savePlayer(player))
-        if(currentTime===duration){
-            TracksAPI.listen(active._id).then(active.listens+=1)
+    useEffect(() => {
+            dispatch(savePlayer(player))
+            if (currentTime === duration) {
+                TracksAPI.listen(active._id).then(active.listens += 1)
+            }
         }
-        }
-    ,[pause, volume, currentTime])
+        , [pause, volume, currentTime])
 
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
-            !currentTime&&setCurrentTime ( currentTime)
+            !currentTime && setCurrentTime(currentTime)
             setAudio()
         } else {
             const src = audio.src.replace(baseURL, '')
-            if(src!==active?.audio){
+            if (src !== active?.audio) {
                 console.log('________________')
                 console.log(src)
                 console.log(active?.audio)
@@ -45,18 +45,18 @@ const Player = () => {
         }
     }, [active])
     const setAudio = () => {
-        if (active){
-        audio.src = baseURL+active.audio
+        if (active) {
+            audio.src = baseURL + active.audio
             console.log(audio)
-        audio.volume = volume / 100
-       // audio.currentTime=currentTime || 0
-        audio.onloadedmetadata = () => {
-            setDuration(Math.ceil(audio.duration))
+            audio.volume = volume / 100
+            audio.onloadedmetadata = () => {
+                setDuration(Math.ceil(audio.duration))
+            }
+            audio.ontimeupdate = () => {
+                setCurrentTime(Math.ceil(audio.currentTime))
+            }
         }
-        audio.ontimeupdate = () => {
-            setCurrentTime(audio.currentTime)
-        }
-    }}
+    }
     const play = () => {
         playTrack()
         if (pause) {
@@ -67,33 +67,38 @@ const Player = () => {
             audio.pause()
         }
     }
-    const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-        audio.volume = Number(e.target.value) / 100
-        setVolume(Number(e.target.value))
+    const changeVolume = (e: any, newValue: number) => {
+        audio.volume = newValue/ 100
+        setVolume(newValue)
     }
-    const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-        audio.currentTime = Number(e.target.value)
-        setCurrentTime(Number(e.target.value))
+    const changeCurrentTime = (e: any, newValue: number) => {
+        audio.currentTime = newValue
+        setCurrentTime(newValue)
     }
-    if(!active){
+    if (!active) {
         return null
     }
     return (
-        <div className={classes.player}>
-            <IconButton onClick={play}>
-                {pause
-                    ? <Pause/>
-                    : <PlayArrow/>
-                }
-            </IconButton>
-            <Grid container direction={'column'} style={{width: 200, margin: '0 20px'}}>
-                <div>{active.name}</div>
-                <div style={{fontSize: 12, color: 'gray'}}>{active.artist}</div>
-            </Grid>
-            <TrackProgress left={currentTime} right={duration} onChange={changeCurrentTime} format={'time'}/>
-            <VolumeUp style={{marginLeft: 'auto'}}/>
-            <TrackProgress left={volume} right={100} onChange={changeVolume}/>
-        </div>
+            <Box className={classes.player} bgcolor={'background.default'}>
+            <div className={classes.column}>
+                <IconButton onClick={play}>
+                    {pause
+                        ? <Pause/>
+                        : <PlayArrow/>
+                    }
+                </IconButton>
+                <div className={classes.row}>
+                    <div>{active.name}</div>
+                    <div style={{fontSize: 12}}>{active.artist}</div>
+                </div>
+            </div>
+            <TrackProgress left={currentTime} right={duration}
+                           onChange={changeCurrentTime} format={'time'}/>
+            <div className={classes.column}>
+                <VolumeUp style={{marginLeft: 'auto', paddingRight: 10}}/>
+                <TrackProgress left={volume} right={100} onChange={changeVolume}/>
+            </div>
+        </Box>
     )
 }
 
