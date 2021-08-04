@@ -14,6 +14,9 @@ export class Comment {
     username: string
 
     @Prop()
+    image: string
+
+    @Prop()
     color: string
 
     @Prop()

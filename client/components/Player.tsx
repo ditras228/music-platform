@@ -8,6 +8,7 @@ import {baseURL} from '../api'
 import classes from './Player.module.css'
 import {savePlayer} from '../store/action-creators/player'
 import {useDispatch} from 'react-redux'
+import {TracksAPI} from '../api/tracksAPI'
 
 let audio
 
@@ -20,7 +21,10 @@ const Player = () => {
 
 
     useEffect(()=>{
-          dispatch(savePlayer(player))
+        dispatch(savePlayer(player))
+        if(currentTime===duration){
+            TracksAPI.listen(active._id).then(active.listens+=1)
+        }
         }
     ,[pause, volume, currentTime])
 
