@@ -97,7 +97,7 @@ export class TrackService {
         track.comments.push(comment._id)
         await track.save()
 
-        const user = await this.userModel.findOne(comment.userId) as unknown as UserDocument
+        const user = await this.userModel.findById(comment.userId) as unknown as UserDocument
         comment.username = user?.name
         comment.color = user?.color
         comment.image= user?.image

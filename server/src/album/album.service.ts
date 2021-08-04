@@ -102,7 +102,7 @@ export class AlbumService {
         album.comments.push(comment._id)
         await album.save()
 
-        const user = await this.userModel.findOne(comment.userId) as unknown as UserDocument
+        const user = await this.userModel.findById(comment.userId) as unknown as UserDocument
         comment.username = user?.name
         comment.color = user?.color
         comment.image= user?.image
