@@ -17,13 +17,12 @@ interface AlbumItemProps {
 
 const AlbumItem: React.FC<AlbumItemProps> = ({album,  token,userId}) => {
     const router = useRouter()
-    const isOwner = album.userId==userId
     const dispatch= useDispatch()
     const deleteOne = async ()=>{
         await AlbumsAPI.deleteOneAlbum(album._id, token).then()
          dispatch( fetchTracks(token))
     }
-
+    const isOwner = album.userId==userId
     return (
         <Card className={classes.track} onClick={() => router.push('/tracks/' + album._id)}>
             <img className={classes.image} src={baseURL + album.picture} alt={'Обложка трека'}/>

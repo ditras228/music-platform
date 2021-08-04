@@ -16,12 +16,12 @@ import {useTypedSelector} from '../hooks/useTypedSelector'
 interface TrackItemProps {
     track: ITrack
     active?: boolean
-    token: string
     view?: string
+    token: string
     userId: string
 }
 
-const TrackItem: React.FC<TrackItemProps> = ({track, active = false, token, view, userId}) => {
+const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userId, token}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
     const dispatch = useDispatch()

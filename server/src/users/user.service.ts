@@ -7,7 +7,6 @@ import {CreateUserDto} from './dto/create.user.dto'
 import * as mailService from './mailService'
 import {Account, AccountDocument} from './schemas/account.schema'
 import {Session, SessionDocument} from "./schemas/session.schema";
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
 const randomColor = require('randomcolor');
@@ -62,7 +61,7 @@ export class UserService {
             user.hash = null
             user.email_verified = true
             user.save()
-            return res.redirect('http://localhost:3000/');
+            return res.redirect('http://87.236.22.121:3000/');
         } catch (e) {
             console.log(e)
         }

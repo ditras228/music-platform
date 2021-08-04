@@ -74,8 +74,8 @@ export class TrackService {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const track = await this.trackModel.findById(id)
         console.log(track.userId)
-        console.log(session.userId._id)
-        if (track.userId==session.userId._id.toString()) {
+        console.log(session.userId)
+        if (track.userId==session.userId) {
             await track.remove()
             return track
         }

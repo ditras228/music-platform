@@ -93,8 +93,8 @@ export const getServerSideProps = wrapper.getServerSideProps
     })
         return {
             props: {
-                token: session.accessToken,
-                userId: session.userId
+                token: session.accessToken || null,
+                userId: session.userId || null
             }
         }
     }

@@ -34,7 +34,7 @@ export class AlbumService {
                 .create(
                     {...dto,
                        tracks: JSON.parse(dto.tracks as string),
-                       userId: session.userId._id,
+                       userId: session.userId,
                        picture: picturePath,
                        created_at: Date()
                     })
@@ -60,7 +60,7 @@ export class AlbumService {
     async delete(id: ObjectId, headers): Promise<any> {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
         const album = await this.albumModel.findByIdAndDelete(id)
-        if(album.userId==session.userId._id.toString()) {
+        if(album.userId==session.userId) {
             return await album.remove()
         }
         return new HttpException
@@ -77,7 +77,7 @@ export class AlbumService {
             const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
             const tracksDb =[]
             const album = await this.albumModel.findById(albumId)
-            if (session.userId._id!==album.userId) {
+            if (session.userId!==album.userId) {
                 return new HttpException
                 (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
