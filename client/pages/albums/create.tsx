@@ -55,7 +55,7 @@ const Create = ({token, userId}) => {
             router.push(`/albums/${redirectTo}`)
     }, [redirectTo])
     return (
-        <MainLayout title={'Загрузить альбом'}>
+        <MainLayout title={'Создать альбом'}>
             <Card>
                 <MultiStepForm
                     initialValues={{

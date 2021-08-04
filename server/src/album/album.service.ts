@@ -34,8 +34,10 @@ export class AlbumService {
                 .create(
                     {...dto,
                        tracks: JSON.parse(dto.tracks as string),
+                       author: dto.author,
                        userId: session.userId,
                        picture: picturePath,
+                       listens: 0,
                        created_at: Date()
                     })
         }catch(e){
@@ -100,6 +102,10 @@ export class AlbumService {
         album.comments.push(comment._id)
         await album.save()
 
+        const user = await this.userModel.findOne(ObjectId(comment.userId)) as unknown as UserDocument
+        comment.username = user?.name
+        comment.color = user?.color
+        comment.image= user?.image
         return comment
     }
 

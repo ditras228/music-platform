@@ -62,7 +62,7 @@ export class AlbumController {
     }
     @Post('/comment')
     addComment(@Headers() headers, @Body() dto: CreateCommentDTO) {
-        return this.trackService.addComment(headers, dto)
+        return this.albumService.addComment(headers, dto)
     }
 
 }

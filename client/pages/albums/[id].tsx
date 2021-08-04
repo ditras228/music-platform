@@ -24,7 +24,7 @@ const AlbumPage = ({serverAlbum, token}) => {
     const formik = useFormik({
         initialValues: {
             text: '',
-            trackId: album._id
+            albumId: album._id
         },
         onSubmit: async values => {
             AlbumsAPI.addComment(values, token).then((track: any)=>
@@ -41,7 +41,7 @@ const AlbumPage = ({serverAlbum, token}) => {
                 <Button
                     variant={'outlined'}
                     style={{fontSize: 20}}
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/albums')}
                 >
                     <ArrowBackIos/> К списку
                 </Button>
@@ -58,18 +58,8 @@ const AlbumPage = ({serverAlbum, token}) => {
                                 <h3 className={classes.item_title}><Person/>Автор</h3>
                                 <h3 className={classes.item_value}>{album.artist}</h3>
                             </div>
-                            <div className={classes.line}>
-                                <h3 className={classes.item_title}><Hearing/>Прослушиваний</h3>
-                                <h3 className={classes.item_value}>{album.listens}</h3>
-                            </div>
                         </div>
                     </Grid>
-                </Card>
-                <Card>
-                    <div className={classes.card}>
-                        <h3 className={classes.title}><GTranslate/> Описание альбома</h3>
-                        <p className={classes.text}>{album.text}</p>
-                    </div>
                 </Card>
                 <Card>
                     <div className={classes.card}>
@@ -78,11 +68,6 @@ const AlbumPage = ({serverAlbum, token}) => {
                     </div>
                 </Card>
                 <Card>
-                    <div className={classes.card}>
-                        <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
-                        <p className={classes.text}>{album.text}</p>
-                    </div>
-
                     <Grid container className={classes.card}>
                         <form onSubmit={formik.handleSubmit} className={classes.form}>
                             <h3 className={classes.title}>
