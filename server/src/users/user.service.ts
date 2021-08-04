@@ -117,7 +117,7 @@ export class UserService {
                 return new HttpException
                 (`Пользователь не найден`, HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            return {name: user.name, email: user.email, image: user.image, color: user.color, accessToken: account.accessToken}
+            return {_id: user._id, name: user.name, email: user.email, image: user.image, color: user.color, accessToken: account.accessToken}
         } catch (e) {
             console.log(e)
             return new HttpException

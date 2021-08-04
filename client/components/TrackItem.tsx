@@ -98,9 +98,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
             default:
                 return (
                     <IconButton disabled={!isOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
-                        {
-                            isOwner && <Delete onClick={deleteOne}/>
-                        }
+                         <Delete onClick={deleteOne}/>
                     </IconButton>
                 )
 

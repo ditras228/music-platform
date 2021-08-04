@@ -20,6 +20,9 @@ export class Album {
     @Prop()
     author: string
 
+    @Prop()
+    listens: number
+
     @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Track'}]})
     tracks: Track[]
 

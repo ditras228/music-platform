@@ -55,7 +55,7 @@ export default function Navbar() {
         await signOut()
     }
     const logInHandler = async ()=>{
-        await router.push('/auth')
+        await router.push('/')
     }
     const click = (e) =>
     {

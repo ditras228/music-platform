@@ -1,10 +1,22 @@
 .player {
-    height: 60px;
-    width: 100%;
+    height: 60px;   width: 100%;
     position: fixed;
     bottom: 0;
-    display: flex;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
     align-items: center;
-    padding: 0 10px;
     background-color: lightgray;
+    grid-gap: 20px;
+}
+.column{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.row{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+.duration{
+    width: 100%;
 }
