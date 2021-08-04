@@ -28,8 +28,9 @@ const menuItem = [
     {text: 'Треки', href: '/'},
     {text: 'Альбомы', href: '/albums'},
 ]
+
 export default function Navbar() {
-    const [ session, loading ] = useSession()
+    const [ session, loading ] = useSession() as any
     const router = useRouter()
     const [open, setOpen] = React.useState(false)
     const dispatch = useDispatch()
@@ -116,7 +117,7 @@ export default function Navbar() {
                             ?<Button onClick={()=>logInHandler()}>Login</Button>
                             :(
                             <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                                <Avatar alt="Remy Sharp" src={session.user.image} className={classes.orange}>
+                                <Avatar alt="Remy Sharp" src={session.image} style={{backgroundColor: session.color || 'gray'}}>
                                     {session.user?.name?.substring(0,1)}
                                 </Avatar>
                             </Button>

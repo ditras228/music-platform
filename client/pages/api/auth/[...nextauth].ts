@@ -64,6 +64,7 @@ export default(req, res)=>{
                 session.accessToken = token.accessToken
                 session.color = token.color
                 session.id= token.sub
+                session.image=token.image
                 return session
             }
 

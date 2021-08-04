@@ -64,6 +64,7 @@ export class TrackService {
                 const user = await this.userModel.findOne(ObjectId(comments[i].userId)) as unknown as UserDocument
                 comments[i].username = user?.name
                 comments[i].color = user?.color
+                comments[i].image = user?.image
             }
         }
 

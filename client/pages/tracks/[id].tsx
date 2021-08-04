@@ -102,7 +102,7 @@ const TrackPage = ({serverTrack, token}) => {
                     </Grid>
 
                     {
-                        track.comments.map(comment =>
+                        track.comments.map((comment: any) =>
                             <CommentFC key={comment._id} comment={comment}/>
                         )
                     }

@@ -16,6 +16,7 @@ import cookies from 'next-cookies'
 import {UsersActionTypes} from '../../types/user'
 
 const SignupSchema = Yup.object({
+    name: Yup.string().min(3, "Минимум 3 символа").max(12, "Максимум 12 символов"),
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
     password: Yup.string()
         .min(6, 'Должен быть больше 5 симолов')
@@ -32,6 +33,7 @@ const Register = () => {
 
     const formik = useFormik({
         initialValues: {
+            name: '',
             email: '',
             password: '',
             repeat_password: '',
@@ -43,7 +45,7 @@ const Register = () => {
     })
     const loginHandler= async (e: any)=>{
         e.preventDefault()
-        await router.push('/auth')
+        await router.push('/')
     }
 
         return (
@@ -55,6 +57,12 @@ const Register = () => {
                     <Grid
                         className={classes.form}
                     >
+                        <TextField
+                            label={'Введите ник'}
+                            name={'name'}
+                            value={formik.values.name}
+                            onChange={formik.handleChange}
+                        />
                         <TextField
                             label={'Введите Email'}
                             name={'email'}

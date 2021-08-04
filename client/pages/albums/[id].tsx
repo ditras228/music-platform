@@ -112,7 +112,7 @@ const AlbumPage = ({serverAlbum, token}) => {
                         </form>
                     </Grid>
                     {
-                        album.comments.map(comment =>
+                        album.comments.map((comment: any) =>
                             <CommentFC comment={comment}/>
                         )
                     }
