@@ -4,7 +4,8 @@ import {useFormikContext} from 'formik'
 
 const AlertStep = () => {
     const formik = useFormikContext()  as any
-    const errors = []
+    const errors = Array.from(formik.errors)
+
 
     for (let i = 0; i < formik.errors.length; i++) {
         errors.push(formik.errors)
