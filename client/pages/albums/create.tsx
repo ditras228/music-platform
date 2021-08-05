@@ -20,6 +20,7 @@ import cookies from 'next-cookies'
 import {UsersActionTypes} from '../../types/user'
 import {GetError} from '../../store/selectors'
 import {Alert} from '@material-ui/lab'
+import AlertStep from '../../components/create/AlertStep'
 
 const InfoSchema = Yup.object({
     name: Yup.string()
@@ -51,7 +52,6 @@ const Create = ({token, userId}) => {
     const {tracks, error} = useTypedSelector(state => state.track)
     const dispatch = useDispatch()
     const albumTracks = useTypedSelector(state => state.album.albumTracks)
-    const formik = useFormikContext() as any
 
     useEffect(() => {
         console.log(albumTracks)
@@ -95,10 +95,7 @@ const Create = ({token, userId}) => {
 
                     <FormStep stepName={'Обложка'}
                               validationSchema={ImageSchema}>
-                        {formik.errors.picture &&
-                        <Alert variant="filled" severity="error">
-                            {formik.errors.picture}
-                        </Alert>}
+                        <AlertStep/>
                         <Grid container direction={'column'}>
                             <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
                                 <Button fullWidth>Загрузить изображение</Button>
@@ -110,10 +107,7 @@ const Create = ({token, userId}) => {
 
                     <FormStep stepName={'Треки'}
                               validationSchema={TrackSchema}>
-                        {formik.errors.tracks &&
-                        <Alert variant="filled" severity="error">
-                            {formik.errors.tracks}
-                        </Alert>}
+                        <AlertStep/>
                         <div style={{padding: '0 40px'}}>
 
                             <TrackList tracks={tracks} token={token} userId={userId} view={'checkbox'}/>

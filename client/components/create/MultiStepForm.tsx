@@ -1,8 +1,10 @@
-import React, {useState} from 'react'
-import {Form, Formik, FormikConfig, FormikHelpers, FormikValues, useFormik} from 'formik'
+import React, {useEffect, useState} from 'react'
+import {Form, Formik, FormikConfig, FormikHelpers, FormikValues, useFormik, useFormikContext} from 'formik'
 import FormNavigation from './FormNavigation'
 import {Step, StepLabel, Stepper} from '@material-ui/core'
 import {useRouter} from 'next/router'
+import {useDispatch} from 'react-redux'
+import {UsersActionTypes} from '../../types/user'
 
 interface Props extends FormikConfig<FormikValues>{
     children: React.ReactNode
@@ -37,8 +39,6 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
             next(values)
         }
     }
-
-
     return <div>
         <Formik
             initialValues={snapShot}
