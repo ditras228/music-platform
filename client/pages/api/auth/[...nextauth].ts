@@ -63,7 +63,7 @@ export default(req, res)=>{
                 // Add property to session, like an access_token from a provider.
                 session.accessToken = token.accessToken
                 session.color = token.color
-                session.id= token.sub
+                session.userId= token.sub
                 session.image=token.image
                 return session
             }

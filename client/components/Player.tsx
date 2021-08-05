@@ -35,6 +35,7 @@ const Player = () => {
                 console.log('________________')
                 console.log(src)
                 console.log(active?.audio)
+                setDuration(Math.ceil(audio.duration))
                 setAudio()
             }
         }
@@ -52,9 +53,11 @@ const Player = () => {
             if(audio.duration-1>=audio.currentTime){
                 setCurrentTime(Math.ceil(audio.currentTime))
             }else{
-                pauseTrack()
-                audio.pause()
-                TracksAPI.listen(active._id).then(()=>active.listens+=1)
+                if(audio.duration!==0){
+                    pauseTrack()
+                    audio.pause()
+                    TracksAPI.listen(active._id).then(()=>active.listens+=1)
+                }
             }
         }
     }}

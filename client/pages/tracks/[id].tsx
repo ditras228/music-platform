@@ -14,6 +14,15 @@ import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {UsersActionTypes} from '../../types/user'
+import {Alert} from '@material-ui/lab'
+import * as yup from 'yup'
+
+const commentSchema=yup.object({
+    text: yup.string()
+        .min(20, 'Минимум 20 символов')
+        .max(200, 'Максимум 200 символов')
+        .required()
+})
 
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
@@ -24,7 +33,7 @@ const TrackPage = ({serverTrack, token}) => {
             text: '',
             trackId: serverTrack._id
         },
-
+        validationSchema: commentSchema,
         onSubmit: async values => {
             TracksAPI.addComment(values, token).then((comment: any)=>{
             setTrack({...track, comments: [...track.comments, comment.data]})
@@ -92,6 +101,10 @@ const TrackPage = ({serverTrack, token}) => {
                                     multiline
                                 >
                                 </TextField>
+                                {formik.errors.text && formik.touched.text &&
+                                <Alert variant="filled" severity="error">
+                                    {formik.errors.text}
+                                </Alert>}
                                 <Button
                                     type={'submit'}
                                     className={classes.comments_submit}

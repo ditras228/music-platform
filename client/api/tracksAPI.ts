@@ -38,7 +38,7 @@ export const TracksAPI= {
 
     },
     listen(id) {
-        return instance.post(`/listen/${id}`)
+        return instance.post(`/tracks/listen/${id}`)
 
     },
 }

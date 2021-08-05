@@ -69,6 +69,10 @@ export class AlbumService {
                 comments[i].image = user?.image
             }
         }
+        const tracks = album.tracks as any
+        for(let i=0; i<tracks.length;i++){
+            album.listens+=tracks[i].listens
+        }
         return album
     }
 

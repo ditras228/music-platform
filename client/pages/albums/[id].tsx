@@ -15,7 +15,15 @@ import {useFormik} from 'formik'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {UsersActionTypes} from '../../types/user'
+import * as yup from 'yup'
+import {Alert} from '@material-ui/lab'
 
+const commentSchema=yup.object({
+    text: yup.string()
+        .min(20, 'Минимум 20 символов')
+        .max(200, 'Максимум 200 символов')
+        .required()
+})
 
 const AlbumPage = ({serverAlbum, token}) => {
     const router = useRouter()
@@ -26,6 +34,7 @@ const AlbumPage = ({serverAlbum, token}) => {
             text: '',
             albumId: album._id
         },
+        validationSchema: commentSchema,
         onSubmit: async values => {
             AlbumsAPI.addComment(values, token).then((track: any)=>
                 setAlbum({...track, comments: [...track.comments, track.data]})
@@ -56,7 +65,11 @@ const AlbumPage = ({serverAlbum, token}) => {
                             </div>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}><Person/>Автор</h3>
-                                <h3 className={classes.item_value}>{album.artist}</h3>
+                                <h3 className={classes.item_value}>{album.author}</h3>
+                            </div>
+                            <div className={classes.line}>
+                                <h3 className={classes.item_title}><Hearing/>Прослушиваний</h3>
+                                <h3 className={classes.item_value}>{album.listens}</h3>
                             </div>
                         </div>
                     </Grid>
@@ -88,6 +101,10 @@ const AlbumPage = ({serverAlbum, token}) => {
                                     multiline
                                 >
                                 </TextField>
+                                {formik.errors.text && formik.touched.text &&
+                                <Alert variant="filled" severity="error">
+                                    {formik.errors.text}
+                                </Alert>}
                                 <Button
                                     type={'submit'}
                                     className={classes.comments_submit}

@@ -64,7 +64,7 @@ export const getServerSideProps = wrapper.getServerSideProps
 
     const player = cookies(ctx).player;
     const theme = cookies(ctx).theme;
-
+    console.log(session)
     dispatch( setPlayer(player))
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
@@ -73,7 +73,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     return {
         props:{
             token: session.accessToken || null,
-            userId: session.id || null,
+            userId: session.userId || null,
         }
     }
 })

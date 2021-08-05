@@ -7,7 +7,7 @@ import {Button, Card, Grid} from '@material-ui/core'
 import * as Yup from 'yup'
 import FileUpload from '../../components/FileUpload'
 import MainLayout from '../../layouts/MainLayout'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateAlbum} from '../../store/action-creators/user'
 import MultiStepForm, {FormStep} from '../../components/create/MultiStepForm'
@@ -18,6 +18,8 @@ import {setPlayer} from '../../store/action-creators/player'
 import {useFormikContext} from 'formik'
 import cookies from 'next-cookies'
 import {UsersActionTypes} from '../../types/user'
+import {GetError} from '../../store/selectors'
+import {Alert} from '@material-ui/lab'
 
 const InfoSchema = Yup.object({
     name: Yup.string()
@@ -27,15 +29,18 @@ const InfoSchema = Yup.object({
 })
 const ImageSchema = Yup.object().shape({
     picture: Yup.mixed().required('Обязательно')
+        .test({
+            message: "Должна быть квардатной",
+            test: img=> img.width===img.height
+        })
 })
 
 const TrackSchema = Yup.object().shape({
     tracks: Yup.array()
         .test({
-            message:'Минимум 2, максимум 16',
-            test: arr  => arr.length >= 2
-        }
-
+                message: 'Минимум 2, максимум 16',
+                test: arr => arr.length >= 2
+            }
         )
 })
 
@@ -46,10 +51,11 @@ const Create = ({token, userId}) => {
     const {tracks, error} = useTypedSelector(state => state.track)
     const dispatch = useDispatch()
     const albumTracks = useTypedSelector(state => state.album.albumTracks)
+    const formik = useFormikContext() as any
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(albumTracks)
-    },[albumTracks])
+    }, [albumTracks])
     useEffect(() => {
         if (redirectTo)
             router.push(`/albums/${redirectTo}`)
@@ -66,7 +72,10 @@ const Create = ({token, userId}) => {
                     }}
 
                     onSubmit={(values) => {
-                        dispatch(CreateAlbum({...values, tracks: JSON.stringify(albumTracks.map(track=>track._id))}, token))
+                        dispatch(CreateAlbum({
+                            ...values,
+                            tracks: JSON.stringify(albumTracks.map(track => track._id))
+                        }, token))
                     }}
                 >
                     <FormStep stepName={'Инфо'}
@@ -86,18 +95,27 @@ const Create = ({token, userId}) => {
 
                     <FormStep stepName={'Обложка'}
                               validationSchema={ImageSchema}>
+                        {formik.errors.picture &&
+                        <Alert variant="filled" severity="error">
+                            {formik.errors.picture}
+                        </Alert>}
                         <Grid container direction={'column'}>
                             <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
                                 <Button fullWidth>Загрузить изображение</Button>
                             </FileUpload>
                         </Grid>
+
                         <ImagePreview src={image}/>
                     </FormStep>
 
                     <FormStep stepName={'Треки'}
                               validationSchema={TrackSchema}>
+                        {formik.errors.tracks &&
+                        <Alert variant="filled" severity="error">
+                            {formik.errors.tracks}
+                        </Alert>}
                         <div style={{padding: '0 40px'}}>
-                            
+
                             <TrackList tracks={tracks} token={token} userId={userId} view={'checkbox'}/>
                         </div>
                     </FormStep>
@@ -122,10 +140,10 @@ export const getServerSideProps = wrapper.getServerSideProps
             },
         }
     }
-    const player = cookies(ctx).player;
-    const theme = cookies(ctx).theme;
+    const player = cookies(ctx).player
+    const theme = cookies(ctx).theme
 
-    dispatch( setPlayer(player))
+    dispatch(setPlayer(player))
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false
