@@ -52,7 +52,7 @@ export class TrackService {
             return new HttpException
             (`Токен не валиден`, HttpStatus.INTERNAL_SERVER_ERROR)
         }
-        return this.trackModel.find().skip(Number(offset)).limit(Number(count))
+        return this.trackModel.find()//.skip(Number(offset)).limit(Number(count))
     }
 
     async getOne(id: ObjectId): Promise<Track> {
