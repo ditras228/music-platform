@@ -14,6 +14,8 @@ export const Registration = (name, email, password) => {
                     type: UsersActionTypes.ADD_ERROR,
                     payload: {type: 'register', message: response.data?.message || 'Неизвестная ошибка'}
                 })
+
+            }else{
                 dispatch({
                     type: UsersActionTypes.REDIRECT_TO,
                     payload: '/'
