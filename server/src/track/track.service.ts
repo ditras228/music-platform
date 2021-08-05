@@ -57,7 +57,7 @@ export class TrackService {
 
     async getOne(id: ObjectId): Promise<Track> {
         const track = await this.trackModel
-            .findById(id).populate({path:'comments', sort: {'created_at': -1}}) as unknown as TrackDocument
+            .findById(id).populate({path:'comments', sort: {'created_at': 1}}) as unknown as TrackDocument
         const comments = track.comments as any
         if (comments.length > 0) {
             for (let i = 0; i < comments.length; i++) {

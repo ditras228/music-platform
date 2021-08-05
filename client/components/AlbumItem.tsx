@@ -24,8 +24,8 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album,  token,userId}) => {
     }
     const isOwner = album.userId==userId
     return (
-        <Card className={classes.track} onClick={() => router.push('/tracks/' + album._id)}>
-            <img className={classes.image} src={baseURL + album.picture} alt={'Обложка трека'}/>
+        <Card className={classes.track} onClick={() => router.push('/albums/' + album._id)}>
+            <img className={classes.image} src={baseURL + album.picture} alt={'Обложка альбома'}/>
             <Grid className={classes.name} container direction={'column'}>
                 <div>{album.name}</div>
                 <div className={classes.author}>{album.artist}</div>
