@@ -47,7 +47,7 @@ const Register = () => {
     })
     const loginHandler = async (e: any) => {
         e.preventDefault()
-        await router.push('/regsuccess')
+        await router.push('/')
     }
     useEffect(() => {
         router.push(redirectTo)
