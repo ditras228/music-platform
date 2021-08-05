@@ -12,6 +12,8 @@ const AlertStep = () => {
     }
     useEffect(()=>{
         errors= Array.from(formik.errors)
+        console.log('formik')
+        console.log(formik)
     }, formik)
     return (
         <>
