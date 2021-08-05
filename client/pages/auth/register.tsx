@@ -86,7 +86,7 @@ const Register = () => {
                             type={'password'}
 
                         />
-                        {formik.touched.email && formik.errors.email
+                        {formik.touched.password && formik.errors.password
                         && <Alert variant="filled" severity="error">
                             {formik.errors.password}
                         </Alert>}
