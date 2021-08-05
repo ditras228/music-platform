@@ -13,7 +13,7 @@ const AlertStep = () => {
     return (
         <>
             {
-                formik.errors.map(error => (
+                errors.map(error => (
                     <Alert variant="filled" severity="error">
                         {error}
                     </Alert>
