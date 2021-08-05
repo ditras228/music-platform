@@ -32,12 +32,13 @@ export class UserService {
                 return new HttpException('Ник занят', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             const hashPassword = await bcrypt.hash(dto.password, 7)
-            const hashURL = await bcrypt.hash(dto.name, 5).replace(/\//g, '')
+            const hashURL = await bcrypt.hash(dto.name, 5)
+            const replaceHashUrl= hashURL.replace(/\//g, '')
             const hashToken = await bcrypt.hash(dto.email, 5)
             const color = randomColor()
             const user = new this.userModel(
                 {email: dto.email,  name: dto.name,
-                     hash: hashURL, password: hashPassword, color: color,
+                     hash: replaceHashUrl, password: hashPassword, color: color,
                      created_at: Date(), updated_at:  Date()})
             await user.save()
 
@@ -46,7 +47,7 @@ export class UserService {
                     created_at: Date(), updated_at:  Date()})
             await account.save()
 
-            await mailService.main(dto.email, hashURL)
+            await mailService.main(dto.email, replaceHashUrl)
             return user
         } catch (e) {
             console.log(e)
