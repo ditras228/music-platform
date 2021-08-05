@@ -32,8 +32,7 @@ export class UserService {
                 return new HttpException('Ник занят', HttpStatus.INTERNAL_SERVER_ERROR)
             }
             const hashPassword = await bcrypt.hash(dto.password, 7)
-            const hashURL = await bcrypt.hash(dto.name, 5)
-            hashURL.replace(/\//g, '')
+            const hashURL = await bcrypt.hash(dto.name, 5).replace(/\//g, '')
             const hashToken = await bcrypt.hash(dto.email, 5)
             const color = randomColor()
             const user = new this.userModel(
@@ -60,7 +59,7 @@ export class UserService {
             const user = await this.userModel.findOne({hash: id})
             user.hash = null
             user.email_verified = true
-            user.save()
+            await user.save()
             return res.redirect('http://87.236.22.121:3000/');
         } catch (e) {
             console.log(e)
