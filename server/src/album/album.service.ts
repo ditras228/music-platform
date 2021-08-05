@@ -57,7 +57,7 @@ export class AlbumService {
     }
 
     async getOne(id: ObjectId): Promise<Album> {
-        const album = this.albumModel.findById(id)
+        const album = await this.albumModel.findById(id)
             .populate('tracks')
             .populate({path:'comments', sort: {'created_at': 1}}) as unknown as AlbumDocument
         const comments = album.comments as any
