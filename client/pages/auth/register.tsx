@@ -17,7 +17,7 @@ import {UsersActionTypes} from '../../types/user'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 
 const SignupSchema = Yup.object({
-    name: Yup.string().min(3, "Минимум 3 символа").max(12, "Максимум 12 символов"),
+    name: Yup.string().min(3, 'Минимум 3 символа').max(12, 'Максимум 12 символов'),
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
     password: Yup.string()
         .min(6, 'Должен быть больше 5 симолов')
@@ -30,12 +30,8 @@ const SignupSchema = Yup.object({
 const Register = () => {
     const router = useRouter()
     const dispatch = useDispatch()
-    const error = useSelector(state =>GetError(state, 'register'))
-    const redirectTo = useTypedSelector(state => state.user.redirectTo))
-
-    useEffect(()=>{
-        router.push(redirectTo)
-    },[redirectTo])
+    const error = useSelector(state => GetError(state, 'register'))
+    const redirectTo = useTypedSelector(state => state.user.redirectTo)
 
     const formik = useFormik({
         initialValues: {
@@ -46,15 +42,18 @@ const Register = () => {
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-            dispatch(Registration(values.name,values.email, values.password))
+            dispatch(Registration(values.name, values.email, values.password))
         }
     })
-    const loginHandler= async (e: any)=>{
+    const loginHandler = async (e: any) => {
         e.preventDefault()
         await router.push('/')
     }
+    useEffect(() => {
+        router.push(redirectTo)
+    }, [redirectTo])
 
-        return (
+    return (
         <MainLayout>
             <form onSubmit={formik.handleSubmit}>
                 <Card
@@ -76,7 +75,7 @@ const Register = () => {
                             onChange={formik.handleChange}
                         />
                         {formik.touched.email && formik.errors.email
-                        &&  <Alert variant="filled" severity="error">
+                        && <Alert variant="filled" severity="error">
                             {formik.errors.email}
                         </Alert>}
                         <TextField
@@ -99,19 +98,19 @@ const Register = () => {
                             type={'password'}
                         />
                         {formik.touched.password && formik.errors.repeat_password
-                        &&<Alert variant="filled" severity="error">
+                        && <Alert variant="filled" severity="error">
                             {formik.errors.repeat_password}
                         </Alert>
                         }
-                        {error?
+                        {error ?
                             <Alert variant="filled" severity="error">
                                 {error.message}
-                            </Alert>: null}
+                            </Alert> : null}
                         <Button
-                        type={'submit'}>
+                            type={'submit'}>
                             Регистрация
                         </Button>
-                        <Link onClick={e=>loginHandler(e)} className={classes.login}>
+                        <Link onClick={e => loginHandler(e)} className={classes.login}>
                             Уже есть аккаунт? Войти
                         </Link>
                     </Grid>
@@ -126,13 +125,13 @@ export default Register
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const theme = cookies(ctx).theme;
+    const theme = cookies(ctx).theme
     const session = await getSession({req: ctx.req})
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false
     })
-    if(session){
+    if (session) {
         return {
             redirect: {
                 destination: '/tracks',
@@ -141,6 +140,6 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
 
-    return({props:{session}})
+    return ({props: {session}})
 
 })
