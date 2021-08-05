@@ -8,6 +8,7 @@ import classes from './Player.module.css'
 import {savePlayer} from '../store/action-creators/player'
 import {useDispatch} from 'react-redux'
 import {Box, Grid, IconButton} from '@material-ui/core'
+import {TracksAPI} from '../api/tracksAPI'
 let audio
 
 
@@ -53,6 +54,7 @@ const Player = () => {
             }else{
                 pauseTrack()
                 audio.pause()
+                TracksAPI.listen(active._id).then(()=>active.listens+=1)
             }
         }
     }}

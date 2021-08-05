@@ -37,4 +37,8 @@ export const TracksAPI= {
             {headers: {Authorization: `Bearer ${token}`}})
 
     },
+    listen(id) {
+        return instance.post(`/listen/${id}`)
+
+    },
 }
