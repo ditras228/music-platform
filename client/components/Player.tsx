@@ -22,7 +22,7 @@ const Player = () => {
     useEffect(()=>{
           dispatch(savePlayer(player))
         }
-    ,[active, volume])
+    ,[active, volume, duration])
 
     useEffect(() => {
         if (!audio) {
