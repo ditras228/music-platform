@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {useFormik} from 'formik'
 import {Button, Card, Grid, Link, TextField} from '@material-ui/core'
@@ -14,6 +14,7 @@ import {getSession} from 'next-auth/client'
 import {NextThunkDispatch, wrapper} from '../../store'
 import cookies from 'next-cookies'
 import {UsersActionTypes} from '../../types/user'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
 
 const SignupSchema = Yup.object({
     name: Yup.string().min(3, "Минимум 3 символа").max(12, "Максимум 12 символов"),
@@ -23,13 +24,18 @@ const SignupSchema = Yup.object({
         .max(16, 'Должен быть меньше 17 симолов')
         .required('Обязательно'),
     repeat_password: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Пороли не совпадают')
+        .oneOf([Yup.ref('password'), null], 'Пароли не совпадают')
 })
 
 const Register = () => {
     const router = useRouter()
     const dispatch = useDispatch()
     const error = useSelector(state =>GetError(state, 'register'))
+    const redirectTo = useTypedSelector(state => state.user.redirectTo))
+
+    useEffect(()=>{
+        router.push(redirectTo)
+    },[redirectTo])
 
     const formik = useFormik({
         initialValues: {
@@ -40,7 +46,7 @@ const Register = () => {
         },
         validationSchema: SignupSchema,
         onSubmit: async values => {
-            dispatch(Registration(values.email, values.password))
+            dispatch(Registration(values.name,values.email, values.password))
         }
     })
     const loginHandler= async (e: any)=>{
@@ -74,7 +80,7 @@ const Register = () => {
                             {formik.errors.email}
                         </Alert>}
                         <TextField
-                            label={'Введите пороль'}
+                            label={'Введите пароль'}
                             name={'password'}
                             value={formik.values.password}
                             onChange={formik.handleChange}
@@ -86,13 +92,13 @@ const Register = () => {
                             {formik.errors.password}
                         </Alert>}
                         <TextField
-                            label={'Повторите пороль'}
+                            label={'Повторите пароль'}
                             name={'repeat_password'}
                             value={formik.values.repeat_password}
                             onChange={formik.handleChange}
                             type={'password'}
                         />
-                        {formik.touched.password && formik.errors.password
+                        {formik.touched.password && formik.errors.repeat_password
                         &&<Alert variant="filled" severity="error">
                             {formik.errors.repeat_password}
                         </Alert>

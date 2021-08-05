@@ -5,13 +5,18 @@ import {TracksAPI} from '../../api/tracksAPI'
 import {AlbumsAPI} from '../../api/albumsAPI'
 import cookie from 'js-cookie'
 
-export const Registration = (username, password) => {
+export const Registration = (name, email, password) => {
     return async (dispatch: Dispatch<UserAction>) => {
-        await UsersAPI.registration({username, password}).then(response => {
+        await UsersAPI.registration({name, email, password}).then(response => {
+            console.log(response)
             if (response.data.status === 500) {
                 dispatch({
                     type: UsersActionTypes.ADD_ERROR,
                     payload: {type: 'register', message: response.data?.message || 'Неизвестная ошибка'}
+                })
+                dispatch({
+                    type: UsersActionTypes.REDIRECT_TO,
+                    payload: '/'
                 })
             }
         }).catch(e => {
