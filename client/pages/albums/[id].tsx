@@ -43,8 +43,8 @@ const AlbumPage = ({serverAlbum, token}) => {
     })
     return (
         <MainLayout
-            title={'Музыкальная площадка - ' + album.name + ' - ' + album.artist}
-            keywords={'Музыка, артисты,' + album.name + album.artist}
+            title={'Музыкальная площадка - ' + album.name + ' - ' + album.author}
+            keywords={'Музыка, артисты,' + album.name + album.author}
         >
             <Grid className={classes.grid}>
                 <Button
