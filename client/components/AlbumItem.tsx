@@ -28,7 +28,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album,  token,userId}) => {
             <img className={classes.image} src={baseURL + album.picture} alt={'Обложка альбома'}/>
             <Grid className={classes.name} container direction={'column'}>
                 <div>{album.name}</div>
-                <div className={classes.author}>{album.artist}</div>
+                <div className={classes.author}>{album.author}</div>
             </Grid>
             <IconButton disabled={isNotOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
                 <Delete onClick={deleteOne} />
