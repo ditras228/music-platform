@@ -1,7 +1,7 @@
 import {Headers, HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {InjectModel} from '@nestjs/mongoose'
 import {Album, AlbumDocument} from './schemas/album.schema'
-import {Model} from 'mongoose'
+import {Model, ObjectId} from 'mongoose'
 import {Track, TrackDocument} from '../track/schemas/track.schema'
 import {FileService, FileType} from '../file/file.service'
 import {CreateAlbumDto} from './dto/create.album.dto'
@@ -9,7 +9,7 @@ import {User, UserDocument} from '../users/schemas/user.schema'
 import {Account, AccountDocument} from '../users/schemas/account.schema'
 import {CreateCommentDTO} from '../track/dto/add.comment.dto'
 import {Comment, CommentDocument} from '../track/schemas/comment.schema'
-const ObjectId = require('mongodb').ObjectID;
+const getObjectId = require('mongodb').ObjectID;
 
 @Injectable()
 export class AlbumService {
@@ -63,7 +63,7 @@ export class AlbumService {
         const comments = album.comments as any
         if (comments.length > 0) {
             for (let i = 0; i < comments.length; i++) {
-                const user = await this.userModel.findOne(ObjectId(comments[i].userId)) as unknown as UserDocument
+                const user = await this.userModel.findOne(getObjectId(comments[i].userId)) as unknown as UserDocument
                 comments[i].username = user?.name
                 comments[i].color = user?.color
                 comments[i].image = user?.image

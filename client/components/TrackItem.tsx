@@ -89,7 +89,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         )
     }
     const SwitchView = ({view, deleteOne, checked, userId, track}) => {
-    const isOwner= userId==track.userId
+    const isNotOwner= userId!=track.userId
         switch (view) {
             case 'checkbox':
                 return (
@@ -97,7 +97,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
                 )
             default:
                 return (
-                    <IconButton disabled={!isOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
+                    <IconButton disabled={isNotOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
                          <Delete onClick={deleteOne}/>
                     </IconButton>
                 )

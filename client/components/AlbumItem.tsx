@@ -22,7 +22,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album,  token,userId}) => {
         await AlbumsAPI.deleteOneAlbum(album._id, token).then()
          dispatch( fetchTracks(token))
     }
-    const isOwner = album.userId==userId
+    const isNotOwner = album.userId!=userId
     return (
         <Card className={classes.track} onClick={() => router.push('/albums/' + album._id)}>
             <img className={classes.image} src={baseURL + album.picture} alt={'Обложка альбома'}/>
@@ -30,7 +30,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album,  token,userId}) => {
                 <div>{album.name}</div>
                 <div className={classes.author}>{album.artist}</div>
             </Grid>
-            <IconButton disabled={!isOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
+            <IconButton disabled={isNotOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
                 <Delete onClick={deleteOne} />
             </IconButton>
         </Card>
