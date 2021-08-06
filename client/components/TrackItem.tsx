@@ -26,8 +26,8 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const router = useRouter()
     const dispatch = useDispatch()
     const [isChecked, setChecked] = useState(false)
-    const formik =useFormikContext()
-    const tracks= useTypedSelector(state=>state.album.albumTracks)
+    const formik = useFormikContext()
+    const tracks = useTypedSelector(state => state.album.albumTracks)
 
     const deleteOne = async () => {
         await TracksAPI.deleteOne(track._id, token)
@@ -49,59 +49,63 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         }
 
         formik.setFieldValue('tracks', tracks)
-        }
-        const play = (e) => {
-            e.stopPropagation()
-            e.preventDefault()
-            setActiveTrack(track)
-            playTrack()
-        }
-        const pause = (e) => {
-            e.stopPropagation()
-            e.preventDefault()
+    }
+    const play = (e) => {
+        e.stopPropagation()
+        e.preventDefault()
+        setActiveTrack(track)
+        playTrack()
+    }
+    const pause = (e) => {
+        e.stopPropagation()
+        e.preventDefault()
 
-            setActiveTrack(track)
-            pauseTrack()
-        }
-        return (
-            <Card className={classes.track} onClick={() => {
+        setActiveTrack(track)
+        pauseTrack()
+    }
+    return (
+        <Card className={classes.track}>
+            <SwitchView view={view} checked={isChecked}
+                        deleteOne={deleteOne}
+                        track={track}
+                        userId={userId}/>
+            <IconButton className={classes.play}>
+                {active
+                    ? <Pause onClick={play}/>
+                    : <PlayArrow onClick={pause}/>
+                }
+            </IconButton>
+            <div className={classes.track_info}
+                onClick={() => {
                 view !== 'checkbox'
                     ? router.push('/tracks/' + track._id)
                     : editState()
             }
             }>
-                <SwitchView view={view} checked={isChecked}
-                            deleteOne={deleteOne}
-                            track={track}
-                            userId={userId}/>
-                <IconButton className={classes.play}>
-                    {active
-                        ? <Pause onClick={play}/>
-                        : <PlayArrow onClick={pause}/>
-                    }
-                </IconButton>
                 <img className={classes.image} src={baseURL + track.picture} alt={'Обложка трека'}/>
                 <Grid className={classes.name} container direction={'column'}>
                     <div>{track.name}</div>
                     <div className={classes.author}>{track.artist}</div>
                 </Grid>
-            </Card>
-        )
-    }
-    const SwitchView = ({view, deleteOne, checked, userId, track}) => {
-    const isNotOwner= userId!=track.userId
-        switch (view) {
-            case 'checkbox':
-                return (
-                    <Checkbox checked={checked}  name="checkbox"/>
-                )
-            default:
-                return (
-                    <IconButton disabled={isNotOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
-                         <Delete onClick={deleteOne}/>
-                    </IconButton>
-                )
+            </div>
 
-        }
+        </Card>
+    )
+}
+const SwitchView = ({view, deleteOne, checked, userId, track}) => {
+    const isNotOwner = userId != track.userId
+    switch (view) {
+        case 'checkbox':
+            return (
+                <Checkbox checked={checked} name="checkbox" className={classes.delete}/>
+            )
+        default:
+            return (
+                <IconButton disabled={isNotOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
+                    <Delete onClick={deleteOne}/>
+                </IconButton>
+            )
+
     }
-    export default TrackItem
+}
+export default TrackItem

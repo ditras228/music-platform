@@ -25,11 +25,19 @@
 }
 
 .img {
+    display: block;
+    max-width: 100%;
+    transition: 1s;
+}
+.img:hover{
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+.img_thumb{
     width: 170px;
     height: 170px;
-
+    overflow: hidden;
 }
-
 .card {
     padding: 20px
 }
@@ -38,10 +46,6 @@
     display: grid;
     flex-direction: column;
     grid-template-columns: 1fr 1fr;
-}
-
-.text {
-    text-align: center
 }
 
 .item_title {

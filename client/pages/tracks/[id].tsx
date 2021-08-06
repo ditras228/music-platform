@@ -5,7 +5,7 @@ import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
 import {baseURL} from '../../api'
 import {useFormik} from 'formik'
-import {ITrack} from '../../types/track'
+import {ITrack, TrackActionTypes} from '../../types/track'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
@@ -16,6 +16,8 @@ import {getSession} from 'next-auth/client'
 import {UsersActionTypes} from '../../types/user'
 import {Alert} from '@material-ui/lab'
 import * as yup from 'yup'
+import {useDispatch} from "react-redux";
+import {PlayerActionTypes} from "../../types/player";
 
 const commentSchema=yup.object({
     text: yup.string()
@@ -27,6 +29,7 @@ const commentSchema=yup.object({
 const TrackPage = ({serverTrack, token}) => {
     const router = useRouter()
     const [track, setTrack] = useState<ITrack>(serverTrack)
+    const dispatch = useDispatch()
 
     const formik = useFormik({
         initialValues: {
@@ -42,6 +45,12 @@ const TrackPage = ({serverTrack, token}) => {
             )
         }
     })
+    const trackClickHandler = ()=>{
+        dispatch({
+            type: PlayerActionTypes.SET_ACTIVE,
+            payload: serverTrack
+        })
+    }
     return (
         <MainLayout
             title={'Музыкальная площадка - ' + track.name + ' - ' + track.artist}
@@ -58,7 +67,11 @@ const TrackPage = ({serverTrack, token}) => {
                 <Card>
 
                     <Grid className={classes.info}>
-                        <img src={baseURL + track.picture} className={classes.img} alt={'Обложка трека'}/>
+                        <div className={classes.img_thumb}>
+                        <img src={baseURL + track.picture}
+                             className={classes.img} alt={'Обложка трека'} onClick={trackClickHandler}/>
+                            <div className={classes.play_button}/>
+                        </div>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}><Title/>Название</h3>
@@ -78,7 +91,7 @@ const TrackPage = ({serverTrack, token}) => {
                 <Card>
                     <div className={classes.card}>
                         <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
-                        <p className={classes.text}>{track.text}</p>
+                        <pre>{track.text}</pre>
                     </div>
 
                     <Grid container className={classes.card}>
@@ -131,11 +144,9 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session= await getSession(ctx)
-
     const player = cookies(ctx).player;
-    const theme = cookies(ctx).theme;
-
     dispatch( setPlayer(player))
+    const theme = cookies(ctx).theme;
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false

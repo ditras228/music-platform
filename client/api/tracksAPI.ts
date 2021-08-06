@@ -14,6 +14,9 @@ export const TracksAPI= {
         return instance.get('/tracks/' + params,
             {headers: {Authorization: `Bearer ${token}`}})
     },
+    getBySrc(src) {
+        return instance.get(`/tracks?src=${src}`)
+    },
     deleteOne(params, token) {
         return instance.delete('/tracks/' + params,
             {headers: {Authorization: `Bearer ${token}`}})

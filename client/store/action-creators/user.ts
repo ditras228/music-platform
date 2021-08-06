@@ -18,7 +18,7 @@ export const Registration = (name, email, password) => {
             }else{
                 dispatch({
                     type: UsersActionTypes.REDIRECT_TO,
-                    payload: '/regsuccess'
+                    payload: '/auth/regsuccess'
                 })
             }
         }).catch(e => {
