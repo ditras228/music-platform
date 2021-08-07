@@ -36,3 +36,21 @@ export const searchTracks = (query: string, token: string) => {
         }
     }
 }
+export const deleteTrack = (id:string, token: string) => {
+    return async (dispatch: any) => {
+        try {
+            const response = await TracksAPI.deleteOne(id,token)
+            if(response.data.track){
+                dispatch({
+                    type: TrackActionTypes.REMOVE_TRACK,
+                    payload: response.data.track
+                })
+            }
+        } catch (e) {
+            dispatch({
+                type: TrackActionTypes.FETCH_TRACKS_ERROR,
+                payload: 'Произошла ошибка удаления трека'
+            })
+        }
+    }
+}

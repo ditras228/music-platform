@@ -1,4 +1,4 @@
-import {Headers, HttpException, HttpStatus, Injectable} from '@nestjs/common'
+        import {Headers, HttpException, HttpStatus, Injectable} from '@nestjs/common'
 import {InjectModel} from '@nestjs/mongoose'
 import {Track, TrackDocument} from './schemas/track.schema'
 import {Model, ObjectId} from 'mongoose'
@@ -76,9 +76,9 @@ export class TrackService {
         const track = await this.trackModel.findById(id)
         console.log(track.userId)
         console.log(session.userId)
-        if (track.userId==session.userId) {
+        if (track.userId.toString()==session.userId.toString()) {
             await track.remove()
-            return track
+            return track._id
         }
         return new HttpException
         (`Вы не владелец трека`, HttpStatus.INTERNAL_SERVER_ERROR)

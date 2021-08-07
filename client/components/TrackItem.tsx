@@ -31,7 +31,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
 
     const deleteOne = async () => {
         await TracksAPI.deleteOne(track._id, token)
-        dispatch(fetchTracks(token))
+            .then()
     }
     const editState = () => {
         setChecked(!isChecked)

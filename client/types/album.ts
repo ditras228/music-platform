@@ -22,7 +22,12 @@ export enum AlbumActionTypes{
     FETCH_ALBUMS_ERROR='FETCH_ALBUMS_ERROR',
     ADD_TRACK_TO_ALBUM='ADD_TRACK_TO_ALBUM',
     REMOVE_TRACK_FROM_ALBUM='REMOVE_TRACK_FROM_ALBUM',
-    FETCH_CHECKED_STATUS='FETCH_CHECKED_STATUS'
+    FETCH_CHECKED_STATUS='FETCH_CHECKED_STATUS',
+    REMOVE_ALBUM='AlbumActionTypes'
+}
+interface RemoveAlbum{
+    type: AlbumActionTypes.REMOVE_ALBUM
+    payload: string
 }
 interface FetchAlbumsAction{
     type: AlbumActionTypes.FETCH_ALBUMS
@@ -45,3 +50,4 @@ export type AlbumAction =
     | FetchAlbumsErrorAction
     | AddTrackToAlbum
     | RemoveTrackFromAlbum
+    |RemoveAlbum
