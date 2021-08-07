@@ -34,7 +34,7 @@ const Index = ({token, userId}) => {
             <Grid container justify={'center'}>
                 <Card className={classes.card}>
                         <Grid container justify={'space-between'} direction={'row'}>
-                            <h2 className={classes.title}><Search/>Список треков</h2>
+                            <h2 className={classes.title}><Search/> Треки</h2>
                             <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
                         </Grid>
 

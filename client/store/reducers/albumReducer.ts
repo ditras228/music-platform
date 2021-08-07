@@ -19,7 +19,7 @@ export const albumReducer = (state = initialState, action: AlbumAction): AlbumSt
         case AlbumActionTypes.FETCH_ALBUMS:
             return {...state, error: '', albums: action.payload}
         case AlbumActionTypes.REMOVE_ALBUM:
-            return {...state, error: '', albums: state.albums.filter(album=> album._id!==action.payload)}
+            return {...state, error: '', albums: [...state.albums.filter(album=> album._id!==action.payload)]}
         default:
             return state
     }

@@ -161,6 +161,15 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session = await getSession(ctx)
+
+    if(!session){
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
     const player = cookies(ctx).player;
     dispatch( setPlayer(player))
     const theme = cookies(ctx).theme;
