@@ -40,9 +40,9 @@ const Player = () => {
                 console.log('________________')
                 console.log(src)
                 console.log(active?.audio)
-                setDuration(Math.ceil(audio.duration))
                 setAudio()
             }
+            setDuration(Math.ceil(audio.duration))
         }
     }, [active])
     const setAudio = () => {
