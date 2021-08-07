@@ -6,7 +6,7 @@ export interface IAlbum{
     userId: string
     name: string
     text: string
-    artist: string
+    author: string
     picture: string
     tracks: ITrack[]
     comments: IComment[]
