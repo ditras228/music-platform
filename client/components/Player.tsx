@@ -28,6 +28,9 @@ const Player = () => {
             if(duration===0){
                 setDuration(Math.ceil(audio?.duration))
             }
+            if(currentTime===0){
+                setDuration(Math.ceil(audio?.currentTime))
+            }
         }
         , [active, volume, duration, pause])
 
