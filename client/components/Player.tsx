@@ -26,7 +26,7 @@ const Player = () => {
                 active: {name: active.name, artist: active.artist, audio: active.audio}
             }))
             if(duration===0){
-                setDuration(audio?.duration)
+                setDuration(Math.ceil(audio?.duration))
             }
         }
         , [active, volume, duration, pause])
