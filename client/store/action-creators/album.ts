@@ -33,7 +33,7 @@ export const deleteAlbum = (id:string, token: string) => {
     return async (dispatch: any) => {
         try {
             AlbumsAPI.deleteOneAlbum(id,token)
-                .then(()=>{
+                .then(response=>{
                         dispatch({
                             type: AlbumActionTypes.REMOVE_ALBUM,
                             payload: response.data
