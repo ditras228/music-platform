@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
+import {useFormikContext} from "formik";
+import {dataURItoBlob} from "./ImagePreview";
 type props={
     upImg: any,
     previewCanvasRef: any,
@@ -9,10 +11,14 @@ type props={
 export default function Cropper({upImg, previewCanvasRef}: props) {
     const imgRef = useRef(null);
     const [completedCrop, setCompletedCrop] = useState(null);
-    const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 1 / 1 });
+    const [crop, setCrop] = useState({ unit: '%', width: 100, aspect: 1 / 1 });
+    const { setFieldValue} = useFormikContext();
     const onLoad = useCallback((img) => {
         imgRef.current = img;
     }, []);
+    useEffect(()=>{
+        setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))
+    },[previewCanvasRef])
     useEffect(() => {
         if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
             return;
