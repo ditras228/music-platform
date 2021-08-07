@@ -42,8 +42,6 @@ const Player = () => {
                 console.log(active?.audio)
                 setDuration(Math.ceil(audio.duration))
                 setAudio()
-            }else{
-                play()
             }
         }
     }, [active])
@@ -65,7 +63,12 @@ const Player = () => {
                         audio.pause()
                         TracksAPI.listen(active._id).then(() => active.listens += 1)
                     } else {
-                        setDuration(Math.ceil(duration))
+                        if (src !== active?.audio) {
+                            setDuration(Math.ceil(duration))
+                        }
+                        else{
+                            setDuration(Math.ceil(audio.duration))
+                        }
                     }
                 }
             }
