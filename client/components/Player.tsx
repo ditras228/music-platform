@@ -18,20 +18,11 @@ const Player = () => {
     const {pause, volume, active, duration, currentTime} = player
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
     const dispatch = useDispatch()
-    useEffect(()=>{
-        TracksAPI.getOne(active?._id)
-            .then(res=>{
-                if(res.status===500 )
-                    dispatch(deletePlayer())
-                return null
-            })
-
-    },[])
 
     useEffect(() => {
             active && dispatch(savePlayer({
                 ...player,
-                active: {name: active.name, artist: active.artist, audio: active.audio}
+                active: {_id: active._id, name: active.name, artist: active.artist, audio: active.audio}
             }))
             if(duration===0){
                 setDuration(Math.ceil(audio?.duration))
