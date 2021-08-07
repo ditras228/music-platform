@@ -38,7 +38,7 @@ export const deleteTrack = (id: string, token: string) => {
     return async (dispatch: any) => {
         try {
             TracksAPI.deleteOne(id, token)
-                .then(() => {
+                .then(response => {
                         dispatch({
                             type: TrackActionTypes.REMOVE_TRACK,
                             payload: response.data
