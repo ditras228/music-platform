@@ -43,7 +43,7 @@ const Player = () => {
                 setDuration(Math.ceil(audio.duration))
                 setAudio()
             }else{
-                setDuration(Math.ceil(active.duration))
+                setDuration(Math.ceil(duration))
             }
         }
     }, [active])
