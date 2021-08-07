@@ -118,6 +118,7 @@ import {useFormikContext} from "formik";
                                     onSubmit={()=>{
                                         const { setFieldValue} = useFormikContext();
                                         setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))
+                                        dispatch(CreateTrack(values,token))
                                     }}>
                             <Grid container direction={'column'}>
                                 <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
