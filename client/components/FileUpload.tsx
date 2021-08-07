@@ -38,10 +38,10 @@ const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props) => 
                 setAudio('none')
             }
         }
-        if(accept==='image/*'){
-            field.value=file
-            setFieldValue(field.name, field.value)
-        }
+        // if(accept==='image/*'){
+        //     field.value=file
+        //     setFieldValue(field.name, field.value)
+        // }
         if(accept==='audio/*')
             field.value=file
             setFieldValue(field.name, field.value)

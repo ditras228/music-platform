@@ -52,6 +52,7 @@ const Create = ({token, userId}) => {
     const {tracks, error} = useTypedSelector(state => state.track)
     const dispatch = useDispatch()
     const albumTracks = useTypedSelector(state => state.album.albumTracks)
+    const previewCanvasRef = useRef(null);
 
     useEffect(() => {
         console.log(albumTracks)
@@ -102,7 +103,7 @@ const Create = ({token, userId}) => {
                             </FileUpload>
                         </Grid>
 
-                        <ImagePreview src={image}/>
+                        <ImagePreview src={image} previewCanvasRef={previewCanvasRef}/>
                     </FormStep>
 
                     <FormStep stepName={'Треки'}

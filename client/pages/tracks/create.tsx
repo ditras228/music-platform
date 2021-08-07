@@ -1,4 +1,4 @@
-import ImagePreview from '../../components/ImagePreview'
+import ImagePreview, {dataURItoBlob} from '../../components/ImagePreview'
 
 if (typeof window !== 'undefined') {
         var WaveSurfer = require('wavesurfer.js')
@@ -22,6 +22,7 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateTrack} from '../../store/action-creators/user'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
+import {useFormikContext} from "formik";
 
     const InfoSchema = Yup.object({
         name: Yup.string()
@@ -43,6 +44,7 @@ import {setPlayer} from '../../store/action-creators/player'
         const [audio, setAudio] = useState('none')
         const router = useRouter()
         const chart = useRef(null)
+        const previewCanvasRef = useRef(null);
         const redirectTo=useTypedSelector(state=>state.user.redirectTo)
         const dispatch=useDispatch()
 
@@ -112,13 +114,17 @@ import {setPlayer} from '../../store/action-creators/player'
                         </FormStep>
 
                         <FormStep stepName={'Обложка'}
-                                  validationSchema={ImageSchema}>
+                                  validationSchema={ImageSchema}
+                                    onSubmit={()=>{
+                                        const { setFieldValue} = useFormikContext();
+                                        setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))
+                                    }}>
                             <Grid container direction={'column'}>
                                 <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
                                     <Button fullWidth>Загрузить изображение</Button>
                                 </FileUpload>
                             </Grid>
-                            <ImagePreview src={image}/>
+                            <ImagePreview src={image} previewCanvasRef={previewCanvasRef}/>
                         </FormStep>
 
                     </MultiStepForm>
