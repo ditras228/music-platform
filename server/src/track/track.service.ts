@@ -55,7 +55,7 @@ export class TrackService {
         return this.trackModel.find()//.skip(Number(offset)).limit(Number(count))
     }
 
-    async getOne(id: ObjectId): Promise<Track> {
+    async getOne(id: ObjectId): Promise<any> {
         const track = await this.trackModel
             .findById(id).populate({path:'comments', sort: {'created_at': 1}}) as unknown as TrackDocument
         const comments = track.comments as any
@@ -67,7 +67,10 @@ export class TrackService {
                 comments[i].image = user?.image
             }
         }
-
+        if(!track){
+            return new HttpException
+            (`Трека не существует`, HttpStatus.BAD_REQUEST)
+        }
         return track
     }
 

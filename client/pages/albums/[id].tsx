@@ -68,7 +68,7 @@ const AlbumPage = ({serverAlbum, token}) => {
                             </div>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}><Person/>Автор</h3>
-                                <h3 className={classes.item_value}>{album.author}</h3>
+                                <h3 className={classes.item_value}>{album.artist}</h3>
                             </div>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}><Hearing/>Прослушиваний</h3>

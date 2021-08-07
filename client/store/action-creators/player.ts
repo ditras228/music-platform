@@ -30,6 +30,11 @@ export const savePlayer = (player) => {
         console.log( cookie.get('player'))
     }
 }
+export const deletePlayer = () => {
+    return async () => {
+        cookie.set('player', '')
+    }
+}
 
 
 

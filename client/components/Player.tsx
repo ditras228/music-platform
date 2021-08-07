@@ -5,7 +5,7 @@ import {useTypedSelector} from '../hooks/useTypedSelector'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
 import classes from './Player.module.css'
-import {savePlayer} from '../store/action-creators/player'
+import {deletePlayer, savePlayer, setPlayer} from '../store/action-creators/player'
 import {useDispatch} from 'react-redux'
 import {Box, Grid, IconButton} from '@material-ui/core'
 import {TracksAPI} from '../api/tracksAPI'
@@ -18,7 +18,11 @@ const Player = () => {
     const {pause, volume, active, duration, currentTime} = player
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
     const dispatch = useDispatch()
-
+    TracksAPI.getOne(acive._id)
+        .then(res=>{
+            if(res.data.status===400 )
+                dispatch(deletePlayer())
+        })
 
     useEffect(() => {
             active && dispatch(savePlayer({
@@ -29,7 +33,7 @@ const Player = () => {
                 setDuration(Math.ceil(audio?.duration))
             }
             if(currentTime===0){
-                setDuration(Math.ceil(audio?.currentTime))
+                setCurrentTime(Math.ceil(audio?.currentTime))
             }
         }
         , [active, volume, duration, pause])

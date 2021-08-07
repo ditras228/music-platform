@@ -9,7 +9,7 @@ export const TracksAPI= {
         return instance.get('/tracks/search?query=' + query,
             {headers: {Authorization: `Bearer ${token}`}})
     },
-    getOne(params, token) {
+    getOne(params, token?) {
 
         return instance.get('/tracks/' + params,
             {headers: {Authorization: `Bearer ${token}`}})
