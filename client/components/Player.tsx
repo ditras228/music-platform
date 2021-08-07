@@ -42,7 +42,9 @@ const Player = () => {
                 console.log(active?.audio)
                 setAudio()
             }
-            setDuration(Math.ceil(audio.duration))
+            audio.onloadedmetadata = () => {
+                setDuration(Math.ceil(audio.duration))
+            }
         }
     }, [active])
     const setAudio = () => {
