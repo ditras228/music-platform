@@ -28,3 +28,24 @@ export const searchAlbums= (query: string, token: string) => {
         }
     }
 }
+
+export const deleteAlbum = (id:string, token: string) => {
+    return async (dispatch: any) => {
+        try {
+            AlbumsAPI.deleteOneAlbum(id,token)
+                .then(()=>{
+                        dispatch({
+                            type: AlbumActionTypes.REMOVE_ALBUM,
+                            payload: response.data
+                        })
+                    }
+                )
+
+        } catch (e) {
+            dispatch({
+                type: AlbumActionTypes.FETCH_ALBUMS_ERROR,
+                payload: 'Произошла ошибка удаления альбома'
+            })
+        }
+    }
+}

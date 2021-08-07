@@ -6,8 +6,8 @@ import {baseURL} from '../api'
 import {deleteTrack, fetchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
-import {AlbumsAPI, deleteAlbum} from '../api/albumsAPI'
 import {IAlbum} from '../types/album'
+import {deleteAlbum} from "../store/action-creators/album";
 
 interface AlbumItemProps {
     album: IAlbum
