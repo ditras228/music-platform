@@ -63,7 +63,7 @@ const Player = () => {
                         audio.pause()
                         TracksAPI.listen(active._id).then(() => active.listens += 1)
                     } else {
-                        if (src !== active?.audio) {
+                        if (audio.src !== active?.audio) {
                             setDuration(Math.ceil(duration))
                         }
                         else{
