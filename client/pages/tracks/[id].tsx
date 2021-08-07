@@ -92,10 +92,16 @@ const TrackPage = ({serverTrack, token}) => {
                     </Grid>
                 </Card>
                 <Card>
-                    <div className={classes.card}>
-                        <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
-                        <pre>{track.text}</pre>
-                    </div>
+                    {
+                        track.text&&(
+                            <Grid container className={classes.card}>
+                                <div className={classes.card}>
+                                    <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
+                                    <pre>{track.text}</pre>
+                                </div>
+                            </Grid>
+                        )
+                    }
 
                     <Grid container className={classes.card}>
                         <form onSubmit={formik.handleSubmit} className={classes.form}>

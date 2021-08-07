@@ -6,12 +6,12 @@ import {useRouter} from 'next/router'
 import {useActions} from '../hooks/useAction'
 import {baseURL} from '../api'
 import {TracksAPI} from '../api/tracksAPI'
-import {fetchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
 import {AlbumActionTypes} from '../types/album'
 import {useFormikContext} from 'formik'
 import {useTypedSelector} from '../hooks/useTypedSelector'
+import {deleteTrack} from "../store/action-creators/track";
 
 interface TrackItemProps {
     track: ITrack
@@ -30,8 +30,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const tracks = useTypedSelector(state => state.album.albumTracks)
 
     const deleteOne = async () => {
-        await TracksAPI.deleteOne(track._id, token)
-            .then()
+        dispatch(deleteTrack(track._id, token))
     }
     const editState = () => {
         setChecked(!isChecked)

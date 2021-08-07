@@ -1,4 +1,7 @@
 import {instance} from './index'
+import {TracksAPI} from "./tracksAPI";
+import {TrackActionTypes} from "../types/track";
+import {AlbumActionTypes} from "../types/album";
 
 export const AlbumsAPI= {
     getAlbums(token) {
@@ -42,4 +45,22 @@ export const AlbumsAPI= {
         {headers: {Authorization: `Bearer ${token}`}})
 
 },
+}
+export const deleteAlbum = (id:string, token: string) => {
+    return async (dispatch: any) => {
+        try {
+            const response = await AlbumsAPI.deleteOneAlbum(id,token)
+            if(response.data){
+                dispatch({
+                    type: AlbumActionTypes.REMOVE_ALBUM,
+                    payload: response.data
+                })
+            }
+        } catch (e) {
+            dispatch({
+                type: AlbumActionTypes.FETCH_ALBUMS_ERROR,
+                payload: 'Произошла ошибка удаления альбома'
+            })
+        }
+    }
 }

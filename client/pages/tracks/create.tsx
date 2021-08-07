@@ -28,9 +28,6 @@ import {setPlayer} from '../../store/action-creators/player'
             .required('Обязательно'),
         artist: Yup.string()
             .required('Обязательно'),
-        text: Yup.string()
-            .required('Обязательно'),
-
     })
     const ImageSchema = Yup.object().shape({
         picture: Yup.mixed().required('Обязательно')

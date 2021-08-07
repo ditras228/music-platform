@@ -3,10 +3,10 @@ import {Card, Grid, IconButton} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
 import {useRouter} from 'next/router'
 import {baseURL} from '../api'
-import {fetchTracks} from '../store/action-creators/track'
+import {deleteTrack, fetchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
-import {AlbumsAPI} from '../api/albumsAPI'
+import {AlbumsAPI, deleteAlbum} from '../api/albumsAPI'
 import {IAlbum} from '../types/album'
 
 interface AlbumItemProps {
@@ -19,8 +19,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album,  token,userId}) => {
     const router = useRouter()
     const dispatch= useDispatch()
     const deleteOne = async ()=>{
-        await AlbumsAPI.deleteOneAlbum(album._id, token).then()
-         dispatch( fetchTracks(token))
+        dispatch(deleteAlbum(album._id, token))
     }
     const isNotOwner = album.userId!=userId
     return (
