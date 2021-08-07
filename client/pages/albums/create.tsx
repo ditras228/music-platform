@@ -107,7 +107,7 @@ const Create = ({token, userId}) => {
 
                     <FormStep stepName={'Треки'}
                               validationSchema={TrackSchema}>
-                        <Alert variant="filled"  severity={'info'}>Выберите 3+ треков</Alert>
+                        <Alert severity={'info'}>Выберите 3+ треков</Alert>
                         <div style={{padding: '0 40px'}}>
 
                             <TrackList tracks={tracks} token={token} userId={userId} view={'checkbox'}/>

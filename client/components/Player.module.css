@@ -4,7 +4,7 @@
     bottom: 0;
     padding: 0 40px;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: auto 2fr 1fr;
     align-items: center;
     background-color: lightgray;
     grid-gap: 20px;

@@ -55,6 +55,7 @@ export default(req, res)=>{
                 if (user?.accessToken) {
                     token.accessToken = user.accessToken
                     token.color = user.color
+                    token._id=user._id
                 }
 
                 return token
@@ -63,7 +64,7 @@ export default(req, res)=>{
                 // Add property to session, like an access_token from a provider.
                 session.accessToken = token.accessToken
                 session.color = token.color
-                session.userId= token.sub
+                session.userId= token._id
                 session.image=token.image
                 return session
             }

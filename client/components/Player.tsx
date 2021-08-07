@@ -23,16 +23,17 @@ const Player = () => {
     useEffect(() => {
             active && dispatch(savePlayer({
                 ...player,
-                active: {name: active.name, artist: active.name, audio: active.audio}
+                active: {name: active.name, artist: active.artist, audio: active.audio}
             }))
         }
-        , [active, volume, duration])
+        , [active, volume, duration, pause])
 
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
             !currentTime && setCurrentTime(currentTime)
             setAudio()
+            pauseTrack()
         } else {
             const src = audio.src.replace(baseURL, '')
             if (src !== active?.audio) {

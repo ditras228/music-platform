@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Button, Card, Grid, TextField} from '@material-ui/core'
+import {Avatar, Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {baseURL} from '../../api'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, MusicNote, Person, Title} from '@material-ui/icons'
@@ -9,7 +9,7 @@ import cookies from 'next-cookies'
 import TrackList from '../../components/TrackList'
 import {IAlbum} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
-import {getSession} from 'next-auth/client'
+import {getSession, useSession} from 'next-auth/client'
 import CommentFC from '../../components/comment'
 import {useFormik} from 'formik'
 import {setPlayer} from '../../store/action-creators/player'
@@ -28,6 +28,7 @@ const commentSchema=yup.object({
 const AlbumPage = ({serverAlbum, token}) => {
     const router = useRouter()
     const [album, setAlbum] = useState<IAlbum>(serverAlbum)
+    const [ session, loading ] = useSession() as any
 
     const formik = useFormik({
         initialValues: {
@@ -57,7 +58,9 @@ const AlbumPage = ({serverAlbum, token}) => {
                 <Card>
 
                     <Grid className={classes.info}>
+                        <div className={classes.img_thumb}>
                         <img src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
+                        </div>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}><Title/>Название</h3>
@@ -90,17 +93,23 @@ const AlbumPage = ({serverAlbum, token}) => {
                                     :'комментарии'
                             }
                             </h3>
-                            <Grid className={classes.comments_form}>
-                                <TextField
-                                    className={classes.comments_input}
-                                    value={formik.values.text}
-                                    onChange={formik.handleChange}
-                                    name={'text'}
-                                    label='Оставьте комментарий'
-                                    fullWidth
-                                    multiline
-                                >
-                                </TextField>
+                            {session&&
+                            <div className={classes.comments_form}>
+                                <div className={classes.avatar_comment}>
+                                    <Avatar alt="Remy Sharp" src={session.image}
+                                            style={{backgroundColor: session.color || 'gray', marginRight:20}}>
+                                        {session.user?.name?.substring(0,1)}
+                                    </Avatar>
+                                    <TextField
+                                        value={formik.values.text}
+                                        onChange={formik.handleChange}
+                                        name={'text'}
+                                        label='Оставьте комментарий'
+                                        fullWidth
+                                        multiline
+                                    >
+                                    </TextField>
+                                </div>
                                 {formik.errors.text && formik.touched.text &&
                                 <Alert variant="filled" severity="error">
                                     {formik.errors.text}
@@ -110,7 +119,8 @@ const AlbumPage = ({serverAlbum, token}) => {
                                     className={classes.comments_submit}
                                 >Отправить
                                 </Button>
-                            </Grid>
+                            </div>
+                            }
                         </form>
                     </Grid>
                     {
