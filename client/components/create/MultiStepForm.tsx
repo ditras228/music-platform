@@ -6,63 +6,72 @@ import {useRouter} from 'next/router'
 import {useDispatch} from 'react-redux'
 import {UsersActionTypes} from '../../types/user'
 
-interface Props extends FormikConfig<FormikValues>{
+interface Props extends FormikConfig<FormikValues> {
     children: React.ReactNode
 }
+
 const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
     const [stepNumber, setStepNumber] = useState(0)
     const steps = React.Children.toArray(children) as React.ReactElement[]
     const step = steps[stepNumber]
     const totalSteps = steps.length
-    const isLastStep = stepNumber===totalSteps-1
+    const isLastStep = stepNumber === totalSteps - 1
     const [snapShot, setSnapshot] = useState(initialValues)
     const router = useRouter()
 
-    const next=(values: FormikValues)=>{
-        setStepNumber(stepNumber+1)
+    const next = (values: FormikValues) => {
+        setStepNumber(stepNumber + 1)
         setSnapshot(values)
     }
-    const previous = (values: FormikValues)=>{
-        setStepNumber(stepNumber-1)
+    const previous = (values: FormikValues) => {
+        setStepNumber(stepNumber - 1)
         setSnapshot(values)
 
     }
-        const handleSubmit = async (values: FormikValues, actions:FormikHelpers<FormikValues>)=>{
-        if(step.props.onSubmit){
+    const setFieldValue = async (values: FormikValues, actions: FormikHelpers<FormikValues>) => {
+        const field = step.props.setFieldValue
+        if (field) {
+            formik.setFieldValue(...field)
+        }
+    }
+    const handleSubmit = async (values: FormikValues, actions: FormikHelpers<FormikValues>) => {
+        if(step.props.setFieldValue){
+            setFieldValue
+        }
+        if (step.props.onSubmit) {
             await step.props.onSubmit(values)
         }
-        if(isLastStep){
-             return onSubmit(values,actions)
+        if (isLastStep) {
+            return onSubmit(values, actions)
 
-        }else{
+        } else {
             actions.setTouched({})
             next(values)
         }
     }
+    const formik = useFormik({
+        initialValues: snapShot,
+        onSubmit: handleSubmit,
+        handleSubmit: step.props.validationSchema
+    })
     return <div>
-        <Formik
-            initialValues={snapShot}
-            onSubmit={handleSubmit}
-            validationSchema={step.props.validationSchema}>
-            {(formik)=>
-                <Form>
-                    <Stepper activeStep={stepNumber}>{
-                        steps.map(currentStep=>{
-                            const label=currentStep.props.stepName
+        <Form onSubmit={formik.handleSubmit}>
+            <Stepper activeStep={stepNumber}>{
+                steps.map(currentStep => {
+                    const label = currentStep.props.stepName
 
-                            return <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        })
-                    }</Stepper>
-                    {step}
-                    <FormNavigation
-                        isLastStep={isLastStep}
-                        hasPrevious={stepNumber>0}
-                        onBackClick={()=>previous(()=>formik.values)}/>
-                </Form>}
-        </Formik>
+                    return <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                    </Step>
+                })
+            }</Stepper>
+            {step}
+            <FormNavigation
+                isLastStep={isLastStep}
+                hasPrevious={stepNumber > 0}
+                onBackClick={() => previous(() => formik.values)}/>
+        </Form>}
     </div>
 }
-export const FormStep=({stepName='', children}: any)=>children
+export const FormStep = ({stepName = '', children}: any) => children
 export default MultiStepForm

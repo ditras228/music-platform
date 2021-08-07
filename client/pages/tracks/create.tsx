@@ -115,9 +115,8 @@ import {useFormikContext} from "formik";
 
                         <FormStep stepName={'Обложка'}
                                   validationSchema={ImageSchema}
-                                    onSubmit={formik=>{
-                                        formik.setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))
-                                    }}>
+                                  setFieldValue={field: 'picture', value: dataURItoBlob(previewCanvasRef.current.toDataURL())
+                                    }>
                             <Grid container direction={'column'}>
                                 <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
                                     <Button fullWidth>Загрузить изображение</Button>
