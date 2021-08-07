@@ -18,11 +18,15 @@ const Player = () => {
     const {pause, volume, active, duration, currentTime} = player
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
     const dispatch = useDispatch()
-    TracksAPI.getOne(active?._id)
-        .then(res=>{
-            if(res.data.status===400 )
-                dispatch(deletePlayer())
-        })
+    useEffect(()=>{
+        TracksAPI.getOne(active?._id)
+            .then(res=>{
+                if(res.status===500 )
+                    dispatch(deletePlayer())
+                return null
+            })
+
+    },[])
 
     useEffect(() => {
             active && dispatch(savePlayer({
