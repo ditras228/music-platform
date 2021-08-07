@@ -18,7 +18,7 @@ const Player = () => {
     const {pause, volume, active, duration, currentTime} = player
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
     const dispatch = useDispatch()
-    TracksAPI.getOne(acive._id)
+    TracksAPI.getOne(active._id)
         .then(res=>{
             if(res.data.status===400 )
                 dispatch(deletePlayer())
