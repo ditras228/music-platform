@@ -43,7 +43,7 @@ const TrackSchema = Yup.object().shape({
         .nullable()
         .test({
                 message: 'Минимум 3',
-                test: arr => arr.length >= 2
+                test: arr => arr.length >= 3
             }
         )
 })

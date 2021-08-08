@@ -39,13 +39,10 @@ const ImagePreview = ({src, previewCanvasRef}: Props) => {
 
 
     return (
-        <>
+        <div className={classes.grid}>
             <Cropper upImg={src} previewCanvasRef={previewCanvasRef} />
-            <div className={classes.grid}>
                 <canvas ref={previewCanvasRef} className={classes.imageBig}/>
-
-            </div>
-        </>
+        </div>
 
     )
 }
