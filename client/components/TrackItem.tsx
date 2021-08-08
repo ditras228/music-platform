@@ -35,19 +35,12 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const editState = () => {
         setChecked(!isChecked)
         if (isChecked === false) {
-            dispatch({
-                type: AlbumActionTypes.ADD_TRACK_TO_ALBUM,
-                payload: track
-            })
+            formik.setFieldValue('tracks', formik.values.tracks.filter(trackId=>trackId!==track._id))
         }
         if (isChecked === true) {
-            dispatch({
-                type: AlbumActionTypes.REMOVE_TRACK_FROM_ALBUM,
-                payload: track
-            })
+            formik.setFieldValue('tracks', formik.values.tracks.push(track._id))
         }
 
-        formik.setFieldValue('tracks', tracks)
     }
     const play = (e) => {
         e.stopPropagation()
@@ -91,12 +84,12 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         </Card>
     )
 }
-const SwitchView = ({view, deleteOne, checked, userId, track}) => {
+const SwitchView = ({view, deleteOne, checked, userId, track,  editState}) => {
     const isNotOwner = userId != track.userId
     switch (view) {
         case 'checkbox':
             return (
-                <Checkbox checked={checked} name="checkbox" className={classes.delete}/>
+                <Checkbox checked={checked} name="checkbox" className={classes.delete} onClick={editState}/>
             )
         default:
             return (
