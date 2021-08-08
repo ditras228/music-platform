@@ -1,4 +1,4 @@
-import ImagePreview from '../../components/ImagePreview'
+import ImagePreview, {dataURItoBlob} from '../../components/ImagePreview'
 import React, {useEffect, useRef, useState} from 'react'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
@@ -56,6 +56,7 @@ const Create = ({token, userId}) => {
     const dispatch = useDispatch()
     const albumTracks = useTypedSelector(state => state.album.albumTracks)
     const previewCanvasRef = useRef(null);
+    const {setFieldValue} = useFormikContext();
 
     useEffect(() => {
         console.log(albumTracks)
@@ -110,7 +111,8 @@ const Create = ({token, userId}) => {
                     </FormStep>
 
                     <FormStep stepName={'Треки'}
-                              validationSchema={TrackSchema}>
+                              validationSchema={TrackSchema}
+                              onSubmit={()=>setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))}  >
                         <Alert severity={'info'}>Выберите 3+ треков</Alert>
                         <div style={{padding: '0 40px'}}>
 
