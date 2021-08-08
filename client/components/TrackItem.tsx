@@ -45,7 +45,6 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         if (isChecked === true) {
             setFieldValue('tracks', [...values.tracks.filter(thisTrack=>thisTrack!==track._id)], true)
         }
-        setFieldValue('tracks', tracks.map(track=>track._id),true)
     }
     const play = (e) => {
         e.stopPropagation()
