@@ -16,11 +16,6 @@ export default function Cropper({upImg, previewCanvasRef}: props) {
     const onLoad = useCallback((img) => {
         imgRef.current = img;
     }, []);
-    useEffect(()=>{
-        if(previewCanvasRef.current){
-            setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))
-        }
-    },[crop,completedCrop])
     useEffect(() => {
         if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
             return;
@@ -54,6 +49,7 @@ export default function Cropper({upImg, previewCanvasRef}: props) {
             crop.width,
             crop.height
         );
+        setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))
     }, [completedCrop]);
 
     return (

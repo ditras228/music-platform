@@ -56,7 +56,6 @@ const Create = ({token, userId}) => {
     const dispatch = useDispatch()
     const albumTracks = useTypedSelector(state => state.album.albumTracks)
     const previewCanvasRef = useRef(null);
-    const {setFieldValue} = useFormikContext();
 
     useEffect(() => {
         console.log(albumTracks)
