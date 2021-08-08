@@ -60,7 +60,8 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
             <SwitchView view={view} checked={isChecked}
                         deleteOne={deleteOne}
                         track={track}
-                        userId={userId}/>
+                        userId={userId}
+                        editState={editState}/>
             <IconButton className={classes.play}>
                 {active
                     ? <Pause onClick={play}/>
