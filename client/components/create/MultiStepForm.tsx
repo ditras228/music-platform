@@ -19,6 +19,11 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
     const [snapShot, setSnapshot] = useState(initialValues)
     const router = useRouter()
 
+    const formik = useFormik({
+        initialValues: snapShot,
+        onSubmit: handleSubmit,
+        validationSchema: step.props.validationSchema
+    })
     const next = (values: FormikValues) => {
         setStepNumber(stepNumber + 1)
         setSnapshot(values)
@@ -49,11 +54,7 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
             next(values)
         }
     }
-    const formik = useFormik({
-        initialValues: snapShot,
-        onSubmit: handleSubmit,
-        handleSubmit: step.props.validationSchema
-    })
+
     return <div>
         <Form onSubmit={formik.handleSubmit}>
             <Stepper activeStep={stepNumber}>{
