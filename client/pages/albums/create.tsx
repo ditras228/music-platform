@@ -34,16 +34,15 @@ const ImageSchema = Yup.object().shape({
         .nullable()
         .test({
             message: "Должна быть квардатной",
-            test: img => img.width === img.height
+            test: img=> img.width===img.height
         })
 })
 
 const TrackSchema = Yup.object().shape({
     tracks: Yup.array()
-        .required('Обязательно')
         .nullable()
         .test({
-                message: 'Минимум 3',
+                message: 'Минимум 3'
                 test: arr => arr.length >= 3
             }
         )
@@ -79,7 +78,7 @@ const Create = ({token, userId}) => {
                     onSubmit={(values) => {
                         dispatch(CreateAlbum({
                             ...values,
-                            tracks: JSON.stringify(values))
+                            tracks: JSON.stringify(values.tracks)
                         }, token))
                     }}
                 >
