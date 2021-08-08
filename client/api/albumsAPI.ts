@@ -24,7 +24,7 @@ export const AlbumsAPI= {
     createAlbum(data, token) {
         let formData = new FormData()
         formData.append('name', data.name)
-        formData.append('artist', data.artist)
+        formData.append('author', data.author)
         formData.append('text', data.text)
         formData.append('picture', data.picture)
         formData.append('tracks', data.tracks)

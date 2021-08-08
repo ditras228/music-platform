@@ -25,7 +25,7 @@ import AlertStep from '../../components/create/AlertStep'
 const InfoSchema = Yup.object({
     name: Yup.string()
         .required('Обязательно'),
-    artist: Yup.string()
+    author: Yup.string()
         .required('Обязательно'),
 })
 const ImageSchema = Yup.object().shape({

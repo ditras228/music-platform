@@ -57,6 +57,7 @@ export default function Cropper({upImg, previewCanvasRef}: props) {
                 src={upImg}
                 onImageLoaded={onLoad}
                 crop={crop}
+                guides={true}
                 onChange={(c) => setCrop(c)}
                 onComplete={(c) => setCompletedCrop(c)}
                 style={{width:300}}
