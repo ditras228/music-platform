@@ -35,16 +35,12 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const editState = () => {
         setChecked(!isChecked)
         if (isChecked === false) {
-            dispatch({
-                type: AlbumActionTypes.ADD_TRACK_TO_ALBUM,
-                payload: track
-            })
+            formik.setFieldValue('tracks', formik.values['tracks'].map(track=>track._id))
+
         }
         if (isChecked === true) {
-            dispatch({
-                type: AlbumActionTypes.REMOVE_TRACK_FROM_ALBUM,
-                payload: track
-            })
+            formik.setFieldValue('tracks', tracks.map(track=>track._id))
+
         }
         console.log(formik)
         formik.setFieldValue('tracks', tracks.map(track=>track._id))
