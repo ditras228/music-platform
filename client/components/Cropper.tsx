@@ -12,7 +12,7 @@ export default function Cropper({upImg, previewCanvasRef}: props) {
     const imgRef = useRef(null);
     const [completedCrop, setCompletedCrop] = useState(null);
     const [crop, setCrop] = useState({ unit: '%', width: 100, aspect: 1 / 1 });
-    const { setFieldValue} = useFormikContext();
+    const {setFieldValue} = useFormikContext();
     const onLoad = useCallback((img) => {
         imgRef.current = img;
     }, []);
