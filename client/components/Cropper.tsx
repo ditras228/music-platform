@@ -30,6 +30,8 @@ export default function Cropper({upImg, previewCanvasRef}: props) {
         const canvas = previewCanvasRef.current;
         const crop = completedCrop;
 
+        image.crossOrigin='*'
+
         const scaleX = image.naturalWidth / image.width;
         const scaleY = image.naturalHeight / image.height;
         const ctx = canvas.getContext('2d');
