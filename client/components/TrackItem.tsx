@@ -31,19 +31,21 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const router = useRouter()
     const dispatch = useDispatch()
     const [isChecked, setChecked] = useState(false)
-    const {values,setFieldValue } = useFormikContext<formik>()
-    const tracks = useTypedSelector(state => state.album.albumTracks)
+    const formik = useFormikContext<formik>()
 
     const deleteOne = async () => {
         dispatch(deleteTrack(track._id, token))
     }
+
     const editState = () => {
-        setChecked(!isChecked)
-        if (isChecked === false) {
-            setFieldValue('tracks',[...values.tracks, track._id], true)
-        }
-        if (isChecked === true) {
-            setFieldValue('tracks', [...values.tracks.filter(thisTrack=>thisTrack!==track._id)], true)
+        if(formik){
+            setChecked(!isChecked)
+            if (isChecked === false) {
+                formik.setFieldValue('tracks',[...formik.values.tracks, track._id], true)
+            }
+            if (isChecked === true) {
+                formik.setFieldValue('tracks', [...formik.values.tracks.filter(thisTrack=>thisTrack!==track._id)], true)
+            }
         }
     }
     const play = (e) => {
