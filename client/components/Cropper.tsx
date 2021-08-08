@@ -20,7 +20,7 @@ export default function Cropper({upImg, previewCanvasRef}: props) {
         if(previewCanvasRef.current){
             setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))
         }
-    },[previewCanvasRef])
+    },[crop])
     useEffect(() => {
         if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
             return;

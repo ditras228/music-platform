@@ -28,7 +28,6 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
         setSnapshot(values)
 
     }
-
     const handleSubmit = async (values: FormikValues, actions: FormikHelpers<FormikValues>) => {
         const field = step.props.setFieldValue
         if (field) {
