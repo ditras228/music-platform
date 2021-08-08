@@ -46,6 +46,8 @@ const AlbumList: React.FC<AlbumListProps> = ({albums,token, userId}) => {
                         formik.handleChange(e)
                         await handleSearch(formik.values)
                     }}
+                    style={{marginBottom:20}}
+
                 />
             </form>
             <Grid container direction={'column'} >

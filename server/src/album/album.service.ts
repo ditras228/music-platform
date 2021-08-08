@@ -78,9 +78,10 @@ export class AlbumService {
 
     async delete(id: ObjectId, headers): Promise<any> {
         const session = await this.accountModel.findOne({accessToken: headers.authorization.split(' ')[1]})
-        const album = await this.albumModel.findByIdAndDelete(id)
-        if(album.userId==session.userId) {
-            return await album.remove()
+        const album = await this.albumModel.findById(id)
+        if (album.userId.toString()==session.userId.toString()) {
+            await album.remove()
+            return album._id
         }
         return new HttpException
         (`Вы не владелец альбома`, HttpStatus.INTERNAL_SERVER_ERROR)

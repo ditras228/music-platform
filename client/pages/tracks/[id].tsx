@@ -21,8 +21,8 @@ import {PlayerActionTypes} from "../../types/player";
 
 const commentSchema = yup.object({
     text: yup.string()
-        .min(20, 'Минимум 20 символов')
-        .max(200, 'Максимум 200 символов')
+        .min(1, 'Минимум 1 символ')
+        .max(2000, 'Максимум 200 символов')
         .required()
 })
 

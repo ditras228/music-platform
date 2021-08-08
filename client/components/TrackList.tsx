@@ -48,6 +48,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token, userId,view}) => {
                         formik.handleChange(e)
                         await handleSearch(formik.values)
                     }}
+                    style={{marginBottom:20}}
                 />
             </form>
             <Grid className={classes.grid} >
