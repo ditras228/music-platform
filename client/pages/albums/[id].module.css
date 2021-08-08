@@ -26,7 +26,6 @@
 .img {
     display: block;
     max-width: 100%;
-    align-self: center;
 }
 .img_thumb{
     width: 170px;

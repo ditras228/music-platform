@@ -91,7 +91,7 @@ const Create = ({token, userId}) => {
                                 label={'Название альбома'}
                             />
                             <InputField
-                                name={'artist'}
+                                name={'author'}
                                 label={'Имя автора'}
                             />
                         </Grid>

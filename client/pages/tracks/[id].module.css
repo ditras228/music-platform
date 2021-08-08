@@ -28,7 +28,6 @@
     display: block;
     max-width: 100%;
     transition: 1s;
-    align-self: center;
 }
 .img:hover{
     transform: scale(1.1);
