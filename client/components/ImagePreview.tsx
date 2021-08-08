@@ -2,7 +2,8 @@ import React, {useEffect, useRef, useState} from 'react'
 import classes from './ImagePreview.module.css'
 import {FormStep} from "./create/MultiStepForm";
 import Cropper from './Cropper'
-import {useFormikContext} from "formik";
+global.atob = require("atob");
+
 interface Props {
     src: string,
     previewCanvasRef: any

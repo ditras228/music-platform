@@ -13,6 +13,7 @@
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@react-spring/web": "^9.2.4",
     "@types/react-redux": "^7.1.16",
+    "atob": "^2.1.2",
     "axios": "^0.21.1",
     "cookie-cutter": "^0.2.0",
     "emoji-picker-react": "^3.4.8",
