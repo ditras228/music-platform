@@ -46,7 +46,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
                 payload: track
             })
         }
-
+        console.log(formik)
         formik.setFieldValue('tracks', tracks)
     }
     const play = (e) => {
