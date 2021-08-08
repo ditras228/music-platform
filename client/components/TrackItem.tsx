@@ -26,7 +26,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const router = useRouter()
     const dispatch = useDispatch()
     const [isChecked, setChecked] = useState(false)
-    const {setFieldValue, values} = useFormikContext() as any
+    const formik = useFormikContext()
     const tracks = useTypedSelector(state => state.album.albumTracks)
 
     const deleteOne = async () => {
@@ -35,12 +35,19 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const editState = () => {
         setChecked(!isChecked)
         if (isChecked === false) {
-            setFieldValue('tracks', values?.tracks.filter(trackId=>trackId!==track._id))
+            dispatch({
+                type: AlbumActionTypes.ADD_TRACK_TO_ALBUM,
+                payload: track
+            })
         }
         if (isChecked === true) {
-            setFieldValue('tracks', values?.tracks.push(track._id))
+            dispatch({
+                type: AlbumActionTypes.REMOVE_TRACK_FROM_ALBUM,
+                payload: track
+            })
         }
 
+        formik.setFieldValue('tracks', tracks)
     }
     const play = (e) => {
         e.stopPropagation()
@@ -85,12 +92,12 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         </Card>
     )
 }
-const SwitchView = ({view, deleteOne, checked, userId, track,  editState}) => {
+const SwitchView = ({view, deleteOne, checked, userId, track, editState}) => {
     const isNotOwner = userId != track.userId
     switch (view) {
         case 'checkbox':
             return (
-                <Checkbox checked={checked} name="checkbox" className={classes.delete} onClick={editState}/>
+                <Checkbox checked={checked} name="checkbox" className={classes.delete}/>
             )
         default:
             return (
