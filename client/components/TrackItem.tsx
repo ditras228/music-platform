@@ -40,12 +40,12 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const editState = () => {
         setChecked(!isChecked)
         if (isChecked === false) {
-            setFieldValue('tracks',[...values.tracks, track._id])
+            setFieldValue('tracks',[...values.tracks, track._id], true)
         }
         if (isChecked === true) {
-            setFieldValue('tracks', [...values.tracks.filter(thisTrack=>thisTrack!==track._id)])
+            setFieldValue('tracks', [...values.tracks.filter(thisTrack=>thisTrack!==track._id)], true)
         }
-        setFieldValue('tracks', tracks.map(track=>track._id))
+        setFieldValue('tracks', tracks.map(track=>track._id),true)
     }
     const play = (e) => {
         e.stopPropagation()
