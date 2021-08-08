@@ -29,18 +29,22 @@ const InfoSchema = Yup.object({
         .required('Обязательно'),
 })
 const ImageSchema = Yup.object().shape({
-    picture: Yup.mixed().required('Обязательно')
+    picture: Yup.mixed()
+        .required('Обязательно')
+        .nullable()
         .test({
             message: "Должна быть квардатной",
-            test: img=> img.width===img.height
+            test: img => img.width === img.height
         })
 })
 
 const TrackSchema = Yup.object().shape({
     tracks: Yup.array()
+        .required('Обязательно')
+        .nullable()
         .test({
-                message: 'Минимум 2, максимум 16',
-                test: arr => arr.length >= 2
+                message: 'Минимум 3',
+                test: arr => arr.length >= 3
             }
         )
 })
