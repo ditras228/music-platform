@@ -47,7 +47,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
             })
         }
         console.log(formik)
-        formik.setFieldValue('tracks', [tracks.map(track=>track._id)])
+        formik.setFieldValue('tracks', tracks.map(track=>track._id))
     }
     const play = (e) => {
         e.stopPropagation()
