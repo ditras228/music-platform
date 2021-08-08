@@ -1,4 +1,4 @@
-import ImagePreview, {dataURItoBlob} from '../../components/ImagePreview'
+import ImagePreview from '../../components/ImagePreview'
 import React, {useEffect, useRef, useState} from 'react'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
@@ -111,7 +111,7 @@ const Create = ({token, userId}) => {
 
                     <FormStep stepName={'Треки'}
                               validationSchema={TrackSchema}
-                              onSubmit={()=>setFieldValue('picture', dataURItoBlob(previewCanvasRef.current.toDataURL()))}  >
+                    >
                         <Alert severity={'info'}>Выберите 3+ треков</Alert>
                         <div style={{padding: '0 40px'}}>
 
