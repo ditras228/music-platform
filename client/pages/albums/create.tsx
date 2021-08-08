@@ -72,7 +72,7 @@ const Create = ({token, userId}) => {
                         name: '',
                         artist: '',
                         picture: undefined,
-                        tracks: []
+                        tracks: [] as Array<string>
                     }}
 
                     onSubmit={(values) => {

@@ -20,13 +20,18 @@ interface TrackItemProps {
     token: string
     userId: string
 }
-
+type formik={
+    name: '',
+    artist: '',
+    picture: undefined,
+    tracks:  Array<string>
+}
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userId, token}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
     const dispatch = useDispatch()
     const [isChecked, setChecked] = useState(false)
-    const formik = useFormikContext()
+    const {values,setFieldValue } = useFormikContext<formik>()
     const tracks = useTypedSelector(state => state.album.albumTracks)
 
     const deleteOne = async () => {
@@ -35,15 +40,14 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const editState = () => {
         setChecked(!isChecked)
         if (isChecked === false) {
-            formik.setFieldValue('tracks', formik.values['tracks'].map(track=>track._id))
+            setFieldValue('tracks', [...values.tracks.filter(thisTrack=>thisTrack!==track._id)])
 
         }
         if (isChecked === true) {
-            formik.setFieldValue('tracks', tracks.map(track=>track._id))
+            setFieldValue('tracks',[...values.tracks, track._id])
 
         }
-        console.log(formik)
-        formik.setFieldValue('tracks', tracks.map(track=>track._id))
+        setFieldValue('tracks', tracks.map(track=>track._id))
     }
     const play = (e) => {
         e.stopPropagation()
