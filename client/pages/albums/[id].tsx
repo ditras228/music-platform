@@ -37,8 +37,8 @@ const AlbumPage = ({serverAlbum, token}) => {
         },
         validationSchema: commentSchema,
         onSubmit: async values => {
-            AlbumsAPI.addComment(values, token).then((track: any)=>
-                setAlbum({...track, comments: [...track.comments, track.data]})
+            AlbumsAPI.addComment(values, token).then((comment: any)=>
+                setAlbum({...album, comments: [...album.comments, comment.data]})
             )
         }
     })
