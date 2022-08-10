@@ -1,0 +1,17 @@
+version: "3.1"
+
+volumes:
+    pg_project:
+
+services:
+    pg_db:
+        image: postgres
+        restart: always
+        environment:
+            - POSTGRES_PASSWORD=pM4*fJoS
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=postgres_music
+        volumes:
+            - pg_project:/var/lib/postgresql/data
+        ports:
+            - ${POSTGRES_PORT:-5432}:5432

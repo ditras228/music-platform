@@ -1,4 +1,4 @@
 export class EditAlbumDto {
-    readonly albumId
-    readonly tracks
+  readonly albumId;
+  readonly tracks;
 }
