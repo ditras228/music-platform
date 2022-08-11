@@ -1,5 +1,6 @@
 <?php
-
+use App\Http\Controllers\TrackController;
+use App\Http\Controllers\AlbumController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,8 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/a', 'MyPlaceController@index');
+Route::resource('/track', TrackController::class);
+Route::resource('/album', AlbumController::class);
