@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Track;
 use Illuminate\Support\Facades\File;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -13,11 +15,11 @@ class TrackController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Track[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
      */
     public function index()
     {
-        return Track::all();;
+        return Track::all();
     }
 
     /**
@@ -96,7 +98,6 @@ class TrackController extends Controller
      */
     public function edit($id)
     {
-        dd('wasted');
         //
     }
 
@@ -132,8 +133,19 @@ class TrackController extends Controller
         $audio = $request->file('audio');
         $imagePath = $image->store('tracks');
         $audioPath = $audio->store('audio');
-        File::delete( public_path().'/'.$track->image);
-        File::delete( public_path().'/'.$track->audio);
+
+
+        if(Storage::exists($track->image)){
+            Storage::delete($track->image);
+        }else{
+            dd('Image does not exists.');
+        }
+
+        if(Storage::exists($track->audio)){
+            Storage::delete($track->audio);
+        }else{
+            dd('Audio does not exists.');
+        }
 
          $track->update([
             'name' => $request->name,
@@ -163,6 +175,19 @@ class TrackController extends Controller
                 'message' => 'Track not found',
             ])->setStatusCode(404);
         }
+
+        if(Storage::exists($track->image)){
+            Storage::delete($track->image);
+        }else{
+            dd('Image does not exists.');
+        }
+
+        if(Storage::exists($track->audio)){
+            Storage::delete($track->audio);
+        }else{
+            dd('Audio does not exists.');
+        }
+
         $track->delete();
 
         return response()->json([
