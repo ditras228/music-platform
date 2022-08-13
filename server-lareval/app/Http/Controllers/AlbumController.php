@@ -107,6 +107,8 @@ class AlbumController extends Controller
                 'message' => 'Tracks not found',
             ])->setStatusCode(404);
         }
+        $album->tracks = [];
+        $album->comments = [];
         return $album;
     }
 

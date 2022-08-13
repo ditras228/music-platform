@@ -1,7 +1,7 @@
 import {TrackAction, TrackActionTypes, TrackState} from '../../types/track'
 
-const initialState: TrackState={
-    tracks:[],
+const initialState: TrackState = {
+    tracks: [],
     error: ''
 }
 export const trackReducer = (state = initialState, action: TrackAction): TrackState => {
@@ -11,7 +11,7 @@ export const trackReducer = (state = initialState, action: TrackAction): TrackSt
         case TrackActionTypes.FETCH_TRACKS:
             return {...state, error: '', tracks: action.payload}
         case TrackActionTypes.REMOVE_TRACK:
-            return {...state, error: '', tracks: [...state.tracks.filter(track=> track._id!==action.payload)]}
+            return {...state, error: '', tracks: [...state.tracks.filter(track => track._id !== action.payload)]}
         default:
             return state
     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import classes from '../pages/tracks/[id].module.css'
+import classes from '../../pages/tracks/[id].module.css'
 import {Avatar} from '@material-ui/core'
 
 const CommentFC: React.FC<CommentProps> = ({comment}) => {

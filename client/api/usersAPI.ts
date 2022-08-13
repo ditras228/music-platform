@@ -1,28 +1,17 @@
 import {instance} from './index'
-import axios from 'axios'
 
-export const UsersAPI={
-    getUsers(){
-        return instance.get('auth/users')
-    },
-    getOne(id){
+export const UsersAPI = {
+    getOne(id): any {
         return instance.get(`auth/${id}`)
     },
-    loginByServer(data){
-        const formData = new FormData()
-        formData.append('csrfToken', data.csrfToken)
-        formData.append('email', data.email)
-        formData.append('password', data.password)
-        return axios.post('/api/auth/callback/credentials', formData, {})
-    },
-    auth(token){
+    auth(token): any {
         return instance.get('auth/',
             {headers: {Authorization: `Bearer ${token}`}})
     },
-    login(props){
+    login(props): any {
         return instance.post('auth/login', props)
     },
-    registration(props){
+    registration(props): any {
         return instance.post('auth/registration', props)
     }
 }

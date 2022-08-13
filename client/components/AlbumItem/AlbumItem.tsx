@@ -2,12 +2,11 @@ import React from 'react'
 import {Card, Grid, IconButton} from '@material-ui/core'
 import {Delete} from '@material-ui/icons'
 import {useRouter} from 'next/router'
-import {baseURL} from '../api'
-import {deleteTrack, fetchTracks} from '../store/action-creators/track'
+import {baseURL} from '../../api'
 import {useDispatch} from 'react-redux'
-import classes from './TrackItem.module.css'
-import {IAlbum} from '../types/album'
-import {deleteAlbum} from "../store/action-creators/album";
+import classes from '../TrackItem/TrackItem.module.css'
+import {IAlbum} from '../../types/album'
+import {deleteAlbum} from "../../store/action-creators/album";
 
 interface AlbumItemProps {
     album: IAlbum

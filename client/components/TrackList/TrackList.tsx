@@ -1,22 +1,23 @@
 import React, {useState} from 'react'
-import {ITrack} from '../types/track'
 import {Box, Grid, TextField} from '@material-ui/core'
-import TrackItem from './TrackItem'
 import classes from './TrackList.module.css'
 import {useFormik} from 'formik'
-import {searchTracks} from '../store/action-creators/track'
 import {useDispatch} from 'react-redux'
+import {searchTracks} from "../../store/action-creators/track";
+import TrackItem from "../TrackItem/TrackItem";
+import {ITrack} from "../../types/track";
 
-interface TrackListProps{
+interface TrackListProps {
     tracks: ITrack[]
     token: string
     userId: string
     view?: string
 }
-const TrackList: React.FC<TrackListProps> = ({tracks,token, userId,view}) => {
+
+const TrackList: React.FC<TrackListProps> = ({tracks, token, userId, view}) => {
     const [timer, setTimer] = useState(null)
 
-    const dispatch = useDispatch()  
+    const dispatch = useDispatch()
     const formik = useFormik({
         initialValues: {
             query: ''
@@ -31,7 +32,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token, userId,view}) => {
         }
         setTimer(
             setTimeout(async () => {
-                await dispatch( searchTracks(values, token))
+                await dispatch(searchTracks(values, token))
             }, 500)
         )
     }
@@ -48,12 +49,12 @@ const TrackList: React.FC<TrackListProps> = ({tracks,token, userId,view}) => {
                         formik.handleChange(e)
                         await handleSearch(formik.values)
                     }}
-                    style={{marginBottom:20}}
+                    style={{marginBottom: 20}}
                 />
             </form>
-            <Grid className={classes.grid} >
+            <Grid className={classes.grid}>
                 <Box className={classes.box}>
-                    {tracks.map(track=>
+                    {tracks.map(track =>
                         <TrackItem
                             key={track._id}
                             track={track}

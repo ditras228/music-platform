@@ -2,7 +2,6 @@ import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {Button, Card, Grid} from '@material-ui/core'
 import {useRouter} from 'next/router'
-import TrackList from '../../components/TrackList'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {fetchTracks} from '../../store/action-creators/track'
@@ -12,6 +11,7 @@ import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
 import {UsersActionTypes} from '../../types/user'
+import TrackList from "../../components/TrackList/TrackList";
 
 const Index = ({token, userId}) => {
     const router = useRouter()

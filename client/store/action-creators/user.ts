@@ -15,7 +15,7 @@ export const Registration = (name, email, password) => {
                     payload: {type: 'register', message: response.data?.message || 'Неизвестная ошибка'}
                 })
 
-            }else{
+            } else {
                 dispatch({
                     type: UsersActionTypes.REDIRECT_TO,
                     payload: '/auth/regsuccess'
@@ -49,10 +49,10 @@ export const CreateTrack = (values, token) => {
 }
 export const ChangeTheme = (theme: boolean) => {
     return async (dispatch: Dispatch<UserAction>) => {
-         dispatch( {
-             type: UsersActionTypes.HANDLE_CHANGE_DARK,
-             payload: theme
-         })
+        dispatch({
+            type: UsersActionTypes.HANDLE_CHANGE_DARK,
+            payload: theme
+        })
         cookie.set('theme', theme)
     }
 }

@@ -1,26 +1,24 @@
-import ImagePreview from '../../components/ImagePreview'
+import ImagePreview from '../../components/ImagePreview/ImagePreview'
 import React, {useEffect, useRef, useState} from 'react'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {useRouter} from 'next/router'
 import {Button, Card, Grid} from '@material-ui/core'
 import * as Yup from 'yup'
-import FileUpload from '../../components/FileUpload'
 import MainLayout from '../../layouts/MainLayout'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateAlbum} from '../../store/action-creators/user'
-import MultiStepForm, {FormStep} from '../../components/create/MultiStepForm'
-import InputField from '../../components/create/InputField'
-import TrackList from '../../components/TrackList'
+import MultiStepForm, {FormStep} from '../../components/StepForm/MultiStepForm'
+import InputField from '../../components/StepForm/InputField'
 import {fetchTracks} from '../../store/action-creators/track'
 import {setPlayer} from '../../store/action-creators/player'
-import {useFormikContext} from 'formik'
 import cookies from 'next-cookies'
 import {UsersActionTypes} from '../../types/user'
-import {GetError} from '../../store/selectors'
 import {Alert} from '@material-ui/lab'
-import AlertStep from '../../components/create/AlertStep'
+import AlertStep from '../../components/StepForm/AlertStep'
+import TrackList from "../../components/TrackList/TrackList";
+import FileUpload from "../../components/FileUpload/FileUpload";
 
 const InfoSchema = Yup.object({
     name: Yup.string()

@@ -1,17 +1,14 @@
 import React, {useState} from 'react'
-import {ITrack} from '../types/track'
+import {ITrack} from '../../types/track'
 import {Card, Checkbox, Grid, IconButton} from '@material-ui/core'
 import {Delete, Pause, PlayArrow} from '@material-ui/icons'
 import {useRouter} from 'next/router'
-import {useActions} from '../hooks/useAction'
-import {baseURL} from '../api'
-import {TracksAPI} from '../api/tracksAPI'
+import {useActions} from '../../hooks/useAction'
+import {baseURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
-import {AlbumActionTypes} from '../types/album'
 import {useFormikContext} from 'formik'
-import {useTypedSelector} from '../hooks/useTypedSelector'
-import {deleteTrack} from "../store/action-creators/track";
+import {deleteTrack} from "../../store/action-creators/track";
 
 interface TrackItemProps {
     track: ITrack
@@ -81,7 +78,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
                     : editState()
             }
             }>
-                <img className={classes.image} src={baseURL + track.picture} alt={'Обложка трека'}/>
+                <img className={classes.image} src={baseURL + track.image} alt={'Обложка трека'}/>
                 <Grid className={classes.name} container direction={'column'}>
                     <div>{track.name}</div>
                     <div className={classes.author}>{track.artist}</div>

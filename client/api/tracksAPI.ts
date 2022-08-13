@@ -1,47 +1,43 @@
 import {instance} from './index'
 
-export const TracksAPI= {
-    getTracks(token) {
-        return instance.get('/tracks',
+export const TracksAPI = {
+    getTracks(token): any {
+        return instance.get('/track',
             {headers: {Authorization: `Bearer ${token}`}})
     },
-    searchTracks(query, token) {
-        return instance.get('/tracks/search?query=' + query,
-            {headers: {Authorization: `Bearer ${token}`}})
-    },
-    getOne(params, token?) {
 
-        return instance.get('/tracks/' + params,
+    getOne(params, token?): any {
+        return instance.get('/track/' + params,
             {headers: {Authorization: `Bearer ${token}`}})
     },
-    getBySrc(src) {
-        return instance.get(`/tracks?src=${src}`)
-    },
-    deleteOne(params, token) {
-        return instance.delete('/tracks/' + params,
+
+    deleteOne(params, token): any {
+        return instance.delete('/track/' + params,
             {headers: {Authorization: `Bearer ${token}`}})
     },
-    createTrack(data, token) {
+
+    createTrack(data, token): any {
         let formData = new FormData()
         formData.append('name', data.name)
         formData.append('artist', data.artist)
-        formData.append('text', data.text)
-        formData.append('picture', data.picture)
+        formData.append('lyrics', data.text)
+        formData.append('image', data.picture)
         formData.append('audio', data.audio)
-        return instance.post('/tracks', formData, {
+
+        return instance.post('/track', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Bearer ${token}`
             }
         })
     },
-    addComment(data, token) {
-        return instance.post('/tracks/comment', data,
+
+    addComment(data, token): any {
+        return instance.post('/comment', data,
             {headers: {Authorization: `Bearer ${token}`}})
-
     },
-    listen(id) {
-        return instance.post(`/tracks/listen/${id}`)
 
+    listen(id): any {
+        return instance.post(`/track/listen/${id}`)
     },
 }

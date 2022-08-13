@@ -1,15 +1,16 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {ReactElement} from 'react'
 import classes from './ImagePreview.module.css'
-import {FormStep} from "./create/MultiStepForm";
-import Cropper from './Cropper'
+import Cropper from '../Cropper/Cropper'
+
 global.atob = require("atob");
 
 interface Props {
     src: string,
     previewCanvasRef: any
 }
-export function dataURItoBlob(dataURI) {
-    if(!dataURI){
+
+export function dataURItoBlob(dataURI): Blob {
+    if (!dataURI) {
         return null
     }
     // convert base64 to raw binary data held in a string
@@ -34,17 +35,15 @@ export function dataURItoBlob(dataURI) {
     return new Blob([ab], {type: mimeString});
 
 }
-const ImagePreview = ({src, previewCanvasRef}: Props) => {
 
-
-
+const ImagePreview = ({src, previewCanvasRef}: Props): ReactElement => {
     return (
         <div className={classes.grid}>
             <div className={classes.centered}>
-            <Cropper upImg={src} previewCanvasRef={previewCanvasRef}  />
+                <Cropper upImg={src} previewCanvasRef={previewCanvasRef}/>
             </div>
             <div className={classes.centered}>
-            <canvas ref={previewCanvasRef} className={classes.imageBig}/>
+                <canvas ref={previewCanvasRef} className={classes.imageBig}/>
             </div>
         </div>
 

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import {useFormikContext} from "formik";
-import {dataURItoBlob} from "./ImagePreview";
+import {dataURItoBlob} from "../ImagePreview/ImagePreview";
 type props={
     upImg: any,
     previewCanvasRef: any,

@@ -15,7 +15,7 @@ export const fetchAlbums = (token) => {
         }
     }
 }
-export const searchAlbums= (query: string, token: string) => {
+export const searchAlbums = (query: string, token: string) => {
     return async (dispatch: Dispatch<AlbumAction>) => {
         try {
             const response = await AlbumsAPI.searchAlbums(query, token)
@@ -29,11 +29,11 @@ export const searchAlbums= (query: string, token: string) => {
     }
 }
 
-export const deleteAlbum = (id:string, token: string) => {
+export const deleteAlbum = (id: string, token: string) => {
     return async (dispatch: any) => {
         try {
-            AlbumsAPI.deleteOneAlbum(id,token)
-                .then(response=>{
+            AlbumsAPI.deleteOneAlbum(id, token)
+                .then(response => {
                         dispatch({
                             type: AlbumActionTypes.REMOVE_ALBUM,
                             payload: response.data

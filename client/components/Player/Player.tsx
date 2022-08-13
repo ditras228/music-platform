@@ -1,17 +1,16 @@
 import React, {useEffect} from 'react'
 import {Pause, PlayArrow, VolumeUp} from '@material-ui/icons'
-import TrackProgress from './TrackProgress'
-import {useTypedSelector} from '../hooks/useTypedSelector'
-import {useActions} from '../hooks/useAction'
-import {baseURL} from '../api'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
+import {useActions} from '../../hooks/useAction'
+import {baseURL} from '../../api'
 import classes from './Player.module.css'
-import {deletePlayer, savePlayer, setPlayer} from '../store/action-creators/player'
+import {savePlayer} from '../../store/action-creators/player'
 import {useDispatch} from 'react-redux'
-import {Box, Grid, IconButton} from '@material-ui/core'
-import {TracksAPI} from '../api/tracksAPI'
+import {Box, IconButton} from '@material-ui/core'
+import {TracksAPI} from '../../api/tracksAPI'
+import TrackProgress from "../TrackProgress/TrackProgress";
 
 let audio
-
 
 const Player = () => {
     const player = useTypedSelector(state => state.player)
@@ -24,7 +23,7 @@ const Player = () => {
                 ...player,
                 active: {_id: active._id, name: active.name, artist: active.artist, audio: active.audio}
             }))
-            if(duration===0){
+            if (duration === 0) {
                 setDuration(Math.ceil(audio?.duration))
             }
         }
@@ -67,8 +66,7 @@ const Player = () => {
                     } else {
                         if (audio.src !== active?.audio) {
                             setDuration(Math.ceil(duration))
-                        }
-                        else{
+                        } else {
                             setDuration(Math.ceil(audio.duration))
                         }
                     }

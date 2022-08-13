@@ -1,10 +1,10 @@
 import {UserAction, UsersActionTypes, UserState} from '../../types/user'
 
-const initialState: UserState={
+const initialState: UserState = {
     errors: [],
     isDark: false,
     isLoading: false,
-    redirectTo:''
+    redirectTo: ''
 }
 export const usersReducer = (state = initialState, action: UserAction): UserState => {
     switch (action.type) {

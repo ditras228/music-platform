@@ -1,10 +1,10 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Navbar/Navbar'
 import {Container} from '@material-ui/core'
-import Player from '../components/Player'
+import Player from '../components/Player/Player'
 import Head from 'next/head'
 import classes from './MainLayout.module.css'
-import LoadingModal from '../components/LoadingModal'
+import LoadingModal from '../components/LoadingModal/LoadingModal'
 
 interface MainLayoutProps {
     title?: string
@@ -23,7 +23,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             <Head>
                 <title>{title || 'MERNMusic'}</title>
                 <meta name={'description'} content={'MERNMusic. Здесь каждый может стать знаменитым'
-                + description}/>
+                    + description}/>
                 <meta name={'robots'} content={'index, follow'}/>
                 <meta name={'keyword'} content={keywords || 'Музыка, треки, артисты'}/>
                 <meta name={'viewport'} content={'width=device-width, initialScale=1'}/>

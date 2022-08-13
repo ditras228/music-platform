@@ -19,10 +19,9 @@ import classes from './Navbar.module.css'
 import {Avatar, Button, Divider, Menu, MenuItem, useTheme} from '@material-ui/core'
 import {signOut, useSession} from 'next-auth/client'
 import {useDispatch} from 'react-redux'
-import {useTypedSelector} from '../hooks/useTypedSelector'
-import {UsersActionTypes} from '../types/user'
+import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {Brightness4, Brightness7} from '@material-ui/icons'
-import {ChangeTheme} from '../store/action-creators/user'
+import {ChangeTheme} from '../../store/action-creators/user'
 
 const menuItem = [
     {text: 'Треки', href: '/'},
@@ -30,20 +29,20 @@ const menuItem = [
 ]
 
 export default function Navbar() {
-    const [ session, loading ] = useSession() as any
+    const [session, loading] = useSession() as any
     const router = useRouter()
     const [open, setOpen] = React.useState(false)
     const dispatch = useDispatch()
-    const theme= useTheme()
-    const isDark = useTypedSelector(state=>state.user.isDark) as any
-    useEffect( ()=>{
-        if (!session?.user?.email){
+    const theme = useTheme()
+    const isDark = useTypedSelector(state => state.user.isDark) as any
+    useEffect(() => {
+        if (!session?.user?.email) {
             logOutHandler
         }
-    },[session])
-    useEffect(()=>{
+    }, [session])
+    useEffect(() => {
         console.log(isDark)
-    },[isDark])
+    }, [isDark])
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -51,15 +50,13 @@ export default function Navbar() {
     const handleDrawerClose = () => {
         setOpen(false)
     }
-    const logOutHandler = async ()=>{
+    const logOutHandler = async () => {
         await signOut()
     }
-    const logInHandler = async ()=>{
+    const logInHandler = async () => {
         await router.push('/')
     }
-    const click = (e) =>
-    {
-
+    const click = () => {
         dispatch(ChangeTheme(!isDark))
     };
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -95,13 +92,13 @@ export default function Navbar() {
                     </>
                     <div className={classes.log}>
 
-                    <IconButton
-                    onClick={click}>
-                        {isDark
-                            ?<Brightness7/>
-                            :<Brightness4/>
-                    }
-                    </IconButton>
+                        <IconButton
+                            onClick={click}>
+                            {isDark
+                                ? <Brightness7/>
+                                : <Brightness4/>
+                            }
+                        </IconButton>
 
                         <Menu
                             id="simple-menu"
@@ -112,17 +109,18 @@ export default function Navbar() {
                         >
                             <MenuItem onClick={logOutHandler}>Logout</MenuItem>
                         </Menu>
-                    {
-                        !session
-                            ?<Button onClick={()=>logInHandler()}>Login</Button>
-                            :(
-                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                                <Avatar alt="Remy Sharp" src={session.image} style={{backgroundColor: session.color || 'gray'}}>
-                                    {session.user?.name?.substring(0,1)}
-                                </Avatar>
-                            </Button>
-                        )
-                    }
+                        {
+                            !session
+                                ? <Button onClick={() => logInHandler()}>Login</Button>
+                                : (
+                                    <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                        <Avatar alt="Remy Sharp" src={session.image}
+                                                style={{backgroundColor: session.color || 'gray'}}>
+                                            {session.user?.name?.substring(0, 1)}
+                                        </Avatar>
+                                    </Button>
+                                )
+                        }
                     </div>
                 </Toolbar>
             </AppBar>
@@ -155,8 +153,8 @@ export default function Navbar() {
         </div>
     )
 }
-const getIcon = (index)=>{
-    switch(index){
+const getIcon = (index) => {
+    switch (index) {
         case 0:
             return <MusicNoteIcon/>
         case 1:

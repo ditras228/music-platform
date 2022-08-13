@@ -6,17 +6,17 @@ import {baseURL} from '../../api'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, MusicNote, Person, Title} from '@material-ui/icons'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
-import TrackList from '../../components/TrackList'
 import {IAlbum} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
 import {getSession, useSession} from 'next-auth/client'
-import CommentFC from '../../components/comment'
+import CommentFC from '../../components/Comment/Comment'
 import {useFormik} from 'formik'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {UsersActionTypes} from '../../types/user'
 import * as yup from 'yup'
 import {Alert} from '@material-ui/lab'
+import TrackList from "../../components/TrackList/TrackList";
 
 const commentSchema=yup.object({
     text: yup.string()
@@ -163,7 +163,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     return {
         props: {
             serverAlbum: response.data,
-            token: session.accessToken,
+            token: session.accessToken || null,
         }
 
     }

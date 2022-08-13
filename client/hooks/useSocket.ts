@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {io} from 'socket.io-client'
 
 export default function useSocket(url) {
@@ -12,6 +12,7 @@ export default function useSocket(url) {
         function cleanup() {
             socketIo.disconnect()
         }
+
         return cleanup
 
         // should only run once and not on every re-render,

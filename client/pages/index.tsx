@@ -9,13 +9,10 @@ import classes from './auth/register.module.css'
 import {Alert} from '@material-ui/lab'
 import {useDispatch, useSelector} from 'react-redux'
 import {GetError} from '../store/selectors'
-import {csrfToken, getCsrfToken, getSession, providers, signIn} from 'next-auth/client'
+import {getCsrfToken, getSession, signIn} from 'next-auth/client'
 import {UsersActionTypes} from '../types/user'
 import {NextThunkDispatch, wrapper} from '../store'
 import cookies from 'next-cookies'
-import {use} from 'ast-types'
-import {UsersAPI} from '../api/usersAPI'
-import {baseURL} from '../api'
 
 const SignupSchema = Yup.object({
     email: Yup.string().email('Неккоректный email').required('Обязательно'),

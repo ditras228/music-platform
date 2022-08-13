@@ -1,20 +1,21 @@
 import React, {useState} from 'react'
 import {Box, Grid, TextField} from '@material-ui/core'
-import classes from './TrackList.module.css'
+import classes from './../TrackList/TrackList.module.css'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
-import AlbumItem from './AlbumItem'
-import {searchAlbums} from '../store/action-creators/album'
-import {IAlbum} from '../types/album'
+import AlbumItem from '../AlbumItem/AlbumItem'
+import {searchAlbums} from '../../store/action-creators/album'
+import {IAlbum} from '../../types/album'
 
-interface AlbumListProps{
+interface AlbumListProps {
     albums: IAlbum[]
     token: string
     userId: string
 }
-const AlbumList: React.FC<AlbumListProps> = ({albums,token, userId}) => {
+
+const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
     const [timer, setTimer] = useState(null)
-    const dispatch = useDispatch()  
+    const dispatch = useDispatch()
     const formik = useFormik({
         initialValues: {
             query: ''
@@ -29,7 +30,7 @@ const AlbumList: React.FC<AlbumListProps> = ({albums,token, userId}) => {
         }
         setTimer(
             setTimeout(async () => {
-                await dispatch( searchAlbums(values, token))
+                await dispatch(searchAlbums(values, token))
             }, 500)
         )
     }
@@ -46,13 +47,13 @@ const AlbumList: React.FC<AlbumListProps> = ({albums,token, userId}) => {
                         formik.handleChange(e)
                         await handleSearch(formik.values)
                     }}
-                    style={{marginBottom:20}}
+                    style={{marginBottom: 20}}
 
                 />
             </form>
-            <Grid container direction={'column'} >
+            <Grid container direction={'column'}>
                 <Box p={0} className={classes.box}>
-                    {albums.map(album=>
+                    {albums.map(album =>
                         <AlbumItem
                             key={album._id}
                             album={album}

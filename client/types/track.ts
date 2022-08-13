@@ -1,42 +1,47 @@
-export interface IComment{
+export interface IComment {
     _id: number
     userId: string
     username: string
     text: string
 }
-export interface ITrack{
+
+export interface ITrack {
     _id: string
     name: string
     artist: string
-    text: string
+    lyric: string
     listens: number
-    picture: string
+    image: string
     audio: string
     comments: IComment[]
     checked: boolean
     userId: string
 }
 
-export interface TrackState{
+export interface TrackState {
     tracks: ITrack[]
     error: string
 }
 
-export enum TrackActionTypes{
-    FETCH_TRACKS='FETCH_TRACKS',
-    FETCH_TRACKS_ERROR='FETCH_TRACKS_ERROR',
-    REMOVE_TRACK='REMOVE_TRACK',
+export enum TrackActionTypes {
+    FETCH_TRACKS = 'FETCH_TRACKS',
+    FETCH_TRACKS_ERROR = 'FETCH_TRACKS_ERROR',
+    REMOVE_TRACK = 'REMOVE_TRACK',
 }
-interface RemoveTrack{
+
+interface RemoveTrack {
     type: TrackActionTypes.REMOVE_TRACK
     payload: string
 }
-interface FetchTracksAction{
+
+interface FetchTracksAction {
     type: TrackActionTypes.FETCH_TRACKS
     payload: ITrack[]
 }
-interface FetchTracksErrorAction{
+
+interface FetchTracksErrorAction {
     type: TrackActionTypes.FETCH_TRACKS_ERROR
     payload: string
 }
+
 export type TrackAction = FetchTracksAction | FetchTracksErrorAction | RemoveTrack

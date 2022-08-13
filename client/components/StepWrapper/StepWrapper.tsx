@@ -1,9 +1,11 @@
 import React from 'react';
 import {Card, Container, Grid, Step, StepLabel, Stepper} from '@material-ui/core'
-    interface StepWrapperProps {
+
+interface StepWrapperProps {
     steps: Array<String>
     activeStep: number
 }
+
 import classes from './StepWrapper.module.css'
 
 const StepWrapper: React.FC<StepWrapperProps> = ({steps, activeStep, children}) => {

@@ -1,9 +1,9 @@
 <?php
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::resource('/auth', AuthController::class);
 
 Route::resource('/track', TrackController::class);
 Route::resource('/album', AlbumController::class);
