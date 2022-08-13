@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlbumTracksTable extends Migration
+class CreateAlbumTrackTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAlbumTracksTable extends Migration
      */
     public function up()
     {
-        Schema::create('album_tracks', function (Blueprint $table) {
+        Schema::create('album_track', function (Blueprint $table) {
             $table->id();
             $table->foreignId('album_id')->references('id')->on('albums');
             $table->foreignId('track_id')->references('id')->on('tracks');
@@ -28,6 +28,6 @@ class CreateAlbumTracksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('album_tracks');
+        Schema::dropIfExists('album_track');
     }
 }

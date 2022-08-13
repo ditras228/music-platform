@@ -15,6 +15,8 @@ class VerifyCsrfToken extends Middleware
         'track',
         'track/*',
         'album/',
-        'album/*'
+        'album/*',
+        'comment',
+        'comment/*',
     ];
 }

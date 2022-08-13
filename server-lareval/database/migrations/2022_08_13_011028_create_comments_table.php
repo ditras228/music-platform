@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTracksTable extends Migration
+class CreateCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,12 @@ class CreateTracksTable extends Migration
      */
     public function up()
     {
-        Schema::create('tracks', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
 //            $table->foreignId('user_id')->references('id')->on('users');
-            $table->string('name');
-            $table->string('lyrics');
-            $table->string('artist');
-            $table->string('audio');
-            $table->string('image');
-            $table->unsignedBigInteger('listens')->default(0);
+            $table->foreignId('track_id')->references('id')->on('tracks');
+            $table->string('text');
             $table->timestamps();
-
-            $table->softDeletes();
         });
     }
 
@@ -35,6 +29,6 @@ class CreateTracksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tracks');
+        Schema::dropIfExists('comments');
     }
 }

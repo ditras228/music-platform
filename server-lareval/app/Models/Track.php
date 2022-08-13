@@ -14,4 +14,8 @@ class Track extends Model
     protected $table='tracks';
     protected $guarded = [];
 
+    public function albums(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Album::class);
+    }
 }

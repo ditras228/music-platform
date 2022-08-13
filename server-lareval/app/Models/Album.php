@@ -11,5 +11,11 @@ class Album extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table='albums';
+    protected $table = 'albums';
+    protected $guarded = [];
+
+    public function tracks(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Track::class);
+    }
 }

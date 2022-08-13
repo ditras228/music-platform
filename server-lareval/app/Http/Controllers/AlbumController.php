@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\AlbumTrack;
 use App\Models\Track;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +17,7 @@ class AlbumController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Album[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\Response
+     * @return Album[]|Collection
      */
     public function index()
     {
@@ -24,7 +27,7 @@ class AlbumController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create($request)
     {
@@ -33,8 +36,8 @@ class AlbumController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
+     * @param Request $request
+     * @return JsonResponse|Response|object
      */
     public function store(Request $request)
     {
@@ -54,22 +57,37 @@ class AlbumController extends Controller
             ])->setStatusCode(422);
         }
 
+        $existTrackCount = Track::findMany($request->tracks)->count();
+
+        if($existTrackCount !== count($request->tracks)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Tracks not found',
+            ])->setStatusCode(404);
+        }
+
         $image = $request->file('image');
         $imagePath = $image->store('tracks');
 
-        $albumTrack = array();
-        foreach($request->tracks as $track){
-            $albumTrack[$track] = ['album_id'=>$request->id, 'track_id'=>$track];
-        }
 
-        AlbumTrack::insert($albumTrack);
 
-        return Track::create([
-            'user_id'=> 1,
+
+        $album =  Album::create([
+//            'user_id'=> 1,
             'name' => $request->name,
             'author' => $request->author,
             'image' => $imagePath,
         ]);
+
+        $albumTracks = [];
+        $currentTime = now();
+        foreach($request->tracks as $track){
+            $albumTracks[$track] = ['album_id'=>$album->id, 'track_id'=>$track, 'updated_at'=> $currentTime, 'created_at'=> $currentTime];
+        }
+
+        $album->tracks()->attach($albumTracks);
+
+        return $album;
 
     }
 
@@ -77,7 +95,7 @@ class AlbumController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
+     * @return JsonResponse|Response|object
      */
     public function show($id)
     {
@@ -96,7 +114,7 @@ class AlbumController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function edit($id)
     {
@@ -106,9 +124,9 @@ class AlbumController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
+     * @return JsonResponse|Response|object
      */
     public function update(Request $request, int $id)
     {
@@ -129,6 +147,15 @@ class AlbumController extends Controller
             ])->setStatusCode(422);
         }
 
+        $existTrackCount = Track::findMany($request->tracks)->count();
+
+        if($existTrackCount !== count($request->tracks)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Tracks not found',
+            ])->setStatusCode(404);
+        }
+
         $album = Album::find($id);
 
         $image = $request->file('image');
@@ -141,20 +168,20 @@ class AlbumController extends Controller
             dd('Image does not exists.');
         }
 
-        $albumTrack = array();
-        foreach($request->tracks as $track){
-            $albumTrack[$track] = ['album_id'=>$request->id, 'track_id'=>$track];
-        }
-
-        AlbumTrack::insert($albumTrack);
-
         $album->update([
             'name' => $request->name,
             'author' => $request->author,
             'image' => $imagePath,
         ]);
 
-        return $track;
+        $albumTracks = [];
+        $currentTime = now();
+        foreach($request->tracks as $track){
+            $albumTracks[$track] = ['album_id'=>$album->id, 'track_id'=>$track, 'updated_at'=> $currentTime];
+        }
+
+        $album->attach($albumTracks);
+        return $album;
 
     }
 
@@ -162,7 +189,7 @@ class AlbumController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|object
+     * @return JsonResponse|object
      */
     public function destroy( $id)
     {
@@ -171,7 +198,7 @@ class AlbumController extends Controller
         if(!$album){
             return response()->json([
                 'status' => false,
-                'message' => 'Track not found',
+                'message' => 'Album not found',
             ])->setStatusCode(404);
         }
 
@@ -181,6 +208,7 @@ class AlbumController extends Controller
             dd('Image does not exists.');
         }
 
+        $album->tracks()->detach();
         $album->delete();
 
         return response()->json([
