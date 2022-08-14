@@ -32,7 +32,7 @@ const ImageSchema = Yup.object().shape({
         .nullable()
         .test({
             message: "Должна быть квардатной",
-            test: img=> img.width===img.height
+            test: img=> img?.width===img?.height
         })
 })
 
@@ -47,7 +47,7 @@ const TrackSchema = Yup.object().shape({
 })
 
 const Create = ({token, userId}) => {
-    const [image, setImage] = useState('http://placehold.it/100')
+    const [image, setImage] = useState('')
     const router = useRouter()
     const redirectTo = useTypedSelector(state => state.user.redirectTo)
     const {tracks, error} = useTypedSelector(state => state.track)
@@ -58,6 +58,7 @@ const Create = ({token, userId}) => {
         if (redirectTo)
             router.push(`/albums/${redirectTo}`)
     }, [redirectTo])
+
     return (
         <MainLayout title={'Создать альбом'}>
             <Card>
@@ -65,14 +66,14 @@ const Create = ({token, userId}) => {
                     initialValues={{
                         name: '',
                         artist: '',
-                        picture: undefined,
+                        image: undefined,
                         tracks: [] as Array<string>
                     }}
 
                     onSubmit={(values) => {
                         dispatch(CreateAlbum({
                             ...values,
-                            tracks: JSON.stringify(values.tracks)
+                            tracks: JSON.stringify(values['tracks'])
                         }, token))
                     }}
                 >

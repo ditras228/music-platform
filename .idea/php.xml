@@ -98,7 +98,6 @@
       <path value="$PROJECT_DIR$/server-lareval/vendor/sebastian/version" />
       <path value="$PROJECT_DIR$/server-lareval/vendor/laravel/sanctum" />
       <path value="$PROJECT_DIR$/server-lareval/vendor/laravel/sail" />
-      <path value="$PROJECT_DIR$/server-lareval/vendor/asm89/stack-cors" />
       <path value="$PROJECT_DIR$/server-lareval/vendor/nette/schema" />
       <path value="$PROJECT_DIR$/server-lareval/vendor/sebastian/type" />
       <path value="$PROJECT_DIR$/server-lareval/vendor/ralouphie/getallheaders" />
@@ -113,6 +112,7 @@
       <path value="$PROJECT_DIR$/server-lareval/vendor/psr/http-client" />
       <path value="$PROJECT_DIR$/server-lareval/vendor/psr/http-factory" />
       <path value="$PROJECT_DIR$/server-lareval/vendor/league/commonmark" />
+      <path value="$PROJECT_DIR$/server-lareval/vendor/fruitcake/php-cors" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />

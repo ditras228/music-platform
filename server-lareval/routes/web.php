@@ -3,6 +3,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ImagesController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,4 @@ Route::resource('/auth', AuthController::class);
 Route::resource('/track', TrackController::class);
 Route::resource('/album', AlbumController::class);
 Route::resource('/comment', CommentController::class);
+Route::get('/profile/{person}', [ImagesController::class, 'profilePicture']);

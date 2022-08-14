@@ -15,11 +15,11 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
     const isLastStep = stepNumber === totalSteps - 1
     const [snapShot, setSnapshot] = useState(initialValues)
 
-    const next = (values: FormikValues) => {
+    const next = (values: FormikValues):void => {
         setStepNumber(stepNumber + 1)
         setSnapshot(values)
     }
-    const previous = (values: FormikValues) => {
+    const previous = (values: FormikValues):void => {
         setStepNumber(stepNumber - 1)
         setSnapshot(values)
 

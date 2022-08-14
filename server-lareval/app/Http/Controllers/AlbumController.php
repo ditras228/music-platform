@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\AlbumTrack;
+use App\Models\Comment;
 use App\Models\Track;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -67,7 +68,7 @@ class AlbumController extends Controller
         }
 
         $image = $request->file('image');
-        $imagePath = $image->store('tracks');
+        $imagePath = $image->store('public/album');
 
 
 
@@ -99,16 +100,9 @@ class AlbumController extends Controller
      */
     public function show($id)
     {
-        $album = Album::find($id);
-        $tracks = AlbumTrack::where('album_id', $id);
-        if (!$tracks) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Tracks not found',
-            ])->setStatusCode(404);
-        }
-        $album->tracks = [];
-        $album->comments = [];
+        $album = Album::with('tracks')->where('id',$id)->first();
+        $comments = Comment::where('album_id', $id)->get();
+        $album['comments'] = $comments;
         return $album;
     }
 
@@ -161,7 +155,7 @@ class AlbumController extends Controller
         $album = Album::find($id);
 
         $image = $request->file('image');
-        $imagePath = $image->store('tracks');
+        $imagePath = $image->store('public/album');
 
 
         if(Storage::exists($album->image)){

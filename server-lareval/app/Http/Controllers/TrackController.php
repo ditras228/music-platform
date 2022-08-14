@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Track;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -60,8 +61,8 @@ class TrackController extends Controller
 
         $image = $request->file('image');
         $audio = $request->file('audio');
-        $imagePath = $image->store('tracks');
-        $audioPath = $audio->store('audio');
+        $imagePath = $image->store('tracks','public');
+        $audioPath = $audio->store('audio','public');
 
         return Track::create([
 //            'user_id'=> 1,
@@ -89,6 +90,8 @@ class TrackController extends Controller
                 'message' => 'Track not found',
             ])->setStatusCode(404);
         }
+        $comments = Comment::where('track_id', $id)->get();
+        $track['comments'] = $comments;
         return $track;
     }
 
@@ -133,8 +136,8 @@ class TrackController extends Controller
 
         $image = $request->file('image');
         $audio = $request->file('audio');
-        $imagePath = $image->store('tracks');
-        $audioPath = $audio->store('audio');
+        $imagePath = $image->store('tracks', 'public');
+        $audioPath = $audio->store('audio', 'public');
 
 
         if(Storage::exists($track->image)){

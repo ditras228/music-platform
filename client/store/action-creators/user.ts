@@ -38,7 +38,7 @@ export const CreateTrack = (values, token) => {
             .then(res => {
                 dispatch({
                         type: UsersActionTypes.REDIRECT_TO,
-                        payload: res.data._id
+                        payload: res.data.id
                     }
                 )
             })
@@ -65,7 +65,7 @@ export const CreateAlbum = (values, token) => {
             .then(res => {
                 dispatch({
                         type: UsersActionTypes.REDIRECT_TO,
-                        payload: res.data._id
+                        payload: res.data.id
                     }
                 )
             })

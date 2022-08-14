@@ -36,9 +36,9 @@ const AudioSchema = Yup.object({
 })
 
 const Create = ({token}) => {
-    const [image, setImage] = useState('http://placehold.it/100')
+    const [image, setImage] = useState('')
     const [audio, setAudio] = useState('none')
-    // const router = useRouter()
+    const router = useRouter()
     const chart = useRef(null)
     const previewCanvasRef = useRef(null);
     const redirectTo = useTypedSelector(state => state.user.redirectTo)
@@ -46,22 +46,22 @@ const Create = ({token}) => {
 
     useEffect(() => {
         if (redirectTo){
-            // router.push(`/tracks/${redirectTo}`)
+            router.push(`/tracks/${redirectTo}`)
         }
     }, [redirectTo])
-    // useEffect(() => {
-    //     if (chart.current)
-    //         chart.current.innerHTML = ''
-    //
-    //     if (process.browser) {
-    //         const wavesurfer = WaveSurfer.create({
-    //             container: '#waveform',
-    //             waveColor: '#3f51b5',
-    //             progressColor: 'blue'
-    //         })
-    //         wavesurfer.load(audio)
-    //     }
-    // }, [audio])
+
+    useEffect(() => {
+        if (chart.current)
+            chart.current.innerHTML = ''
+
+        if (typeof window !== 'undefined') {
+            const wavesurfer = WaveSurfer.create({
+                container: chart.current,
+                waveColor: '#3f51b5',
+            })
+            wavesurfer.load(audio)
+        }
+    }, [audio])
 
     return (
         <MainLayout title={'Загрузить трек'}>
@@ -72,7 +72,7 @@ const Create = ({token}) => {
                         name: '',
                         artist: '',
                         lyrics: '',
-                        image: undefined,
+                        picture: undefined,
                         audio: undefined
 
                     }}
@@ -86,7 +86,7 @@ const Create = ({token}) => {
                         <FileUpload accept={'audio/*'} name={'audio'} setAudio={setAudio}>
                             <Button fullWidth>Загрузить аудио</Button>
                         </FileUpload>
-                        <div id="waveform" ref={chart}/>
+                        <div ref={chart}/>
                     </FormStep>
 
                     <FormStep stepName={'Инфо'}

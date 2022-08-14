@@ -96,8 +96,8 @@ const Player = () => {
             <div className={classes.column}>
                 <IconButton onClick={play}>
                     {pause
-                        ? <Pause/>
-                        : <PlayArrow/>
+                        ?<PlayArrow/>
+                        :  <Pause/>
                     }
                 </IconButton>
                 <div className={classes.row}>

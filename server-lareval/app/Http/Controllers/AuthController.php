@@ -162,6 +162,4 @@ class AuthController extends Controller
             'message' => 'Success delete'
         ])->setStatusCode(200);
     }
-
-
 }

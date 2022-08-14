@@ -26,8 +26,7 @@ export const AlbumsAPI = {
         let formData = new FormData()
         formData.append('name', data.name)
         formData.append('author', data.author)
-        formData.append('text', data.text)
-        formData.append('picture', data.picture)
+        formData.append('image', data.picture)
         formData.append('tracks', data.tracks)
         return instance.post('/album', formData, {
             headers: {
