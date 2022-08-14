@@ -26,8 +26,6 @@ export const setPlayer = (payload): PlayerActions => {
 export const savePlayer = (player) => {
     return async () => {
         cookie.set('player', `${JSON.stringify(player)}`)
-        console.log('cookie')
-        console.log(cookie.get('player'))
     }
 }
 export const deletePlayer = () => {

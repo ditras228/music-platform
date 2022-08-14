@@ -9,7 +9,6 @@ export default (req, res) => {
                 name: 'Credentials',
                 async authorize(credentials) {
                     const response = await UsersAPI.login(credentials)
-                    console.log('auth= ' + JSON.stringify(response.data))
                     if (response.data.status !== 500) {
                         return response.data
                     } else {
@@ -39,30 +38,21 @@ export default (req, res) => {
         database: process.env.DB_URL,
         callbacks: {
             async jwt(token, user, account, profile, isNewUser) {
-                // Add access_token to the token right after signin
-                console.log('____________')
-                console.log(token)
-                console.log(`accessToken ====` + token.accessToken)
-                console.log(user)
-                console.log(account)
-                console.log(profile)
-                console.log(isNewUser)
                 if (token?.sub) {
                     token = await UsersAPI.getOne(token.sub).then(res => res.data)
                 }
                 if (user?.accessToken) {
                     token.accessToken = user.accessToken
                     token.color = user.color
-                    token._id = user._id
+                    token.id = user.id
                 }
 
                 return token
             },
             async session(session, token) {
-                // Add property to session, like an access_token from a provider.
                 session.accessToken = token.accessToken
                 session.color = token.color
-                session.userId = token._id
+                session.userId = token.id
                 session.image = token.image
                 return session
             }

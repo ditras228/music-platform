@@ -38,29 +38,30 @@ const AudioSchema = Yup.object({
 const Create = ({token}) => {
     const [image, setImage] = useState('http://placehold.it/100')
     const [audio, setAudio] = useState('none')
-    const router = useRouter()
+    // const router = useRouter()
     const chart = useRef(null)
     const previewCanvasRef = useRef(null);
     const redirectTo = useTypedSelector(state => state.user.redirectTo)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (redirectTo)
-            router.push(`/tracks/${redirectTo}`)
-    }, [redirectTo])
-    useEffect(() => {
-        if (chart.current)
-            chart.current.innerHTML = ''
-
-        if (process.browser) {
-            const wavesurfer = WaveSurfer.create({
-                container: '#waveform',
-                waveColor: '#3f51b5',
-                progressColor: 'blue'
-            })
-            wavesurfer.load(audio)
+        if (redirectTo){
+            // router.push(`/tracks/${redirectTo}`)
         }
-    }, [audio])
+    }, [redirectTo])
+    // useEffect(() => {
+    //     if (chart.current)
+    //         chart.current.innerHTML = ''
+    //
+    //     if (process.browser) {
+    //         const wavesurfer = WaveSurfer.create({
+    //             container: '#waveform',
+    //             waveColor: '#3f51b5',
+    //             progressColor: 'blue'
+    //         })
+    //         wavesurfer.load(audio)
+    //     }
+    // }, [audio])
 
     return (
         <MainLayout title={'Загрузить трек'}>
@@ -70,8 +71,8 @@ const Create = ({token}) => {
                     initialValues={{
                         name: '',
                         artist: '',
-                        text: '',
-                        picture: undefined,
+                        lyrics: '',
+                        image: undefined,
                         audio: undefined
 
                     }}

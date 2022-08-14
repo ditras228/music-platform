@@ -1,12 +1,12 @@
 export interface IComment {
-    _id: number
+    id: number
     userId: string
     username: string
     text: string
 }
 
 export interface ITrack {
-    _id: string
+    id: string
     name: string
     artist: string
     lyric: string

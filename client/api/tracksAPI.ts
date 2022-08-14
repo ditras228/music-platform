@@ -16,6 +16,11 @@ export const TracksAPI = {
             {headers: {Authorization: `Bearer ${token}`}})
     },
 
+    searchTracks(query, token): any {
+        return instance.get('/track/search?query=' + query,
+            {headers: {Authorization: `Bearer ${token}`}})
+    },
+
     createTrack(data, token): any {
         let formData = new FormData()
         formData.append('name', data.name)

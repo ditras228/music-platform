@@ -3,9 +3,9 @@ import MainLayout from '../../layouts/MainLayout'
 import {Avatar, Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
-import {baseURL} from '../../api'
+import {baseURL, filesURL} from '../../api'
 import {useFormik} from 'formik'
-import {ITrack, TrackActionTypes} from '../../types/track'
+import {ITrack} from '../../types/track'
 import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
 import classes from './[id].module.css'
 import cookies from 'next-cookies'
@@ -31,13 +31,10 @@ const TrackPage = ({serverTrack, token}) => {
     const [track, setTrack] = useState<ITrack>(serverTrack)
     const [ session, loading ] = useSession() as any
     const dispatch = useDispatch()
-    useEffect(()=>{
-        console.log(session)
-    },[session])
     const formik = useFormik({
         initialValues: {
             text: '',
-            trackId: serverTrack._id
+            trackId: serverTrack.id
         },
         validationSchema: commentSchema,
         onSubmit: async values => {
@@ -63,7 +60,7 @@ const TrackPage = ({serverTrack, token}) => {
                 <Button
                     variant={'outlined'}
                     style={{fontSize: 20}}
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/tracks')}
                 >
                     <ArrowBackIos/> К списку
                 </Button>
@@ -71,7 +68,7 @@ const TrackPage = ({serverTrack, token}) => {
 
                     <Grid className={classes.info}>
                         <div className={classes.img_thumb}>
-                            <img src={baseURL + track.picture}
+                            <img src={filesURL + track.image}
                                  className={classes.img} alt={'Обложка трека'} onClick={trackClickHandler}/>
                             <div className={classes.play_button}/>
                         </div>
@@ -93,11 +90,11 @@ const TrackPage = ({serverTrack, token}) => {
                 </Card>
                 <Card>
                     {
-                        track.text&&(
+                        track.lyric&&(
                             <Grid container className={classes.card}>
                                 <div className={classes.card}>
                                     <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
-                                    <pre>{track.text}</pre>
+                                    <pre>{track.lyric}</pre>
                                 </div>
                             </Grid>
                         )
@@ -146,7 +143,7 @@ const TrackPage = ({serverTrack, token}) => {
 
                     {
                         track.comments.map((comment: any) =>
-                            <CommentFC key={comment._id} comment={comment}/>
+                            <CommentFC key={comment.id} comment={comment}/>
                         )
                     }
                 </Card>
@@ -182,7 +179,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     return {
         props: {
             serverTrack: response.data,
-            token: session.accessToken
+            token: session.accessToken || null
         }
 
     }

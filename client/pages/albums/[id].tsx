@@ -33,7 +33,7 @@ const AlbumPage = ({serverAlbum, token}) => {
     const formik = useFormik({
         initialValues: {
             text: '',
-            albumId: album._id
+            albumId: album.id
         },
         validationSchema: commentSchema,
         onSubmit: async values => {

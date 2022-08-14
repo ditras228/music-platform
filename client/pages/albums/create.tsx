@@ -52,12 +52,8 @@ const Create = ({token, userId}) => {
     const redirectTo = useTypedSelector(state => state.user.redirectTo)
     const {tracks, error} = useTypedSelector(state => state.track)
     const dispatch = useDispatch()
-    const albumTracks = useTypedSelector(state => state.album.albumTracks)
     const previewCanvasRef = useRef(null);
 
-    useEffect(() => {
-        console.log(albumTracks)
-    }, [albumTracks])
     useEffect(() => {
         if (redirectTo)
             router.push(`/albums/${redirectTo}`)

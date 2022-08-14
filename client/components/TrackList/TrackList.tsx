@@ -56,7 +56,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, userId, view}) => {
                 <Box className={classes.box}>
                     {tracks.map(track =>
                         <TrackItem
-                            key={track._id}
+                            key={track.id}
                             track={track}
                             token={token}
                             view={view}

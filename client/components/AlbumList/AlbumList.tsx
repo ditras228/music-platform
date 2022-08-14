@@ -55,7 +55,7 @@ const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
                 <Box p={0} className={classes.box}>
                     {albums.map(album =>
                         <AlbumItem
-                            key={album._id}
+                            key={album.id}
                             album={album}
                             token={token}
                             userId={userId}

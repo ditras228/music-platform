@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {Pause, PlayArrow, VolumeUp} from '@material-ui/icons'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useAction'
-import {baseURL} from '../../api'
+import {baseURL, filesURL} from '../../api'
 import classes from './Player.module.css'
 import {savePlayer} from '../../store/action-creators/player'
 import {useDispatch} from 'react-redux'
@@ -21,7 +21,7 @@ const Player = () => {
     useEffect(() => {
             active && dispatch(savePlayer({
                 ...player,
-                active: {_id: active._id, name: active.name, artist: active.artist, audio: active.audio}
+                active: {id: active.id, name: active.name, artist: active.artist, audio: active.audio}
             }))
             if (duration === 0) {
                 setDuration(Math.ceil(audio?.duration))
@@ -36,11 +36,8 @@ const Player = () => {
             setAudio()
             pauseTrack()
         } else {
-            const src = audio.src.replace(baseURL, '')
+            const src = audio.src.replace(filesURL, '')
             if (src !== active?.audio) {
-                console.log('________________')
-                console.log(src)
-                console.log(active?.audio)
                 setDuration(Math.ceil(audio.duration))
                 setAudio()
             }
@@ -48,8 +45,7 @@ const Player = () => {
     }, [active])
     const setAudio = () => {
         if (active) {
-            audio.src = baseURL + active.audio
-            console.log(audio)
+            audio.src = filesURL + active.audio
             audio.volume = volume / 100
             // audio.currentTime=currentTime || 0
             audio.onloadedmetadata = () => {
@@ -62,7 +58,7 @@ const Player = () => {
                     if (audio.duration !== 0) {
                         pauseTrack()
                         audio.pause()
-                        TracksAPI.listen(active._id).then(() => active.listens += 1)
+                        TracksAPI.listen(active.id).then(() => active.listens += 1)
                     } else {
                         if (audio.src !== active?.audio) {
                             setDuration(Math.ceil(duration))

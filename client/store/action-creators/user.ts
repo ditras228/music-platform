@@ -8,7 +8,6 @@ import cookie from 'js-cookie'
 export const Registration = (name, email, password) => {
     return async (dispatch: Dispatch<UserAction>) => {
         await UsersAPI.registration({name, email, password}).then(response => {
-            console.log(response)
             if (response.data.status === 500) {
                 dispatch({
                     type: UsersActionTypes.ADD_ERROR,
@@ -22,7 +21,6 @@ export const Registration = (name, email, password) => {
                 })
             }
         }).catch(e => {
-            console.log(e)
             dispatch({
                 type: UsersActionTypes.ADD_ERROR,
                 payload: {type: 'register', message: e.data.message || 'Неизвестная ошибка'}

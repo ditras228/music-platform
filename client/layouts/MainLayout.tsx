@@ -7,6 +7,7 @@ import classes from './MainLayout.module.css'
 import LoadingModal from '../components/LoadingModal/LoadingModal'
 
 interface MainLayoutProps {
+    children:any;
     title?: string
     description?: string
     keywords?: string

@@ -40,9 +40,6 @@ export default function Navbar() {
             logOutHandler
         }
     }, [session])
-    useEffect(() => {
-        console.log(isDark)
-    }, [isDark])
     const handleDrawerOpen = () => {
         setOpen(true)
     }

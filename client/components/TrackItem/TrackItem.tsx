@@ -4,7 +4,7 @@ import {Card, Checkbox, Grid, IconButton} from '@material-ui/core'
 import {Delete, Pause, PlayArrow} from '@material-ui/icons'
 import {useRouter} from 'next/router'
 import {useActions} from '../../hooks/useAction'
-import {baseURL} from '../../api'
+import {baseURL, filesURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './TrackItem.module.css'
 import {useFormikContext} from 'formik'
@@ -31,17 +31,17 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const formik = useFormikContext<formik>()
 
     const deleteOne = async () => {
-        dispatch(deleteTrack(track._id, token))
+        dispatch(deleteTrack(track.id, token))
     }
 
     const editState = () => {
         if(formik){
             setChecked(!isChecked)
             if (isChecked === false) {
-                formik.setFieldValue('tracks',[...formik.values.tracks, track._id], true)
+                formik.setFieldValue('tracks',[...formik.values.tracks, track.id], true)
             }
             if (isChecked === true) {
-                formik.setFieldValue('tracks', [...formik.values.tracks.filter(thisTrack=>thisTrack!==track._id)], true)
+                formik.setFieldValue('tracks', [...formik.values.tracks.filter(thisTrack=>thisTrack!==track.id)], true)
             }
         }
     }
@@ -74,11 +74,11 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
             <div className={classes.track_info}
                 onClick={() => {
                 view !== 'checkbox'
-                    ? router.push('/tracks/' + track._id)
+                    ? router.push('/tracks/' + track.id)
                     : editState()
             }
             }>
-                <img className={classes.image} src={baseURL + track.image} alt={'Обложка трека'}/>
+                <img className={classes.image} src={filesURL + track.image} alt={'Обложка трека'}/>
                 <Grid className={classes.name} container direction={'column'}>
                     <div>{track.name}</div>
                     <div className={classes.author}>{track.artist}</div>
