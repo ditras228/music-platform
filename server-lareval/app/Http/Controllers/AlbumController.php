@@ -43,7 +43,7 @@ class AlbumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make(
-            $request->all(),[
+            $request->all(), [
                 'name' => ['required'],
                 'author' => ['required'],
                 'image' => ['required', 'image'],
@@ -51,16 +51,16 @@ class AlbumController extends Controller
             ]
         );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>false,
-                'errors'=> $validator->messages()
+                'status' => false,
+                'errors' => $validator->messages()
             ])->setStatusCode(422);
         }
 
         $existTrackCount = Track::findMany($request->tracks)->count();
 
-        if($existTrackCount !== count($request->tracks)){
+        if ($existTrackCount !== count($request->tracks)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Tracks not found',
@@ -70,10 +70,7 @@ class AlbumController extends Controller
         $image = $request->file('image');
         $imagePath = $image->store('public/album');
 
-
-
-
-        $album =  Album::create([
+        $album = Album::create([
 //            'user_id'=> 1,
             'name' => $request->name,
             'author' => $request->author,
@@ -82,8 +79,14 @@ class AlbumController extends Controller
 
         $albumTracks = [];
         $currentTime = now();
-        foreach($request->tracks as $track){
-            $albumTracks[$track] = ['album_id'=>$album->id, 'track_id'=>$track, 'updated_at'=> $currentTime, 'created_at'=> $currentTime];
+
+        foreach ($request->tracks as $track) {
+            $albumTracks[$track] = [
+                'album_id' => $album->id,
+                'track_id' => $track,
+                'updated_at' => $currentTime,
+                'created_at' => $currentTime
+            ];
         }
 
         $album->tracks()->attach($albumTracks);
@@ -100,7 +103,7 @@ class AlbumController extends Controller
      */
     public function show($id)
     {
-        $album = Album::with('tracks')->where('id',$id)->first();
+        $album = Album::with('tracks')->where('id', $id)->first();
         $comments = Comment::where('album_id', $id)->get();
         $album['comments'] = $comments;
         return $album;
@@ -127,7 +130,7 @@ class AlbumController extends Controller
     public function update(Request $request, int $id)
     {
         $validator = Validator::make(
-            $request->all(),[
+            $request->all(), [
                 'name' => ['required'],
                 'author' => ['required'],
                 'image' => ['required', 'image'],
@@ -136,16 +139,16 @@ class AlbumController extends Controller
             ]
         );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>false,
-                'errors'=> $validator->messages()
+                'status' => false,
+                'errors' => $validator->messages()
             ])->setStatusCode(422);
         }
 
         $existTrackCount = Track::findMany($request->tracks)->count();
 
-        if($existTrackCount !== count($request->tracks)){
+        if ($existTrackCount !== count($request->tracks)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Tracks not found',
@@ -158,9 +161,9 @@ class AlbumController extends Controller
         $imagePath = $image->store('public/album');
 
 
-        if(Storage::exists($album->image)){
+        if (Storage::exists($album->image)) {
             Storage::delete($album->image);
-        }else{
+        } else {
             dd('Image does not exists.');
         }
 
@@ -172,8 +175,8 @@ class AlbumController extends Controller
 
         $albumTracks = [];
         $currentTime = now();
-        foreach($request->tracks as $track){
-            $albumTracks[$track] = ['album_id'=>$album->id, 'track_id'=>$track, 'updated_at'=> $currentTime];
+        foreach ($request->tracks as $track) {
+            $albumTracks[$track] = ['album_id' => $album->id, 'track_id' => $track, 'updated_at' => $currentTime];
         }
 
         $album->attach($albumTracks);
@@ -187,20 +190,20 @@ class AlbumController extends Controller
      * @param int $id
      * @return JsonResponse|object
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
         $album = Album::find($id);
 
-        if(!$album){
+        if (!$album) {
             return response()->json([
                 'status' => false,
                 'message' => 'Album not found',
             ])->setStatusCode(404);
         }
 
-        if(Storage::exists($album->image)){
+        if (Storage::exists($album->image)) {
             Storage::delete($album->image);
-        }else{
+        } else {
             dd('Image does not exists.');
         }
 
@@ -208,8 +211,8 @@ class AlbumController extends Controller
         $album->delete();
 
         return response()->json([
-            'status'=> true,
-            'message'=> 'Success delete'
+            'status' => true,
+            'message' => 'Success delete'
         ])->setStatusCode(200);
     }
 

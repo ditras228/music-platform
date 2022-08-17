@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Psy\Util\Str;
 
 
 class AuthController extends Controller
@@ -55,12 +58,20 @@ class AuthController extends Controller
             ])->setStatusCode(422);
         }
 
-
-        return User::create([
+        $user =  User::create([
             'name' => $request->name,
-            'password' => $request->password
+            'password' => $request->password,
         ]);
 
+
+        $account = Account::create([
+            'user_id' => $user->id,
+            'access_token' => Str::random(60)
+        ]);
+
+        $user->access_token = $account->access_token;
+
+        return $user;
     }
 
     /**
@@ -71,8 +82,14 @@ class AuthController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        if (!$user) {
+        $user = DB::table('users')
+            ->join('accounts', 'users.id', '=', 'accounts.user_id')
+            ->select('users.*', 'accounts.access_token')
+            ->where('users.id', $id)
+            ->get()
+            ->first();
+
+        if(!$user) {
             return response()->json([
                 'status' => false,
                 'message' => 'User not found',
@@ -147,12 +164,6 @@ class AuthController extends Controller
                 'status' => false,
                 'message' => 'User not found',
             ])->setStatusCode(404);
-        }
-
-        if (Storage::exists($user->image)) {
-            Storage::delete($user->image);
-        } else {
-            dd('Image does not exists.');
         }
 
         $user->delete();

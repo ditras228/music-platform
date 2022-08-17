@@ -39,14 +39,15 @@ export default (req, res) => {
         callbacks: {
             async jwt(token, user, account, profile, isNewUser) {
                 if (token?.sub) {
+                    console.log(token.sub)
                     token = await UsersAPI.getOne(token.sub).then(res => res.data)
+                    token.accessToken = token.access_token
                 }
                 if (user?.accessToken) {
                     token.accessToken = user.accessToken
                     token.color = user.color
                     token.id = user.id
                 }
-
                 return token
             },
             async session(session, token) {

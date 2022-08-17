@@ -16,7 +16,7 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->string('compound_id')->nullable();
-            $table->integer('user_id');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');;
             $table->string('provider_type');
             $table->string('provider_id');
             $table->string('provider_account_id');

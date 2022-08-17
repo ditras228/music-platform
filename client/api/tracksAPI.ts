@@ -43,6 +43,6 @@ export const TracksAPI = {
     },
 
     listen(id): any {
-        return instance.post(`/track/listen/${id}`)
+        return instance.put(`/listen/${id}`)
     },
 }

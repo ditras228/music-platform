@@ -19,7 +19,7 @@ class CreateAlbumsTable extends Migration
             $table->string('image');
             $table->string('author');
             $table->unsignedBigInteger('listens')->default(0);
-//            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
 
             $table->softDeletes();

@@ -50,6 +50,9 @@ export default function Navbar() {
     const logOutHandler = async () => {
         await signOut()
     }
+    const tracksHandler = async () => {
+        await router.push('/tracks')
+    }
     const logInHandler = async () => {
         await router.push('/')
     }
@@ -83,7 +86,7 @@ export default function Navbar() {
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h6" noWrap className={classes.logo}>
+                        <Typography variant="h6" noWrap className={classes.logo} onClick={() => tracksHandler()}>
                             <MusicNoteIcon/>MERNMusic
                         </Typography>
                     </>
