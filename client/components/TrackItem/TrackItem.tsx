@@ -17,11 +17,12 @@ interface TrackItemProps {
     token: string
     userId: string
 }
-type formik={
+
+type formik = {
     name: '',
     artist: '',
     picture: undefined,
-    tracks:  Array<string>
+    tracks: Array<string>
 }
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userId, token}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
@@ -35,13 +36,13 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     }
 
     const editState = () => {
-        if(formik){
+        if (formik) {
             setChecked(!isChecked)
             if (isChecked === false) {
-                formik.setFieldValue('tracks',[...formik.values.tracks, track.id], true)
+                formik.setFieldValue('tracks', [...formik.values.tracks, track.id], true)
             }
             if (isChecked === true) {
-                formik.setFieldValue('tracks', [...formik.values.tracks.filter(thisTrack=>thisTrack!==track.id)], true)
+                formik.setFieldValue('tracks', [...formik.values.tracks.filter(thisTrack => thisTrack !== track.id)], true)
             }
         }
     }
@@ -60,7 +61,8 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     }
     return (
         <Card className={classes.track}>
-            <SwitchView view={view} checked={isChecked}
+            <SwitchView view={view}
+                        checked={isChecked}
                         deleteOne={deleteOne}
                         track={track}
                         userId={userId}
@@ -72,12 +74,12 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
                 }
             </IconButton>
             <div className={classes.track_info}
-                onClick={() => {
-                view !== 'checkbox'
-                    ? router.push('/tracks/' + track.id)
-                    : editState()
-            }
-            }>
+                 onClick={() => {
+                     view !== 'checkbox'
+                         ? router.push('/tracks/' + track.id)
+                         : editState()
+                 }
+                 }>
                 <img className={classes.image} src={filesURL + track.image} alt={'Обложка трека'}/>
                 <Grid className={classes.name} container direction={'column'}>
                     <div>{track.name}</div>

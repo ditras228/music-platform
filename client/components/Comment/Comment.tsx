@@ -6,10 +6,10 @@ const CommentFC: React.FC<CommentProps> = ({comment}) => {
     return (
             <div className={classes.comment}>
                 <Avatar alt="Remy Sharp" src={comment.image}  style={{backgroundColor: comment.color || 'gray'}}>
-                    {comment.username.substring(0,1)}
+                    {comment.name.substring(0,1)}
                 </Avatar>
                 <div className={classes.comment_author}>
-                    {comment.username}
+                    {comment.name}
                 </div>
                 <div
                     className={classes.comment_text}
@@ -24,7 +24,7 @@ export default CommentFC
 
 type CommentProps={
     comment: {
-        username: string
+        name: string
         color: string
         text: string
         image: string

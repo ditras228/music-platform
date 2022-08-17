@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Track;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 use Illuminate\Http\Request;
@@ -44,6 +45,7 @@ class TrackController extends Controller
     {
         $validator = Validator::make(
             $request->all(),[
+                'user_id'=> ['required'],
                 'name' => ['required'],
                 'lyrics' => ['required'],
                 'artist' => ['required'],
@@ -65,7 +67,7 @@ class TrackController extends Controller
         $audioPath = $audio->store('audio','public');
 
         return Track::create([
-//            'user_id'=> 1,
+            'user_id'=> $request->user_id,
             'name' => $request->name,
             'lyrics' => $request->lyrics,
             'artist' => $request->artist,
@@ -90,7 +92,14 @@ class TrackController extends Controller
                 'message' => 'Track not found',
             ])->setStatusCode(404);
         }
-        $comments = Comment::where('track_id', $id)->get();
+
+        $comments = DB::table('comments')
+            ->join('users','users.id','=', 'comments.user_id')
+            ->select('name', 'image', 'text')
+            ->where('comments.track_id', '=', $id )
+            ->orderBy('comments.id', 'desc')
+            ->get();
+
         $track['comments'] = $comments;
         return $track;
     }
@@ -179,18 +188,6 @@ class TrackController extends Controller
                 'status' => false,
                 'message' => 'Track not found',
             ])->setStatusCode(404);
-        }
-
-        if(Storage::exists($track->image)){
-            Storage::delete($track->image);
-        }else{
-            dd('Image does not exists.');
-        }
-
-        if(Storage::exists($track->audio)){
-            Storage::delete($track->audio);
-        }else{
-            dd('Audio does not exists.');
         }
 
         $track->delete();

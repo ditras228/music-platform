@@ -54,7 +54,7 @@ class CommentController extends Controller
             ])->setStatusCode(422);
         }
 
-        if($request->track_id) {
+        if ($request->track_id) {
             $track = Track::find($request->track_id);
 
             if ($track == null) {
@@ -65,7 +65,7 @@ class CommentController extends Controller
             }
         }
 
-        if($request->album_id) {
+        if ($request->album_id) {
             $album = Album::find($request->album_id);
 
             if ($album == null) {
@@ -76,13 +76,16 @@ class CommentController extends Controller
             }
         }
 
-            return Comment::create([
-            'user_id'=> 1,
+        $comment = Comment::create([
+            'user_id' => $request->user_id,
             'text' => $request->text,
-            'track_id'=> $request->track_id,
-            'album_id'=> $request->album_id,
+            'track_id' => $request->track_id,
+            'album_id' => $request->album_id,
         ]);
+        $comment->name = $request->user_name;
+        $comment->image = $request->user_image;
 
+        return $comment;
     }
 
     /**
@@ -119,7 +122,7 @@ class CommentController extends Controller
         $validator = Validator::make(
             $request->all(), [
                 'text' => ['required'],
-                'track_id'=>['required']
+                'track_id' => ['required']
             ]
         );
 

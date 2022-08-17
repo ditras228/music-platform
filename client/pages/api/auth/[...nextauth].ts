@@ -51,6 +51,7 @@ export default (req, res) => {
                 return token
             },
             async session(session, token) {
+                console.log(token)
                 session.accessToken = token.accessToken
                 session.color = token.color
                 session.userId = token.id

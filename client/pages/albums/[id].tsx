@@ -18,7 +18,7 @@ import * as yup from 'yup'
 import {Alert} from '@material-ui/lab'
 import TrackList from "../../components/TrackList/TrackList";
 
-const commentSchema=yup.object({
+const commentSchema = yup.object({
     text: yup.string()
         .min(1, 'Минимум 1 символ')
         .max(2000, 'Максимум 200 символов')
@@ -28,17 +28,17 @@ const commentSchema=yup.object({
 const AlbumPage = ({serverAlbum, token}) => {
     const router = useRouter()
     const [album, setAlbum] = useState<IAlbum>(serverAlbum)
-    const [ session, loading ] = useSession() as any
+    const [session, loading] = useSession() as any
 
     const formik = useFormik({
         initialValues: {
             text: '',
-            albumId: album.id
+            album_id: album.id
         },
         validationSchema: commentSchema,
         onSubmit: async values => {
-            AlbumsAPI.addComment(values, token).then((comment: any)=>
-                setAlbum({...album, comments: [...album.comments, comment.data]})
+            AlbumsAPI.addComment(values, token).then((comment: any) =>
+                setAlbum({...album, comments: [comment.data, ...album.comments]})
             )
         }
     })
@@ -59,7 +59,7 @@ const AlbumPage = ({serverAlbum, token}) => {
 
                     <Grid className={classes.info}>
                         <div className={classes.img_thumb}>
-                        <img src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
+                            <img src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
                         </div>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
@@ -79,8 +79,8 @@ const AlbumPage = ({serverAlbum, token}) => {
                 </Card>
                 <Card>
                     <div className={classes.card}>
-                    <h3 className={classes.title}><MusicNote/> Треки</h3>
-                    <TrackList tracks={album.tracks} token={token} userId={token}/>
+                        <h3 className={classes.title}><MusicNote/> Треки</h3>
+                        <TrackList tracks={album.tracks} token={token} userId={token}/>
                     </div>
                 </Card>
                 <Card>
@@ -88,38 +88,38 @@ const AlbumPage = ({serverAlbum, token}) => {
                         <form onSubmit={formik.handleSubmit} className={classes.form}>
                             <h3 className={classes.title}>
                                 <InsertComment/> {
-                                album.comments.length===0
-                                    ?'нет комментариев'
-                                    :'комментарии'
+                                album.comments.length === 0
+                                    ? 'нет комментариев'
+                                    : 'комментарии'
                             }
                             </h3>
-                            {session&&
-                            <div className={classes.comments_form}>
-                                <div className={classes.avatar_comment}>
-                                    <Avatar alt="Remy Sharp" src={session.image}
-                                            style={{backgroundColor: session.color || 'gray', marginRight:20}}>
-                                        {session.user?.name?.substring(0,1)}
-                                    </Avatar>
-                                    <TextField
-                                        value={formik.values.text}
-                                        onChange={formik.handleChange}
-                                        name={'text'}
-                                        label='Оставьте комментарий'
-                                        fullWidth
-                                        multiline
-                                    >
-                                    </TextField>
+                            {session &&
+                                <div className={classes.comments_form}>
+                                    <div className={classes.avatar_comment}>
+                                        <Avatar alt="Remy Sharp" src={session.image}
+                                                style={{backgroundColor: session.color || 'gray', marginRight: 20}}>
+                                            {session.user?.name?.substring(0, 1)}
+                                        </Avatar>
+                                        <TextField
+                                            value={formik.values.text}
+                                            onChange={formik.handleChange}
+                                            name={'text'}
+                                            label='Оставьте комментарий'
+                                            fullWidth
+                                            multiline
+                                        >
+                                        </TextField>
+                                    </div>
+                                    {formik.errors.text && formik.touched.text &&
+                                        <Alert variant="filled" severity="error">
+                                            {formik.errors.text}
+                                        </Alert>}
+                                    <Button
+                                        type={'submit'}
+                                        className={classes.comments_submit}
+                                    >Отправить
+                                    </Button>
                                 </div>
-                                {formik.errors.text && formik.touched.text &&
-                                <Alert variant="filled" severity="error">
-                                    {formik.errors.text}
-                                </Alert>}
-                                <Button
-                                    type={'submit'}
-                                    className={classes.comments_submit}
-                                >Отправить
-                                </Button>
-                            </div>
                             }
                         </form>
                     </Grid>
@@ -141,7 +141,7 @@ export const getServerSideProps = wrapper.getServerSideProps
 
     const session = await getSession(ctx)
 
-    if(!session){
+    if (!session) {
         return {
             redirect: {
                 destination: '/',
@@ -152,7 +152,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     const player = cookies(ctx).player;
     const theme = cookies(ctx).theme;
 
-    dispatch( setPlayer(player))
+    dispatch(setPlayer(player))
     const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
 
 

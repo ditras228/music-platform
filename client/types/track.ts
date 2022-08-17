@@ -1,7 +1,7 @@
 export interface IComment {
     id: number
     userId: string
-    username: string
+    name: string
     text: string
 }
 

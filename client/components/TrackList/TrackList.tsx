@@ -10,11 +10,11 @@ import {ITrack} from "../../types/track";
 interface TrackListProps {
     tracks: ITrack[]
     token: string
-    userId: string
+    user_id: string
     view?: string
 }
 
-const TrackList: React.FC<TrackListProps> = ({tracks, token, userId, view}) => {
+const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => {
     const [timer, setTimer] = useState(null)
 
     const dispatch = useDispatch()
@@ -60,7 +60,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, userId, view}) => {
                             track={track}
                             token={token}
                             view={view}
-                            userId={userId}
+                            userId={user_id}
                         />
                     )}
                 </Box>

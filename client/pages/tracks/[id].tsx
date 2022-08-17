@@ -34,12 +34,14 @@ const TrackPage = ({serverTrack, token}) => {
     const formik = useFormik({
         initialValues: {
             text: '',
-            trackId: serverTrack.id
+            track_id: serverTrack.id
         },
         validationSchema: commentSchema,
         onSubmit: async values => {
             TracksAPI.addComment(values, token).then((comment: any) => {
-                    setTrack({...track, comments: [...track.comments, comment.data]})
+                console.log(comment)
+                console.log(comment.data)
+                    setTrack({...track, comments: [comment.data, ...track.comments]})
 
                 }
             )

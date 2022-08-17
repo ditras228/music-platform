@@ -1,10 +1,13 @@
 <?php
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Middleware\Authorization;
 use  \App\Http\Controllers\TrackListensController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,9 +19,12 @@ use  \App\Http\Controllers\TrackListensController;
 |
 */
 
+
 Route::resource('/auth', AuthController::class);
 
-Route::resource('/track', TrackController::class);
-Route::put('/listen/{track}', [TrackListensController::class, 'update']);
-Route::resource('/album', AlbumController::class);
-Route::resource('/comment', CommentController::class);
+Route::middleware([Authorization::class])->group(function () {
+    Route::resource('/track', TrackController::class);
+    Route::put('/listen/{track}', [TrackListensController::class, 'update']);
+    Route::resource('/album', AlbumController::class);
+    Route::resource('/comment', CommentController::class);
+});

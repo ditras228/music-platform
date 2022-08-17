@@ -18,7 +18,6 @@ class CreateCommentsTable extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->integer('track_id')->nullable();
             $table->integer('album_id')->nullable();
-            $table->foreignId('user_id')->references('id')->on('users');
             $table->string('text');
             $table->timestamps();
         });
