@@ -1,6 +1,5 @@
 import React, {ReactElement, useRef, useState} from 'react'
 import {FieldConfig, useField, useFormikContext} from 'formik'
-import {Alert} from '@material-ui/lab'
 
 interface Props extends FieldConfig {
     accept: string
@@ -54,9 +53,9 @@ const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props): Re
             />
             {children}
             {meta.error
-                ? <Alert severity={'error'}>{meta.error}</Alert>
+                ? <div >{meta.error}</div>
                 : fileName &&
-                <Alert severity={'success'}>{fileName}</Alert>
+                <div >{fileName}</div>
             }
 
 

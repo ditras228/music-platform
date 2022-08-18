@@ -1,13 +1,12 @@
 import React from 'react'
-import classes from '../../pages/tracks/[id].module.css'
-import {Avatar} from '@material-ui/core'
+import classes from '../../pages/tracks/[id].module.scss'
 
 const CommentFC: React.FC<CommentProps> = ({comment}) => {
     return (
             <div className={classes.comment}>
-                <Avatar alt="Remy Sharp" src={comment.image}  style={{backgroundColor: comment.color || 'gray'}}>
-                    {comment.name.substring(0,1)}
-                </Avatar>
+                {/*<div alt="Remy Sharp" src={comment.image}  style={{backgroundColor: comment.color || 'gray'}}>*/}
+                {/*    {comment.name.substring(0,1)}*/}
+                {/*</div>*/}
                 <div className={classes.comment_author}>
                     {comment.name}
                 </div>

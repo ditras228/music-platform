@@ -1,5 +1,5 @@
 import React, {ReactElement} from 'react'
-import * as classes from './image-preview.module.css'
+import * as classes from './image-preview.module.scss'
 import Cropper from '../cropper/cropper'
 
 global.atob = require("atob");

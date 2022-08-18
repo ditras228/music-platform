@@ -1,5 +1,13 @@
-.AppBar{
-    box-shadow: none!important;
+@import "../../styles/mixins/font";
+.navbar{
+    background-color: #000;
+    color: #ffffff;
+    height: 60px;
+    display: grid;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 30px;
+    @include fontLarge();
 }
 .logo{
     display: flex!important;

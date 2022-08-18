@@ -9,7 +9,7 @@ export interface ITrack {
     id: string
     name: string
     artist: string
-    lyric: string
+    lyrics: string
     listens: number
     image: string
     audio: string

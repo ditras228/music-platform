@@ -1,5 +1,4 @@
 import React from 'react'
-import {Button} from '@material-ui/core'
 import {FormikValues} from 'formik'
 interface Props{
     hasPrevious?: boolean
@@ -14,8 +13,8 @@ const FormNavigation = (props: Props) => {
             marginTop: 50,
             justifyContent: 'space-between'
         }}>
-            <Button disabled={!props.hasPrevious}  variant={'contained'} type={'button'} onClick={props.onBackClick}>Назад</Button>
-            <Button type={'submit'} color={'primary'} >{props.isLastStep?'Готово    ':'Далее'}</Button>
+            <button disabled={!props.hasPrevious}   type={'button'} onClick={props.onBackClick}>Назад</button>
+            <button type={'submit'} color={'primary'} >{props.isLastStep?'Готово    ':'Далее'}</button>
         </div>
     )
 }

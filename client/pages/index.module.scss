@@ -1,7 +1,44 @@
-@import "../../styles/mixins/font";
-.login{
-  &__title{
-    @include fontMedium();
+@import "../styles/mixins/font";
+@import "../styles/mixins/button";
+@import "../styles/variables";
 
+.login {
+  max-width: 900px;
+  margin: 0 auto;
+
+  &__title {
+    @include fontHeaderSmall();
+    margin-bottom: 15px;
   }
+
+  &__content {
+    display: grid;
+    grid-row-gap: 35px;
+
+    &__inputs {
+      display: grid;
+      grid-row-gap: 35px;
+    }
+
+    &__buttons {
+      display: grid;
+      grid-row-gap: 10px;
+
+      &__item {
+        @include button();
+        width: 100%;
+      }
+    }
+
+    &__link {
+      margin-top: 20px;
+      text-align: right;
+      color: $button;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
 }

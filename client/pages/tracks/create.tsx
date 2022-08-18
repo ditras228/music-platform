@@ -1,12 +1,12 @@
-import ImagePreview from '../../components/ImagePreview/ImagePreview'
+import ImagePreview from '../../ui/image-preview/image-preview'
 import React, {useEffect, useRef, useState} from 'react'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {useRouter} from 'next/router'
-import MultiStepForm, {FormStep} from '../../components/StepForm/MultiStepForm'
-import {Button, Card, Grid} from '@material-ui/core'
-import InputField from '../../components/StepForm/InputField'
+import MultiStepForm, {FormStep} from '../../ui/step-form/multi-step-form'
+import InputField from '../../ui/input-field/input-field'
 import * as Yup from 'yup'
+import * as classes from './create.module.scss'
 import MainLayout from '../../layouts/MainLayout'
 import {UsersActionTypes} from '../../types/user'
 import {useDispatch} from 'react-redux'
@@ -14,7 +14,7 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateTrack} from '../../store/action-creators/user'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
-import FileUpload from '../../components/FileUpload/FileUpload'
+import FileUpload from '../../ui/file-upload/file-upload'
 
 if (typeof window !== 'undefined') {
     var WaveSurfer = require('wavesurfer.js')
@@ -45,7 +45,7 @@ const Create = ({token}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (redirectTo){
+        if (redirectTo) {
             router.push(`/tracks/${redirectTo}`)
         }
     }, [redirectTo])
@@ -57,7 +57,12 @@ const Create = ({token}) => {
         if (typeof window !== 'undefined') {
             const wavesurfer = WaveSurfer.create({
                 container: chart.current,
-                waveColor: '#3f51b5',
+                barWidth: 3,
+                cursorWidth: 0,
+                height: 80,
+                responsive: true,
+                waveColor: '#007acc',
+                progressColor: '#007acc',
             })
             wavesurfer.load(audio)
         }
@@ -65,8 +70,7 @@ const Create = ({token}) => {
 
     return (
         <MainLayout title={'Загрузить трек'}>
-            <Card>
-
+            <div>
                 <MultiStepForm
                     initialValues={{
                         name: '',
@@ -84,14 +88,14 @@ const Create = ({token}) => {
                     <FormStep stepName={'Аудио'}
                               validationSchema={AudioSchema}>
                         <FileUpload accept={'audio/*'} name={'audio'} setAudio={setAudio}>
-                            <Button fullWidth>Загрузить аудио</Button>
+                            <button>Загрузить аудио</button>
                         </FileUpload>
-                        <div ref={chart}/>
+                        <div ref={chart} className={classes.waveSuffer}/>
                     </FormStep>
 
                     <FormStep stepName={'Инфо'}
                               validationSchema={InfoSchema}>
-                        <Grid container direction={'column'}
+                        <div
                               style={{padding: 20, maxWidth: 900, margin: '0 auto'}}>
                             <InputField
                                 name={'name'}
@@ -107,22 +111,22 @@ const Create = ({token}) => {
                                 multiline
                                 rows={15}
                             />
-                        </Grid>
+                        </div>
                     </FormStep>
 
                     <FormStep stepName={'Обложка'}
                               validationSchema={ImageSchema}
                     >
-                        <Grid container direction={'column'}>
+                        <div>
                             <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
-                                <Button fullWidth>Загрузить изображение</Button>
+                                <button>Загрузить изображение</button>
                             </FileUpload>
-                        </Grid>
+                        </div>
                         <ImagePreview src={image} previewCanvasRef={previewCanvasRef}/>
                     </FormStep>
 
                 </MultiStepForm>
-            </Card>
+            </div>
 
         </MainLayout>
     )

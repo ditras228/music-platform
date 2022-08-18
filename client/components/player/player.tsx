@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react'
-import {Pause, PlayArrow, VolumeUp} from '@material-ui/icons'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useAction'
 import {baseURL, filesURL} from '../../api'
-import classes from './Player.module.css'
+import classes from './player.module.scss'
 import {savePlayer} from '../../store/action-creators/player'
 import {useDispatch} from 'react-redux'
-import {Box, IconButton} from '@material-ui/core'
 import {TracksAPI} from '../../api/tracksAPI'
-import TrackProgress from "../TrackProgress/TrackProgress";
+import TrackProgress from "../track-progres/track-progres";
 
 let audio
 
@@ -92,14 +90,14 @@ const Player = () => {
         return null
     }
     return (
-        <Box className={classes.player} bgcolor={'background.default'}>
+        <div className={classes.player}>
             <div className={classes.column}>
-                <IconButton onClick={play}>
+                <button onClick={play}>
                     {pause
-                        ?<PlayArrow/>
-                        :  <Pause/>
+                        ?<div>play</div>
+                        :  <div>pause</div>
                     }
-                </IconButton>
+                </button>
                 <div className={classes.row}>
                     <div>{active.name}</div>
                     <div style={{fontSize: 12}}>{active.artist}</div>
@@ -108,10 +106,10 @@ const Player = () => {
             <TrackProgress left={currentTime} right={duration}
                            onChange={changeCurrentTime} format={'time'}/>
             <div className={classes.column}>
-                <VolumeUp style={{marginLeft: 'auto', paddingRight: 10}}/>
+                <div style={{marginLeft: 'auto', paddingRight: 10}}/>
                 <TrackProgress left={volume} right={100} onChange={changeVolume}/>
             </div>
-        </Box>
+        </div>
     )
 }
 

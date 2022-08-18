@@ -1,0 +1,86 @@
+@import '../variables';
+
+@mixin button-fill($size: 16px, $height: 28px, $weight: 600, $spacing: 0.75px) {
+  height: 64px;
+  align-items: center;
+  display: grid;
+  text-align: center;
+  font-weight: $weight;
+  font-size: $size;
+  line-height: $height;
+  letter-spacing: $spacing;
+  background-color: $button;
+  border-color: transparent;
+  color: #ffffff;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+  border 0.2s ease-in-out;
+  border-radius: 40px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $button-hover;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+    background-color: $button;
+  }
+}
+
+@mixin button-red($size: 16px, $height: 28px, $weight: 600, $spacing: 0.75px) {
+  @include button-fill($size, $height, $weight, $spacing);
+  background-color: #ed2e7e;
+
+  &:hover {
+    background-color: #c30052;
+  }
+}
+
+@mixin button($size: 16px, $height: 28px, $weight: 600, $spacing: 0.75px) {
+  @include button-fill($size, $height, $weight, $spacing);
+  background-color: transparent;
+  color: $button;
+  border: 2px solid $button;
+
+  &:hover {
+    border-color: $button-hover;
+    color: $button-hover;
+    background-color: transparent;
+  }
+}
+
+@mixin button-small(
+  $size: 14px,
+  $height: 24px,
+  $weight: 600,
+  $spacing: 0.75px
+) {
+  @include button-fill($size, $height, $weight, $spacing);
+  padding: 6px 24px;
+  height: auto;
+}
+
+@mixin button-icon() {
+  display: grid;
+  background-color: $button;
+  border-radius: 50%;
+  justify-content: center;
+  align-content: center;
+  width: 40px;
+  height: 40px;
+  border-color: transparent;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+  border 0.2s ease-in-out;
+
+  &__icon {
+    width: 25px;
+    height: 25px;
+    background-size: cover;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: $button-hover;
+  }
+}

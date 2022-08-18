@@ -1,15 +1,16 @@
 import React from 'react'
-import MainLayout from '../../layouts/MainLayout'
-import {useFormik} from 'formik'
+import MainLayout from '../layouts/MainLayout'
+import {Formik, useFormik} from 'formik'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import {useDispatch, useSelector} from 'react-redux'
-import {GetError} from '../../store/selectors'
+import {GetError} from '../store/selectors'
 import {getCsrfToken, getSession, signIn} from 'next-auth/client'
-import {UsersActionTypes} from '../../types/user'
-import {NextThunkDispatch, wrapper} from '../../store'
+import {UsersActionTypes} from '../types/user'
+import {NextThunkDispatch, wrapper} from '../store'
 import cookies from 'next-cookies'
 import classes from './index.module.scss'
+import InputField from "../ui/input-field/input-field";
 
 const SignupSchema = Yup.object({
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -24,84 +25,75 @@ const LogIn = ({session, csrfToken}) => {
     const error = useSelector(state => GetError(state, 'login'))
     const dispatch = useDispatch()
 
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-        validationSchema: SignupSchema,
-        onSubmit: async values => {
-
-        }
-    })
     const loginHandler = async (e: any) => {
         e.preventDefault()
         await router.push('/auth/register')
     }
-    const handleSignIn=async (data)=>{
-        if(typeof data.error === 'string'){
+    const handleSignIn = async (data) => {
+        if (typeof data.error === 'string') {
             dispatch({
                 type: UsersActionTypes.ADD_ERROR,
                 payload: {type: 'login', message: data.error}
             })
-        }else{
-           await router.push('/tracks')
+        } else {
+            await router.push('/tracks')
         }
     }
     return (
         <MainLayout>
-            <form >
+            <Formik initialValues={{
+                email: '',
+                password: '',
+            }} onSubmit={(values) => {
+            }} validationSchema={SignupSchema}>{(formik) =>
                 <div
                     className={classes.login}>
                     <h2 className={classes.login__title}>Вход</h2>
                     <div
-                        className={classes.form}
+                        className={classes.login__content}
                     >
                         <input name='csrfToken' type='hidden' defaultValue={csrfToken}/>
-                        <input
-                            name={'email'}
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                        />
-                        {formik.touched.email && formik.errors.email
-                        && <div>
-                            {formik.errors.email}
-                        </div>}
-                        <input
-                            name={'password'}
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            type={'password'}
-
-                        />
-                        {formik.touched.password && formik.errors.password
-                        && <div>
-                            {formik.errors.password}
-                        </div>}
+                        <div className={classes.login__content__inputs}>
+                            <InputField
+                                label={'Email'}
+                                name={'email'}
+                                value={formik.values.email}
+                            />
+                            <InputField
+                                label={'Пароль'}
+                                name={'password'}
+                                value={formik.values.password}
+                                type={'password'}
+                            />
+                        </div>
                         {error ?
                             <div>
                                 {error.message}
                             </div> : null}
+                        <div className={classes.login__content__buttons}>
+                            <button
+                                className={classes.login__content__buttons__item}
+                                onClick={() => {
+                                    formik.handleSubmit()
+                                    signIn('credentials',
+                                        {email: formik.values.email, password: formik.values.password, redirect: false})
+                                        .then(data => handleSignIn(data))
+                                }}>
+                                Войти
+                            </button>
+                            <button
+                                className={classes.login__content__buttons__item}
+                                onClick={() => signIn('github')}>
+                                Войти с помощью GitHub
+                            </button>
+                        </div>
 
-                        <button
-                            onClick={() => {
-                                formik.handleSubmit()
-                                signIn('credentials',
-                                    {email: formik.values.email, password: formik.values.password, redirect: false})
-                                    .then(data => handleSignIn(data))
-                            }                                }>
-                            Войти
-                        </button>
-                        <button
-                            onClick={() => signIn('github')}>
-                            Войти с помощью GitHub
-                        </button>
-                        <div onClick={e => loginHandler(e)} className={classes.login}>
+                        <div onClick={e => loginHandler(e)} className={classes.login__content__link}>
                             Ещё нет аккаунта? Зарегистрируйтесь
                         </div>
                     </div>
-                </div>
-            </form>
+                </div>}
+            </Formik>
         </MainLayout>
     )
 }
@@ -114,7 +106,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const theme = cookies(ctx).theme;
     const session = await getSession({req: ctx.req})
-    const csrfToken= await getCsrfToken(ctx)
+    const csrfToken = await getCsrfToken(ctx)
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false

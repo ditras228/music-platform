@@ -1,19 +1,14 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Button, Card} from '@material-ui/core'
-import classes from './index.module.css'
-import {Check} from '@material-ui/icons'
+import classes from './index.module.scss'
 
 
 const RegSuccess = () => {
     return (
         <MainLayout>
-            <Card className={classes.error}>
-                <Button>
-                    <Check/>
-                </Button>
+            <div className={classes.error}>
                 <h2>Спасибо за регистрацию! Проверьте свою почту</h2>
-            </Card>
+            </div>
         </MainLayout>
     )
 }

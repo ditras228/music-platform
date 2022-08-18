@@ -1,46 +1,40 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Button, Card, Grid} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {fetchTracks} from '../../store/action-creators/track'
-import {RotateLeft, Search} from '@material-ui/icons'
-import classes from './index.module.css'
+import classes from './index.module.scss'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {getSession} from 'next-auth/client'
 import {UsersActionTypes} from '../../types/user'
-import TrackList from "../../components/TrackList/TrackList";
+import TrackList from "../../components/track-list/track-list";
 
 const Index = ({token, userId}) => {
     const router = useRouter()
-    const {tracks,  error} = useTypedSelector(state => state.track)
+    const {tracks, error} = useTypedSelector(state => state.track)
     if (error) {
         return (
             <MainLayout title={error}>
-                <Card className={classes.error}>
-                    <Button>
-                        <RotateLeft/>
-                    </Button>
+                <div className={classes.error}>
                     <h2>{error}</h2>
-                </Card>
+                </div>
             </MainLayout>
         )
     }
     return (
         <MainLayout title={'Треки'}>
+            <div className={classes.tracks}>
+                <div className={classes.tracks__top}>
+                    <div className={classes.tracks__top__title}> Треки</div>
+                    <button className={classes.tracks__top__createBtn}
+                            onClick={() => router.push('/tracks/create')}>Загрузить
+                    </button>
+                </div>
 
-            <Grid container justify={'center'}>
-                <Card className={classes.card}>
-                        <Grid container justify={'space-between'} direction={'row'}>
-                            <h2 className={classes.title}><Search/> Треки</h2>
-                            <Button onClick={() => router.push('/tracks/create')}>Загрузить</Button>
-                        </Grid>
-
-                    <TrackList tracks={tracks} token={token} userId={userId}/>
-                </Card>
-            </Grid>
+                <TrackList tracks={tracks} token={token} user_id={userId}/>
+            </div>
         </MainLayout>
     )
 }
@@ -50,9 +44,9 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session= await getSession({req: ctx.req})
+    const session = await getSession({req: ctx.req})
     //const token= await getToken({req: ctx.req})
-    if(!session){
+    if (!session) {
         return {
             redirect: {
                 destination: '/',
@@ -60,17 +54,17 @@ export const getServerSideProps = wrapper.getServerSideProps
             },
         }
     }
-    await dispatch( fetchTracks(session.accessToken))
+    await dispatch(fetchTracks(session.accessToken))
 
     const player = cookies(ctx).player;
     const theme = cookies(ctx).theme;
-    dispatch( setPlayer(player))
+    dispatch(setPlayer(player))
     dispatch({
         type: UsersActionTypes.HANDLE_CHANGE_DARK,
         payload: theme || false
     })
     return {
-        props:{
+        props: {
             token: session.accessToken || null,
             userId: session.userId || null,
         }

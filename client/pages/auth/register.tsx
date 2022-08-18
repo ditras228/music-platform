@@ -1,12 +1,9 @@
 import React, {useEffect} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {useFormik} from 'formik'
-import {Button, Card, Grid, Link, TextField} from '@material-ui/core'
+import {Formik, useFormik} from 'formik'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
-import {VpnKey} from '@material-ui/icons'
-import classes from './register.module.css'
-import {Alert} from '@material-ui/lab'
+import classes from './register.module.scss'
 import {useDispatch, useSelector} from 'react-redux'
 import {Registration} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
@@ -15,6 +12,7 @@ import {NextThunkDispatch, wrapper} from '../../store'
 import cookies from 'next-cookies'
 import {UsersActionTypes} from '../../types/user'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
+import InputField from "../../ui/input-field/input-field";
 
 const SignupSchema = Yup.object({
     name: Yup.string().min(3, 'Минимум 3 символа').max(12, 'Максимум 12 символов'),
@@ -33,18 +31,6 @@ const Register = () => {
     const error = useSelector(state => GetError(state, 'register'))
     const redirectTo = useTypedSelector(state => state.user.redirectTo)
 
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            email: '',
-            password: '',
-            repeat_password: '',
-        },
-        validationSchema: SignupSchema,
-        onSubmit: async values => {
-            dispatch(Registration(values.name, values.email, values.password))
-        }
-    })
     const loginHandler = async (e: any) => {
         e.preventDefault()
         await router.push('/')
@@ -55,67 +41,62 @@ const Register = () => {
 
     return (
         <MainLayout>
-            <form onSubmit={formik.handleSubmit}>
-                <Card
-                    className={classes.card}>
-                    <h2 className={classes.title}><VpnKey/> Регистрация</h2>
-                    <Grid
-                        className={classes.form}
+            <Formik initialValues={{
+                name: '',
+                email: '',
+                password: '',
+                repeat_password: '',
+            }} onSubmit={(values) => {
+                dispatch(Registration(values.name, values.email, values.password))
+            }} validationSchema={SignupSchema}>{(formik) =>
+                <div
+                    className={classes.register}>
+                    <h2 className={classes.register__title}>Регистрация</h2>
+                    <div
+                        className={classes.register__content}
                     >
-                        <TextField
-                            label={'Введите ник'}
+                        <div className={classes.register__content__inputs}>
+                        <InputField
+                            label={'Имя'}
                             name={'name'}
                             value={formik.values.name}
-                            onChange={formik.handleChange}
                         />
-                        <TextField
-                            label={'Введите Email'}
+                        <InputField
+                            label={'Email'}
                             name={'email'}
                             value={formik.values.email}
-                            onChange={formik.handleChange}
                         />
-                        {formik.touched.email && formik.errors.email
-                        && <Alert variant="filled" severity="error">
-                            {formik.errors.email}
-                        </Alert>}
-                        <TextField
-                            label={'Введите пароль'}
+                        <InputField
+                            label={'Пароль'}
                             name={'password'}
                             value={formik.values.password}
-                            onChange={formik.handleChange}
                             type={'password'}
 
                         />
-                        {formik.touched.password && formik.errors.password
-                        && <Alert variant="filled" severity="error">
-                            {formik.errors.password}
-                        </Alert>}
-                        <TextField
+                        <InputField
                             label={'Повторите пароль'}
                             name={'repeat_password'}
                             value={formik.values.repeat_password}
-                            onChange={formik.handleChange}
                             type={'password'}
                         />
-                        {formik.touched.password && formik.errors.repeat_password
-                        && <Alert variant="filled" severity="error">
-                            {formik.errors.repeat_password}
-                        </Alert>
-                        }
                         {error ?
-                            <Alert variant="filled" severity="error">
+                            <div>
                                 {error.message}
-                            </Alert> : null}
-                        <Button
+                            </div> : null}
+                        </div>
+                        <div className={classes.register__content__buttons}>
+                        <button
+                            className={classes.register__content__buttons__item}
                             type={'submit'}>
                             Регистрация
-                        </Button>
-                        <Link onClick={e => loginHandler(e)} className={classes.login}>
+                        </button>
+                        </div>
+                        <div onClick={e => loginHandler(e)} className={classes.register__content__link}>
                             Уже есть аккаунт? Войти
-                        </Link>
-                    </Grid>
-                </Card>
-            </form>
+                        </div>
+                    </div>
+                </div>}
+            </Formik>
         </MainLayout>
     )
 }

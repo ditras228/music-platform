@@ -1,20 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Avatar, Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
-import {baseURL, filesURL} from '../../api'
+import {filesURL} from '../../api'
 import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
-import {ArrowBackIos, GTranslate, Hearing, InsertComment, Person, Title} from '@material-ui/icons'
-import classes from './[id].module.css'
+import classes from './[id].module.scss'
 import cookies from 'next-cookies'
-import CommentFC from '../../components/Comment/Comment'
+import CommentFC from '../../components/comment/comment'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession, useSession} from 'next-auth/client'
 import {UsersActionTypes} from '../../types/user'
-import {Alert} from '@material-ui/lab'
 import * as yup from 'yup'
 import {useDispatch} from "react-redux";
 import {PlayerActionTypes} from "../../types/player";
@@ -58,17 +55,16 @@ const TrackPage = ({serverTrack, token}) => {
             title={'Музыкальная площадка - ' + track.name + ' - ' + track.artist}
             keywords={'Музыка, артисты,' + track.name + track.artist}
         >
-            <Grid className={classes.grid}>
-                <Button
-                    variant={'outlined'}
+            <div className={classes.grid}>
+                <div
                     style={{fontSize: 20}}
                     onClick={() => router.push('/tracks')}
                 >
-                    <ArrowBackIos/> К списку
-                </Button>
-                <Card>
+                     К списку
+                </div>
+                <div>
 
-                    <Grid className={classes.info}>
+                    <div className={classes.info}>
                         <div className={classes.img_thumb}>
                             <img src={filesURL + track.image}
                                  className={classes.img} alt={'Обложка трека'} onClick={trackClickHandler}/>
@@ -76,36 +72,36 @@ const TrackPage = ({serverTrack, token}) => {
                         </div>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
-                                <h3 className={classes.item_title}><Title/>Название</h3>
+                                <h3 className={classes.item_title}>Название</h3>
                                 <h3 className={classes.item_value}>{track.name}</h3>
                             </div>
                             <div className={classes.line}>
-                                <h3 className={classes.item_title}><Person/>Автор</h3>
+                                <h3 className={classes.item_title}>Автор</h3>
                                 <h3 className={classes.item_value}>{track.artist}</h3>
                             </div>
                             <div className={classes.line}>
-                                <h3 className={classes.item_title}><Hearing/>Прослушиваний</h3>
+                                <h3 className={classes.item_title}>Прослушиваний</h3>
                                 <h3 className={classes.item_value}>{track.listens}</h3>
                             </div>
                         </div>
-                    </Grid>
-                </Card>
-                <Card>
+                    </div>
+                </div>
+                <div>
                     {
-                        track.lyric&&(
-                            <Grid container className={classes.card}>
+                        track.lyrics&&(
+                            <div  className={classes.card}>
                                 <div className={classes.card}>
-                                    <h3 className={classes.title}><GTranslate/> Слова к песне</h3>
-                                    <pre>{track.lyric}</pre>
+                                    <h3 className={classes.title}>Слова к песне</h3>
+                                    <pre>{track.lyrics}</pre>
                                 </div>
-                            </Grid>
+                            </div>
                         )
                     }
 
-                    <Grid container className={classes.card}>
+                    <div  className={classes.card}>
                         <form onSubmit={formik.handleSubmit} className={classes.form}>
                             <h3 className={classes.title}>
-                                <InsertComment/> {
+                                {
                                 track.comments.length === 0
                                     ? 'нет комментариев'
                                     : 'комментарии'
@@ -114,43 +110,40 @@ const TrackPage = ({serverTrack, token}) => {
                             {session && (
                                 <div className={classes.comments_form}>
                                     <div className={classes.avatar_comment}>
-                                        <Avatar alt="Remy Sharp" src={session.image}
-                                                style={{backgroundColor: session.color || 'gray', marginRight: 20}}>
-                                            {session.user?.name?.substring(0, 1)}
-                                        </Avatar>
-                                        <TextField
+                                        {/*<Avatar alt="Remy Sharp" src={session.image}*/}
+                                        {/*        style={{backgroundColor: session.color || 'gray', marginRight: 20}}>*/}
+                                        {/*    {session.user?.name?.substring(0, 1)}*/}
+                                        {/*</Avatar>*/}
+                                        <input
                                             value={formik.values.text}
                                             onChange={formik.handleChange}
                                             name={'text'}
-                                            label='Оставьте комментарий'
-                                            fullWidth
-                                            multiline
                                         >
-                                        </TextField>
+                                        </input>
                                     </div>
                                     {formik.errors.text && formik.touched.text &&
-                                    <Alert variant="filled" severity="error">
+                                    <div>
                                         {formik.errors.text}
-                                    </Alert>}
-                                    <Button
+                                    </div>}
+                                    <button
                                         type={'submit'}
                                         className={classes.comments_submit}
                                     >Отправить
-                                    </Button>
+                                    </button>
 
                                 </div>
                             )}
                         </form>
-                    </Grid>
+                    </div>
 
                     {
                         track.comments.map((comment: any) =>
                             <CommentFC key={comment.id} comment={comment}/>
                         )
                     }
-                </Card>
+                </div>
 
-            </Grid>
+            </div>
         </MainLayout>
     )
 }

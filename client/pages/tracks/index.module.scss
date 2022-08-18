@@ -1,17 +1,25 @@
-.error{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    padding: 20px;
-    font-weight: normal;
+@import "../../styles/mixins/font";
 
-}
-.card{
-    width: 900px;
-    padding: 30px
-}
-.title{
-    margin-left: 10px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-gap: 10px;
+.tracks{
+    background-color: #ffffff;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 20px;
+
+    &__top{
+        display: grid;
+        grid-template-columns: 1fr auto;
+        &__title{
+            @include fontHeaderSmall();
+            margin-bottom: 15px;
+        }
+        &__create-btn{
+
+        }
+        &__search{
+            display: block;
+            margin-bottom: 35px;
+        }
+    }
+
 }

@@ -1,24 +1,22 @@
-import ImagePreview from '../../components/ImagePreview/ImagePreview'
+import ImagePreview from '../../ui/image-preview/image-preview'
 import React, {useEffect, useRef, useState} from 'react'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {useRouter} from 'next/router'
-import {Button, Card, Grid} from '@material-ui/core'
 import * as Yup from 'yup'
 import MainLayout from '../../layouts/MainLayout'
 import {useDispatch} from 'react-redux'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateAlbum} from '../../store/action-creators/user'
-import MultiStepForm, {FormStep} from '../../components/StepForm/MultiStepForm'
-import InputField from '../../components/StepForm/InputField'
+import MultiStepForm, {FormStep} from '../../ui/step-form/multi-step-form'
+import InputField from '../../ui/step-form/input-field'
 import {fetchTracks} from '../../store/action-creators/track'
 import {setPlayer} from '../../store/action-creators/player'
 import cookies from 'next-cookies'
 import {UsersActionTypes} from '../../types/user'
-import {Alert} from '@material-ui/lab'
-import AlertStep from '../../components/StepForm/AlertStep'
-import TrackList from "../../components/TrackList/TrackList";
-import FileUpload from "../../components/FileUpload/FileUpload";
+import AlertStep from '../../ui/step-form/alert-step'
+import TrackList from "../../components/track-list/track-list";
+import FileUpload from "../../ui/file-upload/file-upload";
 
 const InfoSchema = Yup.object({
     name: Yup.string()
@@ -61,7 +59,7 @@ const Create = ({token, userId}) => {
 
     return (
         <MainLayout title={'Создать альбом'}>
-            <Card>
+            <div>
                 <MultiStepForm
                     initialValues={{
                         name: '',
@@ -79,7 +77,7 @@ const Create = ({token, userId}) => {
                 >
                     <FormStep stepName={'Инфо'}
                               validationSchema={InfoSchema}>
-                        <Grid container direction={'column'}
+                        <div
                               style={{padding: 20, maxWidth: 900, margin: '0 auto'}}>
                             <InputField
                                 name={'name'}
@@ -89,17 +87,17 @@ const Create = ({token, userId}) => {
                                 name={'author'}
                                 label={'Имя автора'}
                             />
-                        </Grid>
+                        </div>
                     </FormStep>
 
                     <FormStep stepName={'Обложка'}
                               validationSchema={ImageSchema}>
                         <AlertStep/>
-                        <Grid container direction={'column'}>
+                        <div >
                             <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
-                                <Button fullWidth>Загрузить изображение</Button>
+                                <button>Загрузить изображение</button>
                             </FileUpload>
-                        </Grid>
+                        </div>
 
                         <ImagePreview src={image} previewCanvasRef={previewCanvasRef}/>
                     </FormStep>
@@ -107,14 +105,14 @@ const Create = ({token, userId}) => {
                     <FormStep stepName={'Треки'}
                               validationSchema={TrackSchema}
                     >
-                        <Alert severity={'info'}>Выберите 3+ треков</Alert>
+                        <div >Выберите 3+ треков</div>
                         <div style={{padding: '0 40px'}}>
 
-                            <TrackList tracks={tracks} token={token} userId={userId} view={'checkbox'}/>
+                            <TrackList tracks={tracks} token={token} user_id={userId} view={'checkbox'}/>
                         </div>
                     </FormStep>
                 </MultiStepForm>
-            </Card>
+            </div>
 
         </MainLayout>
     )

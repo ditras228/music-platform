@@ -1,22 +1,19 @@
 import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Avatar, Button, Card, Grid, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {baseURL} from '../../api'
-import {ArrowBackIos, GTranslate, Hearing, InsertComment, MusicNote, Person, Title} from '@material-ui/icons'
-import classes from './[id].module.css'
+import classes from './[id].module.scss'
 import cookies from 'next-cookies'
 import {IAlbum} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
 import {getSession, useSession} from 'next-auth/client'
-import CommentFC from '../../components/Comment/Comment'
+import CommentFC from '../../components/comment/comment'
 import {useFormik} from 'formik'
 import {setPlayer} from '../../store/action-creators/player'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {UsersActionTypes} from '../../types/user'
 import * as yup from 'yup'
-import {Alert} from '@material-ui/lab'
-import TrackList from "../../components/TrackList/TrackList";
+import TrackList from "../../components/track-list/track-list";
 
 const commentSchema = yup.object({
     text: yup.string()
@@ -47,47 +44,46 @@ const AlbumPage = ({serverAlbum, token}) => {
             title={'Музыкальная площадка - ' + album.name + ' - ' + album.author}
             keywords={'Музыка, артисты,' + album.name + album.author}
         >
-            <Grid className={classes.grid}>
-                <Button
-                    variant={'outlined'}
+            <div className={classes.grid}>
+                <div
                     style={{fontSize: 20}}
                     onClick={() => router.push('/albums')}
                 >
-                    <ArrowBackIos/> К списку
-                </Button>
-                <Card>
+                    <div></div> К списку
+                </div>
+                <div>
 
-                    <Grid className={classes.info}>
+                    <div className={classes.info}>
                         <div className={classes.img_thumb}>
                             <img src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
                         </div>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
-                                <h3 className={classes.item_title}><Title/>Название</h3>
+                                <h3 className={classes.item_title}>Название</h3>
                                 <h3 className={classes.item_value}>{album.name}</h3>
                             </div>
                             <div className={classes.line}>
-                                <h3 className={classes.item_title}><Person/>Автор</h3>
+                                <h3 className={classes.item_title}>Автор</h3>
                                 <h3 className={classes.item_value}>{album.author}</h3>
                             </div>
                             <div className={classes.line}>
-                                <h3 className={classes.item_title}><Hearing/>Прослушиваний</h3>
+                                <h3 className={classes.item_title}>Прослушиваний</h3>
                                 <h3 className={classes.item_value}>{album.listens}</h3>
                             </div>
                         </div>
-                    </Grid>
-                </Card>
-                <Card>
-                    <div className={classes.card}>
-                        <h3 className={classes.title}><MusicNote/> Треки</h3>
-                        <TrackList tracks={album.tracks} token={token} userId={token}/>
                     </div>
-                </Card>
-                <Card>
-                    <Grid container className={classes.card}>
+                </div>
+                <div>
+                    <div className={classes.card}>
+                        <h3 className={classes.title}>Треки</h3>
+                        <TrackList tracks={album.tracks} token={token} user_id={token}/>
+                    </div>
+                </div>
+                <div>
+                    <div className={classes.card}>
                         <form onSubmit={formik.handleSubmit} className={classes.form}>
                             <h3 className={classes.title}>
-                                <InsertComment/> {
+                                {
                                 album.comments.length === 0
                                     ? 'нет комментариев'
                                     : 'комментарии'
@@ -96,40 +92,37 @@ const AlbumPage = ({serverAlbum, token}) => {
                             {session &&
                                 <div className={classes.comments_form}>
                                     <div className={classes.avatar_comment}>
-                                        <Avatar alt="Remy Sharp" src={session.image}
-                                                style={{backgroundColor: session.color || 'gray', marginRight: 20}}>
-                                            {session.user?.name?.substring(0, 1)}
-                                        </Avatar>
-                                        <TextField
+                                        {/*<Avatar alt="Remy Sharp" src={session.image}*/}
+                                        {/*        style={{backgroundColor: session.color || 'gray', marginRight: 20}}>*/}
+                                        {/*    {session.user?.name?.substring(0, 1)}*/}
+                                        {/*</Avatar>*/}
+                                        <input
                                             value={formik.values.text}
                                             onChange={formik.handleChange}
                                             name={'text'}
-                                            label='Оставьте комментарий'
-                                            fullWidth
-                                            multiline
                                         >
-                                        </TextField>
+                                        </input>
                                     </div>
                                     {formik.errors.text && formik.touched.text &&
-                                        <Alert variant="filled" severity="error">
+                                        <div>
                                             {formik.errors.text}
-                                        </Alert>}
-                                    <Button
+                                        </div>}
+                                    <button
                                         type={'submit'}
                                         className={classes.comments_submit}
                                     >Отправить
-                                    </Button>
+                                    </button>
                                 </div>
                             }
                         </form>
-                    </Grid>
+                    </div>
                     {
                         album.comments.map((comment: any) =>
                             <CommentFC comment={comment}/>
                         )
                     }
-                </Card>
-            </Grid>
+                </div>
+            </div>
         </MainLayout>
     )
 }

@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
-import {Box, Grid, TextField} from '@material-ui/core'
-import classes from './../TrackList/TrackList.module.css'
+import classes from '../track-list/track-list.module.scss'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import AlbumItem from '../album-item/album-item'
@@ -38,9 +37,7 @@ const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
     return (
         <>
             <form onSubmit={formik.handleSubmit}>
-                <TextField
-                    label={'Найти альбом'}
-                    fullWidth
+                <input
                     name={'query'}
                     value={formik.values.query}
                     onChange={async (e) => {
@@ -51,8 +48,8 @@ const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
 
                 />
             </form>
-            <Grid container direction={'column'}>
-                <Box p={0} className={classes.box}>
+            <div>
+                <div p={0} className={classes.box}>
                     {albums.map(album =>
                         <AlbumItem
                             key={album.id}
@@ -61,8 +58,8 @@ const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
                             userId={userId}
                         />
                     )}
-                </Box>
-            </Grid>
+                </div>
+            </div>
         </>
 
     )

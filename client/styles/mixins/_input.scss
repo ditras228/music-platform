@@ -1,0 +1,12 @@
+@import 'font';
+
+@mixin input() {
+  background-color: #eff0f6;
+  padding: 18px 24px;
+  color: #a0a3bd;
+  border-color: transparent;
+  @include fontSmall();
+  &:focus {
+    border: 2px solid #14142b;
+  }
+}

@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-import {Box, Grid, TextField} from '@material-ui/core'
-import classes from './TrackList.module.css'
-import {useFormik} from 'formik'
+import classes from './track-list.module.scss'
+import {Formik, useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import {searchTracks} from "../../store/action-creators/track";
-import TrackItem from "../TrackItem/TrackItem";
+import TrackItem from "../track-item/track-item";
 import {ITrack} from "../../types/track";
+import InputField from "../../ui/input-field/input-field";
 
 interface TrackListProps {
     tracks: ITrack[]
@@ -18,14 +18,6 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => 
     const [timer, setTimer] = useState(null)
 
     const dispatch = useDispatch()
-    const formik = useFormik({
-        initialValues: {
-            query: ''
-        },
-        onSubmit: async values => {
-            await handleSearch(values)
-        },
-    })
     const handleSearch = async (values) => {
         if (timer) {
             clearTimeout(timer)
@@ -39,21 +31,23 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => 
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit}>
-                <TextField
-                    label={'Найти трек'}
-                    fullWidth
-                    name={'query'}
-                    value={formik.values.query}
-                    onChange={async (e) => {
-                        formik.handleChange(e)
-                        await handleSearch(formik.values)
-                    }}
-                    style={{marginBottom: 20}}
-                />
-            </form>
-            <Grid className={classes.grid}>
-                <Box className={classes.box}>
+            <Formik initialValues={{
+                query: '',
+            }} onSubmit={(values) => {
+                handleSearch(values.query)
+            }}>{(formik) =>
+                <div className={classes.trackList__search}>
+                    <InputField
+                        label={'Введите запрос'}
+                        name={'query'}
+                        value={formik.values.query}
+
+                    />
+                </div>
+            }
+            </Formik>
+            <div className={classes.grid}>
+                <div className={classes.box}>
                     {tracks.map(track =>
                         <TrackItem
                             key={track.id}
@@ -63,8 +57,8 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => 
                             userId={user_id}
                         />
                     )}
-                </Box>
-            </Grid>
+                </div>
+            </div>
         </>
 
     )

@@ -1,10 +1,9 @@
 import React from 'react'
-import Navbar from '../components/Navbar/Navbar'
-import {Container} from '@material-ui/core'
-import Player from '../components/Player/Player'
+import Navbar from '../components/navbar/navbar'
+import Player from '../components/player/player'
 import Head from 'next/head'
-import classes from './MainLayout.module.css'
-import LoadingModal from '../components/LoadingModal/LoadingModal'
+import classes from './MainLayout.module.scss'
+import LoadingModal from "../modals/loading-modal/loading-modal";
 
 interface MainLayoutProps {
     children:any;
@@ -33,9 +32,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
             </Head>
             <Navbar/>
-            <Container className={classes.container}>
+            <div className={classes.container}>
                 {children}
-            </Container>
+            </div>
             <Player/>
             <LoadingModal/>
         </>

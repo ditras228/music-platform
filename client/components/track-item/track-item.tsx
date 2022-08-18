@@ -1,12 +1,10 @@
 import React, {useState} from 'react'
 import {ITrack} from '../../types/track'
-import {Card, Checkbox, Grid, IconButton} from '@material-ui/core'
-import {Delete, Pause, PlayArrow} from '@material-ui/icons'
 import {useRouter} from 'next/router'
 import {useActions} from '../../hooks/useAction'
 import {baseURL, filesURL} from '../../api'
 import {useDispatch} from 'react-redux'
-import classes from './TrackItem.module.css'
+import classes from './track-item.module.scss'
 import {useFormikContext} from 'formik'
 import {deleteTrack} from "../../store/action-creators/track";
 
@@ -60,34 +58,34 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         pauseTrack()
     }
     return (
-        <Card className={classes.track}>
+        <div className={classes.track}>
             <SwitchView view={view}
                         checked={isChecked}
                         deleteOne={deleteOne}
                         track={track}
                         userId={userId}
                         editState={editState}/>
-            <IconButton className={classes.play}>
+            <div className={classes.track__play}>
                 {active
-                    ? <Pause onClick={play}/>
-                    : <PlayArrow onClick={pause}/>
+                    ? <div onClick={play}></div>
+                    : <div onClick={pause}></div>
                 }
-            </IconButton>
-            <div className={classes.track_info}
+            </div>
+            <div className={classes.track__info}
                  onClick={() => {
                      view !== 'checkbox'
                          ? router.push('/tracks/' + track.id)
                          : editState()
                  }
                  }>
-                <img className={classes.image} src={filesURL + track.image} alt={'Обложка трека'}/>
-                <Grid className={classes.name} container direction={'column'}>
+                <img className={classes.track__image} src={filesURL + track.image} alt={'Обложка трека'}/>
+                <div className={classes.track__name}>
                     <div>{track.name}</div>
-                    <div className={classes.author}>{track.artist}</div>
-                </Grid>
+                    <div className={classes.track__author}>{track.artist}</div>
+                </div>
             </div>
 
-        </Card>
+        </div>
     )
 }
 const SwitchView = ({view, deleteOne, checked, userId, track, editState}) => {
@@ -95,13 +93,13 @@ const SwitchView = ({view, deleteOne, checked, userId, track, editState}) => {
     switch (view) {
         case 'checkbox':
             return (
-                <Checkbox checked={checked} name="checkbox" className={classes.delete}/>
+                <input type='checkbox' checked={checked} name="checkbox" className={classes.track__delete}/>
             )
         default:
             return (
-                <IconButton disabled={isNotOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
-                    <Delete onClick={deleteOne}/>
-                </IconButton>
+                <button disabled={isNotOwner} className={classes.track__delete} onClick={deleteOne}>
+                    delete
+                </button>
             )
 
     }

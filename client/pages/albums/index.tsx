@@ -1,16 +1,14 @@
 import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Button, Card, Grid} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {NextThunkDispatch, wrapper} from '../../store'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
-import {RotateLeft, Search} from '@material-ui/icons'
-import classes from './index.module.css'
+import classes from './index.module.scss'
 import {fetchAlbums, searchAlbums} from '../../store/action-creators/album'
 import {getSession} from 'next-auth/client'
-import AlbumList from '../../components/AlbumList/AlbumList'
+import AlbumList from '../../components/album-list/album-list'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
 import {UsersActionTypes} from '../../types/user'
@@ -43,27 +41,27 @@ const Index = ({token, userId}) => {
     if (error) {
         return (
             <MainLayout title={error}>
-                <Card className={classes.error}>
-                    <Button>
-                        <RotateLeft/>
-                    </Button>
+                <div className={classes.error}>
+                    <button>
+                        {/*<RotateLeft/>*/}
+                    </button>
                     <h2>{error}</h2>
-                </Card>
+                </div>
             </MainLayout>
         )
     }
     return (
         <MainLayout title={'Альбомы'}>
 
-            <Grid container justify={'center'}>
-                <Card className={classes.card}>
-                    <Grid container justify={'space-between'} direction={'row'}>
-                        <h2 className={classes.title}><Search/> Альбомы</h2>
-                        <Button onClick={() => router.push('/albums/create')}>Новый альбом</Button>
-                    </Grid>
+            <div>
+                <div className={classes.card}>
+                    <div>
+                        <h2 className={classes.title}>Альбомы</h2>
+                        <button onClick={() => router.push('/albums/create')}>Новый альбом</button>
+                    </div>
                     <AlbumList albums={albums} token={token} userId={userId}/>
-                </Card>
-            </Grid>
+                </div>
+            </div>
         </MainLayout>
     )
 }

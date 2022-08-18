@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react'
-import {Alert} from '@material-ui/lab'
 import {useFormikContext} from 'formik'
 
 const AlertStep = () => {
@@ -17,9 +16,9 @@ const AlertStep = () => {
         <>
             {
                 errors.map(error => (
-                    <Alert variant="filled" severity="error">
+                    <div >
                         {error}
-                    </Alert>
+                    </div>
                 ))
 
             }

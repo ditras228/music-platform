@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {Form, Formik, FormikConfig, FormikHelpers, FormikValues} from 'formik'
 import FormNavigation from './form-navigation'
-import {Step, StepLabel, Stepper} from '@material-ui/core'
 
 interface Props extends FormikConfig<FormikValues> {
     children: React.ReactNode
@@ -44,15 +43,15 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
             validationSchema={step.props.validationSchema}>
             {(formik) =>
                 <Form>
-                    <Stepper activeStep={stepNumber}>{
+                    <div >{
                         steps.map(currentStep => {
                             const label = currentStep.props.stepName
 
-                            return <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
+                            return <div key={label}>
+                                <div>{label}</div>
+                            </div>
                         })
-                    }</Stepper>
+                    }</div>
                     {step}
                     <FormNavigation
                         isLastStep={isLastStep}
