@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Form, Formik, FormikConfig, FormikHelpers, FormikValues} from 'formik'
-import FormNavigation from './FormNavigation'
+import FormNavigation from './form-navigation'
 import {Step, StepLabel, Stepper} from '@material-ui/core'
 
 interface Props extends FormikConfig<FormikValues> {

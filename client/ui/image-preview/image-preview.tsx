@@ -1,6 +1,6 @@
 import React, {ReactElement} from 'react'
-import classes from './ImagePreview.module.css'
-import Cropper from '../Cropper/Cropper'
+import * as classes from './image-preview.module.css'
+import Cropper from '../cropper/cropper'
 
 global.atob = require("atob");
 
@@ -39,12 +39,8 @@ export function dataURItoBlob(dataURI): Blob {
 const ImagePreview = ({src, previewCanvasRef}: Props): ReactElement => {
     return (
         <div className={classes.grid}>
-            <div className={classes.centered}>
                 <Cropper upImg={src} previewCanvasRef={previewCanvasRef}/>
-            </div>
-            <div className={classes.centered}>
                 <canvas ref={previewCanvasRef} className={classes.imageBig}/>
-            </div>
         </div>
 
     )

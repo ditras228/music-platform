@@ -1,0 +1,7 @@
+@import "../../styles/mixins/font";
+.login{
+  &__title{
+    @include fontMedium();
+
+  }
+}

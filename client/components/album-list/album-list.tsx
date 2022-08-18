@@ -3,7 +3,7 @@ import {Box, Grid, TextField} from '@material-ui/core'
 import classes from './../TrackList/TrackList.module.css'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
-import AlbumItem from '../AlbumItem/AlbumItem'
+import AlbumItem from '../album-item/album-item'
 import {searchAlbums} from '../../store/action-creators/album'
 import {IAlbum} from '../../types/album'
 

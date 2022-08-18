@@ -1,18 +1,15 @@
 import React from 'react'
-import MainLayout from '../layouts/MainLayout'
+import MainLayout from '../../layouts/MainLayout'
 import {useFormik} from 'formik'
-import {Button, Card, Grid, Link, TextField} from '@material-ui/core'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
-import {GitHub, VpnKey} from '@material-ui/icons'
-import classes from './auth/register.module.css'
-import {Alert} from '@material-ui/lab'
 import {useDispatch, useSelector} from 'react-redux'
-import {GetError} from '../store/selectors'
+import {GetError} from '../../store/selectors'
 import {getCsrfToken, getSession, signIn} from 'next-auth/client'
-import {UsersActionTypes} from '../types/user'
-import {NextThunkDispatch, wrapper} from '../store'
+import {UsersActionTypes} from '../../types/user'
+import {NextThunkDispatch, wrapper} from '../../store'
 import cookies from 'next-cookies'
+import classes from './index.module.scss'
 
 const SignupSchema = Yup.object({
     email: Yup.string().email('Неккоректный email').required('Обязательно'),
@@ -54,25 +51,23 @@ const LogIn = ({session, csrfToken}) => {
     return (
         <MainLayout>
             <form >
-                <Card
-                    className={classes.card}>
-                    <h2 className={classes.title}><VpnKey/> Вход</h2>
-                    <Grid
+                <div
+                    className={classes.login}>
+                    <h2 className={classes.login__title}>Вход</h2>
+                    <div
                         className={classes.form}
                     >
                         <input name='csrfToken' type='hidden' defaultValue={csrfToken}/>
-                        <TextField
-                            label={'Введите Email'}
+                        <input
                             name={'email'}
                             value={formik.values.email}
                             onChange={formik.handleChange}
                         />
                         {formik.touched.email && formik.errors.email
-                        && <Alert variant="filled" severity="error">
+                        && <div>
                             {formik.errors.email}
-                        </Alert>}
-                        <TextField
-                            label={'Введите пороль'}
+                        </div>}
+                        <input
                             name={'password'}
                             value={formik.values.password}
                             onChange={formik.handleChange}
@@ -80,16 +75,15 @@ const LogIn = ({session, csrfToken}) => {
 
                         />
                         {formik.touched.password && formik.errors.password
-                        && <Alert variant="filled" severity="error">
+                        && <div>
                             {formik.errors.password}
-                        </Alert>}
+                        </div>}
                         {error ?
-                            <Alert variant="filled" severity="error">
+                            <div>
                                 {error.message}
-                            </Alert> : null}
+                            </div> : null}
 
-                        <Button
-                            //type={'submit'}
+                        <button
                             onClick={() => {
                                 formik.handleSubmit()
                                 signIn('credentials',
@@ -97,18 +91,16 @@ const LogIn = ({session, csrfToken}) => {
                                     .then(data => handleSignIn(data))
                             }                                }>
                             Войти
-                        </Button>
-                        <Button
-                            onClick={() => signIn('github')}
-                            startIcon={ <GitHub/>}>
-
+                        </button>
+                        <button
+                            onClick={() => signIn('github')}>
                             Войти с помощью GitHub
-                        </Button>
-                        <Link onClick={e => loginHandler(e)} className={classes.login}>
+                        </button>
+                        <div onClick={e => loginHandler(e)} className={classes.login}>
                             Ещё нет аккаунта? Зарегистрируйтесь
-                        </Link>
-                    </Grid>
-                </Card>
+                        </div>
+                    </div>
+                </div>
             </form>
         </MainLayout>
     )
@@ -139,19 +131,3 @@ export const getServerSideProps = wrapper.getServerSideProps
     return ({props: {session, csrfToken}})
 
 })
-// LogIn.getInitialProps= async (context)=>{
-//     const {req,res} = context
-//     const session = await getSession({req})
-//     if(session && res && session.acessToken){
-//         res.writeHead(302, {
-//             Location: '/'
-//         })
-//         res.end()
-//         return
-//     }
-//     return {
-//         session: undefined,
-//         providers: await providers(),
-//         csrfToken: await csrfToken(context)
-//     }
-// }

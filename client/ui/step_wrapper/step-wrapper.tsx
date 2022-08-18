@@ -6,7 +6,7 @@ interface StepWrapperProps {
     activeStep: number
 }
 
-import classes from './StepWrapper.module.css'
+import classes from './step-wrapper.module.css'
 
 const StepWrapper: React.FC<StepWrapperProps> = ({steps, activeStep, children}) => {
     return (

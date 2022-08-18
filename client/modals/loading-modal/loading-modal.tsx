@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
-import classes from './LoadingModal.module.css'
+import classes from './loading-modal.module.css'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CircularProgress} from '@material-ui/core'
 
