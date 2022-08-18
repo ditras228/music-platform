@@ -28,9 +28,9 @@ const Index = ({token, userId}) => {
             <div className={classes.tracks}>
                 <div className={classes.tracks__top}>
                     <div className={classes.tracks__top__title}> Треки</div>
-                    <button className={classes.tracks__top__createBtn}
+                    <div className={classes.tracks__top__createBtn}
                             onClick={() => router.push('/tracks/create')}>Загрузить
-                    </button>
+                    </div>
                 </div>
 
                 <TrackList tracks={tracks} token={token} user_id={userId}/>

@@ -16,8 +16,8 @@ interface TrackListProps {
 
 const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => {
     const [timer, setTimer] = useState(null)
+    const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
     const handleSearch = async (values) => {
         if (timer) {
             clearTimeout(timer)

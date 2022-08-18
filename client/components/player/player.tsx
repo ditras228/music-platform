@@ -6,7 +6,7 @@ import classes from './player.module.scss'
 import {savePlayer} from '../../store/action-creators/player'
 import {useDispatch} from 'react-redux'
 import {TracksAPI} from '../../api/tracksAPI'
-import TrackProgress from "../track-progres/track-progres";
+import Slider from "../track-progres/track-progres";
 
 let audio
 
@@ -91,24 +91,21 @@ const Player = () => {
     }
     return (
         <div className={classes.player}>
-            <div className={classes.column}>
-                <button onClick={play}>
+            <div className={classes.player__column}>
+                <div onClick={play}>
                     {pause
-                        ?<div>play</div>
-                        :  <div>pause</div>
+                        ? <div className={classes.player__play}></div>
+                        : <div className={classes.player__pause}></div>
                     }
-                </button>
-                <div className={classes.row}>
-                    <div>{active.name}</div>
-                    <div style={{fontSize: 12}}>{active.artist}</div>
+                </div>
+                <div className={classes.player__info}>
+                    <div className={classes.player__info__name}>{active.name}</div>
+                    <div className={classes.player__info__author}>{active.artist}</div>
                 </div>
             </div>
-            <TrackProgress left={currentTime} right={duration}
-                           onChange={changeCurrentTime} format={'time'}/>
-            <div className={classes.column}>
-                <div style={{marginLeft: 'auto', paddingRight: 10}}/>
-                <TrackProgress left={volume} right={100} onChange={changeVolume}/>
-            </div>
+            <Slider left={currentTime} right={duration}
+                    onChange={changeCurrentTime} format={'time'}/>
+            <Slider left={volume} right={100} onChange={changeVolume}/>
         </div>
     )
 }

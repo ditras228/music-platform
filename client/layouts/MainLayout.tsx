@@ -4,9 +4,10 @@ import Player from '../components/player/player'
 import Head from 'next/head'
 import classes from './MainLayout.module.scss'
 import LoadingModal from "../modals/loading-modal/loading-modal";
+import Sidebar from "../components/sidebar/sidebar";
 
 interface MainLayoutProps {
-    children:any;
+    children: any;
     title?: string
     description?: string
     keywords?: string
@@ -29,14 +30,18 @@ const MainLayout: React.FC<MainLayoutProps> = ({
                 <meta name={'viewport'} content={'width=device-width, initialScale=1'}/>
                 <link rel="stylesheet"
                       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
-
             </Head>
-            <Navbar/>
-            <div className={classes.container}>
-                {children}
+            <div>
+                <Navbar/>
+                <div className={classes.layout}>
+                    <Sidebar></Sidebar>
+                    <div className={classes.layout__container}>
+                        {children}
+                    </div>
+                </div>
+                <Player/>
+                <LoadingModal/>
             </div>
-            <Player/>
-            <LoadingModal/>
         </>
     )
 }

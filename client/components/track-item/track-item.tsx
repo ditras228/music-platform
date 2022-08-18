@@ -22,6 +22,7 @@ type formik = {
     picture: undefined,
     tracks: Array<string>
 }
+
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userId, token}) => {
     const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
@@ -29,11 +30,11 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     const [isChecked, setChecked] = useState(false)
     const formik = useFormikContext<formik>()
 
-    const deleteOne = async () => {
+    const deleteOne = (): void => {
         dispatch(deleteTrack(track.id, token))
     }
 
-    const editState = () => {
+    const editState = (): void => {
         if (formik) {
             setChecked(!isChecked)
             if (isChecked === false) {
@@ -44,13 +45,13 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
             }
         }
     }
-    const play = (e) => {
+    const play = (e): void => {
         e.stopPropagation()
         e.preventDefault()
         setActiveTrack(track)
         playTrack()
     }
-    const pause = (e) => {
+    const pause = (e): void => {
         e.stopPropagation()
         e.preventDefault()
 
@@ -98,7 +99,6 @@ const SwitchView = ({view, deleteOne, checked, userId, track, editState}) => {
         default:
             return (
                 <button disabled={isNotOwner} className={classes.track__delete} onClick={deleteOne}>
-                    delete
                 </button>
             )
 

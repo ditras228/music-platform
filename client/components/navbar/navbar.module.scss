@@ -1,32 +1,38 @@
 @import "../../styles/mixins/font";
+@import "../../styles/mixins/icon";
+
 .navbar{
-    background-color: #000;
-    color: #ffffff;
-    height: 60px;
-    display: grid;
-    align-items: center;
-    padding: 0 20px;
-    margin-bottom: 30px;
     @include fontLarge();
-}
-.logo{
-    display: flex!important;
-    align-items: center;
-}
-.List_header{
-    padding-right: 10px!important;
-    height: 64px;
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-template-rows: auto;
+    align-items: center;
+
+    height: 60px;
+    padding: 0 20px;
+    margin-bottom: 30px;
+
+    background-color: #000;
+    color: #ffffff;
+
+    &__logo{
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+
+        &__icon{
+            @include icon('logo.svg');
+            width: 30px;
+            height: 30px;
+        }
+    }
+    &__auth{
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: right;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
 }
-.toolbar{
-    display: grid!important;
-    grid-template-columns: auto 1fr auto!important;
-}
-.log{
-    grid-column: 3/4!important;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: right;
-}
+

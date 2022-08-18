@@ -1,4 +1,5 @@
 @import "../../styles/mixins/font";
+@import "../../styles/mixins/button";
 
 .tracks{
     background-color: #ffffff;
@@ -9,16 +10,16 @@
     &__top{
         display: grid;
         grid-template-columns: 1fr auto;
+        margin-bottom: 15px;
+
         &__title{
             @include fontHeaderSmall();
-            margin-bottom: 15px;
         }
-        &__create-btn{
-
-        }
-        &__search{
-            display: block;
-            margin-bottom: 35px;
+        &__createBtn{
+            @include button-small();
+            &:hover{
+                cursor: pointer;
+            }
         }
     }
 
