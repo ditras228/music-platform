@@ -1,6 +1,6 @@
 import React from 'react'
 import MainLayout from '../layouts/MainLayout'
-import {Formik, useFormik} from 'formik'
+import {Formik} from 'formik'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import {useDispatch, useSelector} from 'react-redux'
