@@ -48,7 +48,7 @@ const Create = ({token}) => {
         if (redirectTo) {
             router.push(`/tracks/${redirectTo}`)
         }
-    }, [redirectTo])
+    }, [redirectTo, router])
 
     useEffect(() => {
         if (chart.current)

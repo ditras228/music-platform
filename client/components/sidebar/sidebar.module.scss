@@ -3,6 +3,8 @@
 
 .sidebar{
   padding-left: 20px;
+  position: fixed;
+  top: 100px;
 
   &__content{
     @include fontMedium();

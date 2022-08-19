@@ -23,5 +23,6 @@ class VerifyCsrfToken extends Middleware
         'profile',
         'profile/*',
         'listen/*',
+        'audio/*'
     ];
 }

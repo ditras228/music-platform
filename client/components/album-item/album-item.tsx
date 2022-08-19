@@ -1,10 +1,11 @@
 import React from 'react'
 import {useRouter} from 'next/router'
-import {filesURL} from '../../api'
+import {imagesURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './album-item.module.scss'
 import {IAlbum} from '../../types/album'
 import {deleteAlbum} from "../../store/action-creators/album";
+import Image from 'next/image'
 
 interface AlbumItemProps {
     album: IAlbum
@@ -22,7 +23,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album, token, userId}) => {
 
     return (
         <div className={classes.track}>
-            <img className={classes.image} src={filesURL + album.picture} alt={'Обложка альбома'}/>
+            <Image className={classes.image} src={imagesURL + album.picture} alt={'Обложка альбома'} width={70} height={70}/>
             <div className={classes.name} onClick={() => router.push('/albums/' + album.id)}>
                 <div>{album.name}</div>
                 <div className={classes.author}>{album.author}</div>

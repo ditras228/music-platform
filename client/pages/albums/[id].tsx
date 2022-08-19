@@ -14,6 +14,7 @@ import {NextThunkDispatch, wrapper} from '../../store'
 import {UsersActionTypes} from '../../types/user'
 import * as yup from 'yup'
 import TrackList from "../../components/track-list/track-list";
+import Image from "next/image";
 
 const commentSchema = yup.object({
     text: yup.string()
@@ -55,7 +56,7 @@ const AlbumPage = ({serverAlbum, token}) => {
 
                     <div className={classes.info}>
                         <div className={classes.img_thumb}>
-                            <img src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
+                            <Image src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
                         </div>
                         <div style={{marginLeft: '30px'}}>
                             <div className={classes.line}>
@@ -118,7 +119,7 @@ const AlbumPage = ({serverAlbum, token}) => {
                     </div>
                     {
                         album.comments.map((comment: any) =>
-                            <CommentFC comment={comment}/>
+                            <CommentFC comment={comment} key={comment.id}></CommentFC>
                         )
                     }
                 </div>

@@ -31,13 +31,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({
                 <link rel="stylesheet"
                       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
             </Head>
-            <div>
+            <div className={classes.layout}>
                 <Navbar/>
-                <div className={classes.layout}>
-                    <Sidebar></Sidebar>
-                    <div className={classes.layout__container}>
-                        {children}
-                    </div>
+                <Sidebar/>
+                <div className={classes.container}>
+                    {children}
                 </div>
                 <Player/>
                 <LoadingModal/>

@@ -1,38 +1,46 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/icon";
 
-.navbar{
-    @include fontLarge();
+.navbar {
+  @include fontLarge();
+  height: 60px;
+  margin-bottom: 30px;
+
+  background-color: #000;
+  color: #ffffff;
+  position: fixed;
+  width: 100%;
+  display: grid;
+  align-items: center;
+  z-index: 1;
+
+  &__container {
+    padding: 0 20px;
     display: grid;
     grid-template-columns: auto 1fr;
-    align-items: center;
 
-    height: 60px;
-    padding: 0 20px;
-    margin-bottom: 30px;
+    &__logo {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
 
-    background-color: #000;
-    color: #ffffff;
-
-    &__logo{
-        display: grid;
-        grid-template-columns: auto 1fr;
-        align-items: center;
-
-        &__icon{
-            @include icon('logo.svg');
-            width: 30px;
-            height: 30px;
-        }
+      &__icon {
+        @include icon('logo.svg');
+        width: 30px;
+        height: 30px;
+      }
     }
-    &__auth{
-        display: grid;
-        grid-template-columns: auto auto;
-        justify-content: right;
 
-        &:hover{
-            cursor: pointer;
-        }
+    &__auth {
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: right;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
+  }
 }
+
 

@@ -37,7 +37,7 @@ const Register = () => {
     }
     useEffect(() => {
         router.push(redirectTo)
-    }, [redirectTo])
+    }, [redirectTo, router])
 
     return (
         <MainLayout>

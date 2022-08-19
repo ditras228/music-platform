@@ -55,7 +55,7 @@ const Create = ({token, userId}) => {
     useEffect(() => {
         if (redirectTo)
             router.push(`/albums/${redirectTo}`)
-    }, [redirectTo])
+    }, [redirectTo, router])
 
     return (
         <MainLayout title={'Создать альбом'}>

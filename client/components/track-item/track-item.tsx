@@ -2,11 +2,12 @@ import React, {useState} from 'react'
 import {ITrack} from '../../types/track'
 import {useRouter} from 'next/router'
 import {useActions} from '../../hooks/useAction'
-import {baseURL, filesURL} from '../../api'
+import {baseURL, imagesURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './track-item.module.scss'
 import {useFormikContext} from 'formik'
 import {deleteTrack} from "../../store/action-creators/track";
+import Image from "next/image";
 
 interface TrackItemProps {
     track: ITrack
@@ -79,7 +80,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
                          : editState()
                  }
                  }>
-                <img className={classes.track__image} src={filesURL + track.image} alt={'Обложка трека'}/>
+                <Image className={classes.track__image} src={imagesURL + track.image} alt={'Обложка трека'} width={70} height={70}/>
                 <div className={classes.track__name}>
                     <div>{track.name}</div>
                     <div className={classes.track__author}>{track.artist}</div>

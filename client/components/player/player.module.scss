@@ -14,6 +14,7 @@
   max-width: 1200px;
   left: 50%;
   transform: translateX(-50%);
+  background-color: #ffffff;
 
   &__play{
     @include icon('play.svg');
@@ -25,6 +26,10 @@
   &__play, &__pause{
     width: 30px;
     height: 30px;
+
+    &:hover{
+      cursor: pointer;
+    }
   }
 
   &__info{

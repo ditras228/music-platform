@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 import {UsersAPI} from '../../../api/usersAPI'
 
+/* eslint-disable */
 export default (req, res) => {
     NextAuth(req, res, {
         providers: [

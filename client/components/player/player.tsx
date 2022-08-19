@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useAction'
-import {baseURL, filesURL} from '../../api'
+import {audioURL, imagesURL} from '../../api'
 import classes from './player.module.scss'
 import {savePlayer} from '../../store/action-creators/player'
 import {useDispatch} from 'react-redux'
-import {TracksAPI} from '../../api/tracksAPI'
 import Slider from "../track-progres/track-progres";
 
 let audio
@@ -13,7 +12,7 @@ let audio
 const Player = () => {
     const player = useTypedSelector(state => state.player)
     const {pause, volume, active, duration, currentTime} = player
-    const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
+    const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration} = useActions()
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -25,49 +24,49 @@ const Player = () => {
                 setDuration(Math.ceil(audio?.duration))
             }
         }
-        , [active, volume, duration, pause])
+        , [active, volume, duration, pause, dispatch, player, setDuration])
 
     useEffect(() => {
+        const setAudio = () => {
+            if (active) {
+                audio.src = audioURL + active.id
+                audio.volume = volume / 100
+                audio.onloadedmetadata = () => {
+                    setDuration(Math.ceil(audio.duration))
+                }
+                audio.ontimeupdate = () => {
+                    if (audio.duration - 1 >= audio.currentTime) {
+                        setCurrentTime(Math.ceil(audio.currentTime))
+                    } else {
+                        if (audio.duration !== 0) {
+                            pauseTrack()
+                            audio.pause()
+                            // TracksAPI.listen(active.id).then(() => active.listens += 1)
+                        } else {
+                            if (audio.src !== active?.audio) {
+                                setDuration(Math.ceil(duration))
+                            } else {
+                                setDuration(Math.ceil(audio.duration))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (!audio) {
             audio = new Audio()
             !currentTime && setCurrentTime(currentTime)
             setAudio()
             pauseTrack()
         } else {
-            const src = audio.src.replace(filesURL, '')
+            const src = audio.src.replace(imagesURL, '')
             if (src !== active?.audio) {
                 setDuration(Math.ceil(audio.duration))
                 setAudio()
             }
         }
-    }, [active])
-    const setAudio = () => {
-        if (active) {
-            audio.src = filesURL + active.audio
-            audio.volume = volume / 100
-            // audio.currentTime=currentTime || 0
-            audio.onloadedmetadata = () => {
-                setDuration(Math.ceil(audio.duration))
-            }
-            audio.ontimeupdate = () => {
-                if (audio.duration - 1 >= audio.currentTime) {
-                    setCurrentTime(Math.ceil(audio.currentTime))
-                } else {
-                    if (audio.duration !== 0) {
-                        pauseTrack()
-                        audio.pause()
-                        TracksAPI.listen(active.id).then(() => active.listens += 1)
-                    } else {
-                        if (audio.src !== active?.audio) {
-                            setDuration(Math.ceil(duration))
-                        } else {
-                            setDuration(Math.ceil(audio.duration))
-                        }
-                    }
-                }
-            }
-        }
-    }
+    }, [])
     const play = () => {
         playTrack()
         if (pause) {
@@ -78,11 +77,13 @@ const Player = () => {
             audio.pause()
         }
     }
-    const changeVolume = (e: React.ChangeEvent<HTMLInputElement>, newValue: number) => {
+    const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.valueAsNumber
         audio.volume = newValue / 100
         setVolume(newValue)
     }
-    const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>, newValue: number) => {
+    const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.valueAsNumber
         audio.currentTime = newValue
         setCurrentTime(newValue)
     }

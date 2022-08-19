@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TrackController extends Controller
 {
@@ -21,6 +22,18 @@ class TrackController extends Controller
      *
      * @return Track[]|\Illuminate\Database\Eloquent\Collection|Response
      */
+    public function streamResponse($id): BinaryFileResponse
+    {
+        $audioPath = Track::Find($id)->audio;
+        $response = new BinaryFileResponse(
+            Storage::disk('public')->path($audioPath)
+        );
+
+        BinaryFileResponse::trustXSendfileTypeHeader();
+
+        return $response;
+    }
+
     public function index()
     {
         return Track::all();

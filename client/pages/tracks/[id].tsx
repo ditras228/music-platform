@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
-import {filesURL} from '../../api'
+import {imagesURL} from '../../api'
 import {useFormik} from 'formik'
 import {ITrack} from '../../types/track'
 import classes from './[id].module.scss'
@@ -15,6 +15,7 @@ import {UsersActionTypes} from '../../types/user'
 import * as yup from 'yup'
 import {useDispatch} from "react-redux";
 import {PlayerActionTypes} from "../../types/player";
+import Image from "next/image";
 
 const commentSchema = yup.object({
     text: yup.string()
@@ -66,7 +67,7 @@ const TrackPage = ({serverTrack, token}) => {
 
                     <div className={classes.info}>
                         <div className={classes.img_thumb}>
-                            <img src={filesURL + track.image}
+                            <Image width={170} height={170} src={imagesURL + track.image}
                                  className={classes.img} alt={'Обложка трека'} onClick={trackClickHandler}/>
                             <div className={classes.play_button}/>
                         </div>

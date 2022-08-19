@@ -27,4 +27,6 @@ Route::middleware([Authorization::class])->group(function () {
     Route::put('/listen/{track}', [TrackListensController::class, 'update']);
     Route::resource('/album', AlbumController::class);
     Route::resource('/comment', CommentController::class);
+
 });
+Route::get('/audio/{track}', [TrackController::class, 'streamResponse']);

@@ -45,4 +45,7 @@ export const TracksAPI = {
     listen(id): any {
         return instance.put(`/listen/${id}`)
     },
+    getAudio(id): any {
+        return instance.get(`/audio/${id}`)
+    },
 }
