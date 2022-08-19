@@ -2,11 +2,6 @@
 @import "../../styles/mixins/button";
 
 .tracks{
-    background-color: #ffffff;
-    border: 1px solid gray;
-    border-radius: 5px;
-    padding: 20px;
-
     &__top{
         display: grid;
         grid-template-columns: 1fr auto;

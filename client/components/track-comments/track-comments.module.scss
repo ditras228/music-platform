@@ -14,9 +14,15 @@
         display: grid;
         grid-template-columns: 1fr auto;
         grid-column-gap: 25px;
+        margin-bottom: 25px;
 
         &__submitBtn{
             @include button();
         }
+    }
+
+    &__list{
+        display: grid;
+        grid-row-gap: 35px;
     }
 }

@@ -17,8 +17,8 @@ const TrackInfo = ({track,}) => {
     return <div className={classes.trackInfo}>
         <div className={classes.trackInfo__thumb}>
             <Image width={170} height={170} src={imagesURL + track.image}
-                   className={classes.img} alt={'Обложка трека'} onClick={trackClickHandler}/>
-            <div className={classes.play_button}/>
+                   className={classes.trackInfo__thumb__img} alt={'Обложка трека'} onClick={trackClickHandler}/>
+            <div className={classes.trackInfo__thumb__icon}/>
         </div>
         <div className={classes.trackInfo__desc}>
             <div className={classes.line}>

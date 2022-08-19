@@ -1,17 +1,16 @@
 @import "../../styles/mixins/font";
 
 .trackId {
-  max-width: 900px;
   display: grid;
   grid-template-columns: 1fr;
-  grid-gap: 10px;
   margin: 0 auto;
 
   &__title {
-    @include fontMedium();
-  }
+    @include fontHeaderSmall();
+    margin-bottom: 15px;
 
-  &__content {
-
+    &:hover{
+      cursor: pointer;
+    }
   }
 }

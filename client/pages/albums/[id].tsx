@@ -58,7 +58,7 @@ const AlbumPage = ({serverAlbum, token}) => {
                         <div className={classes.img_thumb}>
                             <Image src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
                         </div>
-                        <div style={{marginLeft: '30px'}}>
+                        <div>
                             <div className={classes.line}>
                                 <h3 className={classes.item_title}>Название</h3>
                                 <h3 className={classes.item_value}>{album.name}</h3>

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {Form, Formik, FormikConfig, FormikHelpers, FormikValues} from 'formik'
 import FormNavigation from './form-navigation'
+import classes from './multi-step-form.module.scss'
 
 interface Props extends FormikConfig<FormikValues> {
     children: React.ReactNode
@@ -14,11 +15,11 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
     const isLastStep = stepNumber === totalSteps - 1
     const [snapShot, setSnapshot] = useState(initialValues)
 
-    const next = (values: FormikValues):void => {
+    const next = (values: FormikValues): void => {
         setStepNumber(stepNumber + 1)
         setSnapshot(values)
     }
-    const previous = (values: FormikValues):void => {
+    const previous = (values: FormikValues): void => {
         setStepNumber(stepNumber - 1)
         setSnapshot(values)
 
@@ -43,12 +44,12 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
             validationSchema={step.props.validationSchema}>
             {(formik) =>
                 <Form>
-                    <div >{
+                    <div className={classes.stepForm__top}>{
                         steps.map(currentStep => {
                             const label = currentStep.props.stepName
 
-                            return <div key={label}>
-                                <div>{label}</div>
+                            return <div className={classes.stepForm__top__item} key={label}>
+                                {label}
                             </div>
                         })
                     }</div>

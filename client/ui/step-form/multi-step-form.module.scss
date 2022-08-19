@@ -1,0 +1,37 @@
+@import "../../styles/mixins/font";
+@import "../../styles/variables";
+
+.stepForm {
+  &__top {
+    @include fontMedium(bold);
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    counter-reset: list1;
+    margin-bottom: 25px;
+
+    &__item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 35px auto;
+      grid-column-gap: 10px;
+      align-items: center;
+
+      &:before {
+        counter-increment: list1;
+        content: counter(list1);
+
+        width: 30px;
+        height: 30px;
+        background-color: $button;
+        left: 0;
+        border-radius: 50%;;
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        @include fontSmall(bold);
+        line-height: 30px;
+      }
+    }
+  }
+}

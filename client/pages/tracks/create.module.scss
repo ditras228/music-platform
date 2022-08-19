@@ -1,3 +1,11 @@
+@import "../../styles/mixins/button";
+
+.createContent{
+    &__btn{
+        @include button();
+        width: 100%;
+    }
+}
 .waveSuffer{
     margin-top: 20px;
 }

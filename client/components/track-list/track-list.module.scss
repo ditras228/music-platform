@@ -2,4 +2,9 @@
     &__search{
         margin-bottom: 25px;
     }
+
+    &__content{
+        display: grid;
+        grid-row-gap: 10px;
+    }
 }

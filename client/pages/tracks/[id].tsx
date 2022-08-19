@@ -31,11 +31,9 @@ const TrackPage = ({serverTrack, token}) => {
                 >
                     К списку
                 </div>
-                <div className={classes.trackId__content}>
-                    <TrackInfo track={track}></TrackInfo>
-                    <TrackLyrics lyrics={track.lyrics}></TrackLyrics>
-                    <TrackComments track={track} session={session} token={token}></TrackComments>
-                </div>
+                <TrackInfo track={track}></TrackInfo>
+                <TrackLyrics lyrics={track.lyrics}></TrackLyrics>
+                <TrackComments track={track} session={session} token={token}></TrackComments>
             </div>
         </MainLayout>
     )

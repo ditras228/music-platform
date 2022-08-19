@@ -9,7 +9,7 @@ import InputField from "../../ui/input-field/input-field";
 const commentSchema = yup.object({
     text: yup.string()
         .min(5, 'Минимум 5 символов')
-        .max(2000, 'Максимум 200 символов')
+        .max(255, 'Максимум 255 символов')
         .required('Обязательное поле')
 })
 
@@ -19,14 +19,14 @@ const TrackComments = ({track, session, token}) => {
             text: '',
             track_id: track.id
         }
-        } validationSchema={commentSchema} onSubmit={async values => {
+        } validationSchema={commentSchema} onSubmit={values => {
             TracksAPI.addComment(values, token).then((comment: any) => {
                     // setTrack({...track, comments: [comment.data, ...track.comments]})
                 }
             )
         }}
         >{(formik) =>
-            <div>
+            <>
                 <div className={classes.trackComment__title}>
                     {
                         track.comments.length === 0
@@ -44,7 +44,7 @@ const TrackComments = ({track, session, token}) => {
                             >
                             </InputField>
                             <button
-                                type={'submit'}
+                                onClick={() => formik.handleSubmit()}
                                 className={classes.trackComment__form__submitBtn}
                             >Отправить
                             </button>
@@ -53,14 +53,16 @@ const TrackComments = ({track, session, token}) => {
 
                     </div>
                 }
-            </div>}
+            </>}
         </Formik>
+        <div className={classes.trackComment__list}>
+            {
+                track.comments.map((comment: any) =>
+                    <CommentFC key={comment.text} comment={comment}/>
+                )
+            }
 
-        {
-            track.comments.map((comment: any) =>
-                <CommentFC key={comment.id} comment={comment}/>
-            )
-        }
+        </div>
     </div>
 }
 export default TrackComments

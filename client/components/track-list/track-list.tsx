@@ -46,8 +46,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => 
                 </div>
             }
             </Formik>
-            <div className={classes.grid}>
-                <div className={classes.box}>
+            <div className={classes.trackList__content}>
                     {tracks.map(track =>
                         <TrackItem
                             key={track.id}
@@ -57,7 +56,6 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => 
                             userId={user_id}
                         />
                     )}
-                </div>
             </div>
         </>
 

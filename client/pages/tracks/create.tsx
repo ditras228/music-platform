@@ -6,7 +6,7 @@ import {useRouter} from 'next/router'
 import MultiStepForm, {FormStep} from '../../ui/step-form/multi-step-form'
 import InputField from '../../ui/input-field/input-field'
 import * as Yup from 'yup'
-import * as classes from './create.module.scss'
+import classes from './create.module.scss'
 import MainLayout from '../../layouts/MainLayout'
 import {UsersActionTypes} from '../../types/user'
 import {useDispatch} from 'react-redux'
@@ -88,7 +88,7 @@ const Create = ({token}) => {
                     <FormStep stepName={'Аудио'}
                               validationSchema={AudioSchema}>
                         <FileUpload accept={'audio/*'} name={'audio'} setAudio={setAudio}>
-                            <button>Загрузить аудио</button>
+                            <button className={classes.createContent__btn}>Загрузить аудио</button>
                         </FileUpload>
                         <div ref={chart} className={classes.waveSuffer}/>
                     </FormStep>
