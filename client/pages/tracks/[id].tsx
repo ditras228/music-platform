@@ -54,6 +54,8 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
         const player = cookies(ctx).player;
+    console.log(player)
+
     if(player)
 
         dispatch(setPlayer(player))

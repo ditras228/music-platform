@@ -47,42 +47,21 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         }
     }
 
-    const play = (e): void => {
-        e.stopPropagation()
-        e.preventDefault()
-        setActiveTrack(track)
-        playTrack()
-    }
-
-    const pause = (e): void => {
-        e.stopPropagation()
-        e.preventDefault()
-
-        setActiveTrack(track)
-        pauseTrack()
-    }
-
     return (
-        <div className={classes.track}>
+        <div className={classes.track}   onClick={() => {
+            view !== 'checkbox'
+                ? router.push('/tracks/' + track.id)
+                : editState()
+        }
+        }>
             <SwitchView view={view}
                         checked={isChecked}
                         deleteOne={deleteOne}
                         track={track}
-                        userId={userId}/>
-            <div className={classes.track__play}>
-                {
-                    active
-                    ? <div onClick={play}></div>
-                    : <div onClick={pause}></div>
-                }
-            </div>
+                        userId={userId} editState={editState}/>
+
             <div className={classes.track__info}
-                 onClick={() => {
-                     view !== 'checkbox'
-                         ? router.push('/tracks/' + track.id)
-                         : editState()
-                 }
-                 }>
+               >
                 <Image className={classes.track__image} src={imagesURL + track.image} alt={'Обложка трека'} width={70} height={70}/>
                 <div className={classes.track__name}>
                     <div>{track.name}</div>
@@ -94,13 +73,13 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     )
 }
 
-const SwitchView = ({view, deleteOne, checked, userId, track}) => {
+const SwitchView = ({view, deleteOne, checked, userId, track, editState}) => {
     const isNotOwner = userId != track.user_id
 
     switch (view) {
         case 'checkbox':
             return (
-                <input type='checkbox' checked={checked} name="checkbox" className={classes.track__delete}/>
+                <input type='checkbox' checked={checked} onChange={()=>editState()} name="checkbox" className={classes.track__delete}/>
             )
         default:
             return (

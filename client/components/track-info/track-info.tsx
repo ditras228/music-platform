@@ -1,40 +1,27 @@
 import React from "react";
 import Image from "next/image";
 import {imagesURL} from "../../api";
-import {PlayerActionTypes} from "../../types/player";
-import {useDispatch} from "react-redux";
 import classes from './track-info.module.scss'
 import {useActions} from "../../hooks/useAction";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
+import {setPreview} from "../../store/action-creators/player";
 
 const TrackInfo = ({track}) => {
-    const dispatch = useDispatch()
     const player = useTypedSelector(state => state.player)
 
-    const {pauseTrack, playTrack} = useActions()
+    const { setPreview} = useActions()
     const {pause, active} = player
 
-    const trackClickHandler = () => {
-        if(active.id == track.id){
-            if(pause){
-                playTrack()
-            }else{
-                pauseTrack()
-            }
-
-        }else{
-            dispatch({
-                type: PlayerActionTypes.SET_ACTIVE,
-                payload: track
-            })        }
-
+    const trackClickHandler = ():void => {
+        setPreview(active, track, pause )
     }
 
     return <div className={classes.trackInfo}>
-        <div className={classes.trackInfo__thumb} onClick={()=>trackClickHandler()}>
+        <div className={classes.trackInfo__thumb} onClick={trackClickHandler}>
             <Image width={170} height={170} src={imagesURL + track.image}
                    className={classes.trackInfo__thumb__img} alt={'Обложка трека'} />
-            {pause?            <div className={classes.trackInfo__thumb__playIcon}/>
+
+            {pause || active?.id != track.id?            <div className={classes.trackInfo__thumb__playIcon}/>
             :                <div className={classes.trackInfo__thumb__pauseIcon}/>
 
             }

@@ -56,6 +56,7 @@ export const getServerSideProps = wrapper.getServerSideProps
     await dispatch(fetchTracks(session.accessToken))
 
     const player = cookies(ctx).player;
+    console.log(player)
     if(player)
     dispatch(setPlayer(player))
     return {
