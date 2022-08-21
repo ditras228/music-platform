@@ -8,6 +8,8 @@ import classes from './track-item.module.scss'
 import {useFormikContext} from 'formik'
 import {deleteTrack} from "../../store/action-creators/track";
 import Image from "next/image";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
+import PlayImage from "../play-image/play-image";
 
 interface TrackItemProps {
     track: ITrack
@@ -25,11 +27,13 @@ type formik = {
 }
 
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userId, token}) => {
-    const {pauseTrack, playTrack, setActiveTrack} = useActions()
     const router = useRouter()
     const dispatch = useDispatch()
     const [isChecked, setChecked] = useState(false)
     const formik = useFormikContext<formik>()
+    const {setPreview} = useActions()
+    const player = useTypedSelector(state => state.player)
+    const {pause} = player
 
     const deleteOne = (): void => {
         dispatch(deleteTrack(track.id, token))
@@ -48,7 +52,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
     }
 
     return (
-        <div className={classes.track}   onClick={() => {
+        <div className={classes.track} onClick={() => {
             view !== 'checkbox'
                 ? router.push('/tracks/' + track.id)
                 : editState()
@@ -61,8 +65,8 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
                         userId={userId} editState={editState}/>
 
             <div className={classes.track__info}
-               >
-                <Image className={classes.track__image} src={imagesURL + track.image} alt={'Обложка трека'} width={70} height={70}/>
+            >
+                <PlayImage track={track} list={true}></PlayImage>
                 <div className={classes.track__name}>
                     <div>{track.name}</div>
                     <div className={classes.track__author}>{track.artist}</div>
@@ -79,7 +83,8 @@ const SwitchView = ({view, deleteOne, checked, userId, track, editState}) => {
     switch (view) {
         case 'checkbox':
             return (
-                <input type='checkbox' checked={checked} onChange={()=>editState()} name="checkbox" className={classes.track__delete}/>
+                <input type='checkbox' checked={checked} onChange={() => editState()} name="checkbox"
+                       className={classes.track__delete}/>
             )
         default:
             return (

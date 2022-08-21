@@ -7,46 +7,74 @@ import TrackVolume from "../track-volume/track-volume";
 import TrackProgress from "../track-progress/track-progress";
 import Play from "../play/play";
 import cookie from 'js-cookie'
+import {setActiveTrack} from "../../store/action-creators/player";
+import {ITrack} from "../../types/track";
 
 let audio
 
 const Player = () => {
     const player = useTypedSelector(state => state.player)
-    const {active, pause, volume, currentTime} = player
-    const {setCurrentTime, setDuration} = useActions()
+    const track = useTypedSelector(state => state.track)
+    const {active, pause, volume, currentTime, activeAlbum} = player
+    const {setCurrentTime, setDuration, setActiveTrack} = useActions()
 
     useEffect(() => {
-        if (!audio) {
-            // В случае отстуствия аудио, создаем его
-            audio = new Audio()
-        }
-
-        if (active) {
-            // В случае, если id'шник другой, обнуляем currentTime и присваеваем новый src
-            if (audio.src.split('/')[4] != active?.id) {
-                audio.src = audioURL + active.id
-                setCurrentTime(0)
-                audio.play()
-            }
-            audio.volume = volume / 100
-
-            // По загрузке аудио
-            audio.onloadedmetadata = () => {
-                setDuration(Math.ceil(audio.duration))
+            if (!audio) {
+                // В случае отстуствия аудио, создаем его
+                audio = new Audio()
             }
 
-            // При воспроизведении аудио
-            audio.ontimeupdate = () => {
-                if (audio.duration >= audio.currentTime) {
-                    setCurrentTime(Math.ceil(audio.currentTime))
+            if (active) {
+                // В случае, если id'шник другой, обнуляем currentTime и присваеваем новый src
+                if (audio.src.split('/')[4] != active?.id) {
+                    audio.src = audioURL + active.id
+                    setCurrentTime(0)
+                    audio.play()
                 }
+                audio.volume = volume / 100
+
+                // По загрузке аудио
+                audio.onloadedmetadata = () => {
+                    setDuration(Math.ceil(audio.duration))
+                }
+
+                // При воспроизведении аудио
+                audio.ontimeupdate = () => {
+                    if (audio.duration >= audio.currentTime) {
+                        setCurrentTime(Math.ceil(audio.currentTime))
+                    }
+                }
+
+                // Если аудио закончило проигрывание..
+                audio.onended = () => {
+                    if (track) {
+                        nextTrack(track.tracks)
+                    }
+                    if (activeAlbum) {
+                        nextTrack(activeAlbum.tracks)
+                    }
+                }
+
+            }
+
+        }, [active?.id, pause]
+    )
+
+    function nextTrack(tracks: ITrack[]): void {
+        if (tracks.length > 0) {
+            const currentIndex = tracks.indexOf(tracks.filter(value => value.id == active.id)[0])
+
+            if (tracks.length - 1 > currentIndex) {
+                setActiveTrack(tracks[currentIndex + 1])
+            } else {
+                setActiveTrack(null)
             }
         }
 
-    }, [active?.id, pause])
+    }
 
-    // Синхронизация redux и audio
     useEffect(() => {
+        // Синхронизация redux и audio
         if (pause) {
             audio.pause()
         } else {
@@ -69,11 +97,11 @@ const Player = () => {
 
     }, [currentTime, pause, volume])
 
-    // В случае отстуствия трека, возвращаем нуль
+// В случае отстуствия трека, возвращаем нуль
     if (active === null) return null
 
 
-    // Удаление куков паузы текущего трека, при закрытии вкладки
+// Удаление куков паузы текущего трека, при закрытии вкладки
     if (typeof window !== 'undefined') {
         window.addEventListener("beforeunload", (ev) => {
             ev.preventDefault();

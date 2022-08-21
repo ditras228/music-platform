@@ -1,4 +1,5 @@
 import {ITrack} from './track'
+import {IAlbum} from "./album";
 
 export interface PlayerState {
     active: null | ITrack
@@ -6,12 +7,14 @@ export interface PlayerState {
     duration: number
     currentTime: number
     pause: boolean
+    activeAlbum: IAlbum
 }
 
 export enum PlayerActionTypes {
     PLAY = 'PLAY',
     PAUSE = 'PAUSE',
     SET_ACTIVE = 'SET_ACTIVE',
+    SET_ACTIVE__ALBUM = 'SET_ACTIVE__ALBUM',
     SET_DURATION = 'SET_DURATION',
     SET_CURRENT_TIME = 'SET_CURRENT_TIME',
     SET_VOLUME = 'SET_VOLUME',
@@ -34,6 +37,11 @@ interface PauseAction {
 interface SetActiveAction {
     type: PlayerActionTypes.SET_ACTIVE
     payload: ITrack
+}
+
+interface SetActiveAlbumAction {
+    type: PlayerActionTypes.SET_ACTIVE__ALBUM
+    payload: any
 }
 
 interface SetDurationAction {
@@ -59,3 +67,4 @@ export type PlayerActions =
     | SetCurrentTimeAction
     | SetVolumeAction
     | PlayerAction
+    | SetActiveAlbumAction

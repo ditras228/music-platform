@@ -1,0 +1,65 @@
+@import "../../styles/mixins/font";
+@import "../../styles/mixins/icon";
+
+.playImage {
+  overflow: hidden;
+  background-color: black;
+  display: flex;
+  position: relative;
+  $root: &;
+
+  &__img {
+    display: block;
+    max-width: 100%;
+    transition: 1s;
+  }
+
+  &__pauseIcon, &__playIcon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    transition: 0.25s;
+
+    &::before {
+      width: 30px;
+      height: 30px;
+      display: block;
+      content: '';
+    }
+  }
+
+  &__playIcon {
+    opacity: 0;
+    &:before {
+      @include icon('play.svg');
+    }
+  }
+
+  &__pauseIcon {
+    &:before {
+      @include icon('pause.svg');
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    #{$root}__img {
+      transform: scale(1.05);
+      opacity: 0.7;
+    }
+
+    #{$root}__playIcon {
+      opacity: 1;
+    }
+  }
+}
+

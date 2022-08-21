@@ -25,7 +25,7 @@ const Play = ({audio}:IPlay) => {
     }
 
     return (
-        <div onClick={play}>
+        <div onClick={()=>play()}>
             {pause
                 ? <div className={classes.player__play}></div>
                 : <div className={classes.player__pause}></div>

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import classes from './track-progress.module.scss'
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useActions} from "../../hooks/useAction";
@@ -12,8 +12,8 @@ const TrackProgress: React.FC<TrackProgress> =
          audio
      }) => {
         const player = useTypedSelector(state => state.player)
-        const {pause, active, duration, currentTime} = player
-        const {pauseTrack, playTrack, setCurrentTime, setDuration} = useActions()
+        const {duration, currentTime} = player
+        const {setCurrentTime} = useActions()
 
         const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
             const newValue = e.target.valueAsNumber

@@ -30,6 +30,8 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view, hide
         )
     }
 
+
+
     return (
         <div className={classes.trackList}>
             {!hideSearch &&

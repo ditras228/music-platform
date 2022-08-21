@@ -5,8 +5,8 @@ import {AlbumAction, AlbumActionTypes} from '../../types/album'
 export const fetchAlbums = (token) => {
     return async (dispatch: Dispatch<AlbumAction>) => {
         try {
-            const response = await AlbumsAPI.getAlbums(token)
-            dispatch({type: AlbumActionTypes.FETCH_ALBUMS, payload: response.data})
+            const {data} = await AlbumsAPI.getAlbums(token)
+            dispatch({type: AlbumActionTypes.FETCH_ALBUMS, payload: data.data})
         } catch (e) {
             dispatch({
                 type: AlbumActionTypes.FETCH_ALBUMS_ERROR,
@@ -15,6 +15,8 @@ export const fetchAlbums = (token) => {
         }
     }
 }
+
+
 export const searchAlbums = (query: string, token: string) => {
     return async (dispatch: Dispatch<AlbumAction>) => {
         try {

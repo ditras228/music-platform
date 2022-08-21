@@ -10,19 +10,21 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use function MongoDB\BSON\fromJSON;
 
 class AlbumController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Album[]|Collection
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function index()
     {
-        return Album::all();;
+        return Album::with('tracks')->paginate(15);
     }
 
     /**
@@ -47,7 +49,7 @@ class AlbumController extends Controller
                 'name' => ['required'],
                 'author' => ['required'],
                 'image' => ['required', 'image'],
-                'tracks' => ['required', 'array'],
+                'tracks' => ['required'],
             ]
         );
 
@@ -58,9 +60,9 @@ class AlbumController extends Controller
             ])->setStatusCode(422);
         }
 
-        $existTrackCount = Track::findMany($request->tracks)->count();
-
-        if ($existTrackCount !== count($request->tracks)) {
+        $tracks = json_decode($request->tracks);
+        $existTrackCount = Track::findMany($tracks)->count();
+        if ($existTrackCount !== count($tracks)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Tracks not found',
@@ -68,10 +70,10 @@ class AlbumController extends Controller
         }
 
         $image = $request->file('image');
-        $imagePath = $image->store('public/album');
+        $imagePath = $image->store('albums','public');
 
         $album = Album::create([
-//            'user_id'=> 1,
+            'user_id'=> $request->user_id,
             'name' => $request->name,
             'author' => $request->author,
             'image' => $imagePath,
@@ -80,7 +82,7 @@ class AlbumController extends Controller
         $albumTracks = [];
         $currentTime = now();
 
-        foreach ($request->tracks as $track) {
+        foreach ($tracks as $track) {
             $albumTracks[$track] = [
                 'album_id' => $album->id,
                 'track_id' => $track,
@@ -104,7 +106,13 @@ class AlbumController extends Controller
     public function show($id)
     {
         $album = Album::with('tracks')->where('id', $id)->first();
-        $comments = Comment::where('album_id', $id)->get();
+        $comments = DB::table('comments')
+            ->join('users','users.id','=', 'comments.user_id')
+            ->select('name', 'image', 'text')
+            ->where('comments.album_id', '=', $id )
+            ->orderBy('comments.id', 'desc')
+            ->get();
+
         $album['comments'] = $comments;
         return $album;
     }
@@ -158,7 +166,7 @@ class AlbumController extends Controller
         $album = Album::find($id);
 
         $image = $request->file('image');
-        $imagePath = $image->store('public/album');
+        $imagePath = $image->store('albums','public');
 
 
         if (Storage::exists($album->image)) {
@@ -201,13 +209,6 @@ class AlbumController extends Controller
             ])->setStatusCode(404);
         }
 
-        if (Storage::exists($album->image)) {
-            Storage::delete($album->image);
-        } else {
-            dd('Image does not exists.');
-        }
-
-        $album->tracks()->detach();
         $album->delete();
 
         return response()->json([
