@@ -24,7 +24,7 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        return Album::with('tracks')->paginate(15);
+        return Album::paginate(15);
     }
 
     /**

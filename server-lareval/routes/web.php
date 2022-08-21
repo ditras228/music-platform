@@ -21,6 +21,7 @@ use  \App\Http\Controllers\TrackListensController;
 
 
 Route::resource('/auth', AuthController::class);
+Route::post('/registration', [AuthController::class, 'registerUser']);
 
 Route::middleware([Authorization::class])->group(function () {
     Route::resource('/track', TrackController::class);

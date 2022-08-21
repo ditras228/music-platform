@@ -16,14 +16,7 @@ interface AlbumListProps {
 const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch()
-    const formik = useFormik({
-        initialValues: {
-            query: ''
-        },
-        onSubmit: async values => {
-            await handleSearch(values)
-        },
-    })
+
     const handleSearch = async (values) => {
         if (timer) {
             clearTimeout(timer)

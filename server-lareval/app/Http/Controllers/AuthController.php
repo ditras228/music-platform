@@ -10,10 +10,11 @@ use Illuminate\Http\Response;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Psy\Util\Str;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -58,9 +59,48 @@ class AuthController extends Controller
             ])->setStatusCode(422);
         }
 
+        $user =  User::where('name', $request->name)->first();
+
+        if (Hash::check($request->password, $user->password)) {
+            $account = Account::where('user_id',$user->id)->first();
+            $user->access_token = $account->access_token;
+
+        }else{
+            dd('Неверный пароль');
+        }
+
+
+
+        return $user;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse|Response|object
+     */
+    public function registerUser(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(), [
+                'name' => ['required'],
+                'password' => ['required'],
+                'email' => ['required'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->messages()
+            ])->setStatusCode(422);
+        }
+
         $user =  User::create([
             'name' => $request->name,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
+            'email'=> $request->email
         ]);
 
 
@@ -71,6 +111,12 @@ class AuthController extends Controller
 
         $user->access_token = $account->access_token;
 
+        Mail::send(['text'=> 'mail'], ['name', 'Подтверждение регистрации'], function($message){
+            $message->to('misteranonimus555@gmail.com','To dev blog')-> subject('Подтверждение регистрации');
+            $message->from('ditras@druzhinindmitry.ru','To dev blog');
+
+
+        });
         return $user;
     }
 

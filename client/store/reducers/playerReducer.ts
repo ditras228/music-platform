@@ -21,7 +21,7 @@ export const playerReducer = (state = initialState, action: PlayerActions) => {
         case PlayerActionTypes.SET_ACTIVE:
             return {...state, duration: 0, currentTime: 0, active: action.payload, pause: false}
         case PlayerActionTypes.SET_ACTIVE__ALBUM:
-            return {...state, duration: 0, currentTime: 0, activeAlbum: action.payload, pause: false}
+            return {...state, duration: 0, currentTime: 0, activeAlbum: action.payload, pause: false, active: action.payload.tracks[0]}
         case PlayerActionTypes.SET_CURRENT_TIME:
             return {...state, currentTime: action.payload}
         case PlayerActionTypes.SET_VOLUME:

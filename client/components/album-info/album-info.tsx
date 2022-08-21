@@ -1,25 +1,18 @@
 import React from "react";
-import Image from "next/image";
-import {imagesURL} from "../../api";
 import {PlayerActionTypes} from "../../types/player";
 import {useDispatch} from "react-redux";
 import classes from './albm-info.module.scss'
+import PlayAlbumImage from "../play-album-image/play-album-image";
+import {IAlbum} from "../../types/album";
 
-const AlbumInfo = ({album,}) => {
-    const dispatch = useDispatch()
-    const albumClickHandler = () => {
-        dispatch({
-            type: PlayerActionTypes.SET_ACTIVE,
-            payload: album
-        })
-    }
+interface IAlbumInfo {
+    album: IAlbum,
+    token: string
+}
 
+const AlbumInfo = ({album, token}: IAlbumInfo) => {
     return <div className={classes.albumInfo}>
-        <div className={classes.albumInfo__thumb} onClick={albumClickHandler}>
-            <Image width={170} height={170} src={imagesURL + album.image}
-                   className={classes.albumInfo__thumb__img} alt={'Обложка трека'}/>
-            <div className={classes.albumInfo__thumb__icon}/>
-        </div>
+        <PlayAlbumImage token={token} album={album} list={false}/>
         <div className={classes.albumInfo__desc}>
             <div className={classes.line}>
                 <h3 className={classes.item_title}>Название</h3>

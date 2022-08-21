@@ -20,6 +20,7 @@ class VerifyCsrfToken extends Middleware
         'comment/*',
         'auth/',
         'auth/*',
+        'registration/',
         'profile',
         'profile/*',
         'listen/*',

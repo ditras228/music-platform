@@ -12,6 +12,6 @@ export const UsersAPI = {
         return instance.post('auth/login', props)
     },
     registration(props): any {
-        return instance.post('auth/registration', props)
+        return instance.post('registration', props)
     }
 }

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import {Formik, useFormik} from 'formik'
+import {Formik} from 'formik'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import classes from './register.module.scss'
@@ -8,9 +8,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Registration} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
 import {getSession} from 'next-auth/client'
-import {NextThunkDispatch, wrapper} from '../../store'
-import cookies from 'next-cookies'
-import {UsersActionTypes} from '../../types/user'
+import {wrapper} from '../../store'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import InputField from "../../ui/input-field/input-field";
 
@@ -37,7 +35,7 @@ const Register = () => {
     }
     useEffect(() => {
         router.push(redirectTo)
-    }, [redirectTo, router])
+    }, [redirectTo])
 
     return (
         <MainLayout>
@@ -56,40 +54,40 @@ const Register = () => {
                         className={classes.register__content}
                     >
                         <div className={classes.register__content__inputs}>
-                        <InputField
-                            label={'Имя'}
-                            name={'name'}
-                            value={formik.values.name}
-                        />
-                        <InputField
-                            label={'Email'}
-                            name={'email'}
-                            value={formik.values.email}
-                        />
-                        <InputField
-                            label={'Пароль'}
-                            name={'password'}
-                            value={formik.values.password}
-                            type={'password'}
+                            <InputField
+                                label={'Имя'}
+                                name={'name'}
+                                value={formik.values.name}
+                            />
+                            <InputField
+                                label={'Email'}
+                                name={'email'}
+                                value={formik.values.email}
+                            />
+                            <InputField
+                                label={'Пароль'}
+                                name={'password'}
+                                value={formik.values.password}
+                                type={'password'}
 
-                        />
-                        <InputField
-                            label={'Повторите пароль'}
-                            name={'repeat_password'}
-                            value={formik.values.repeat_password}
-                            type={'password'}
-                        />
-                        {error ?
-                            <div>
-                                {error.message}
-                            </div> : null}
+                            />
+                            <InputField
+                                label={'Повторите пароль'}
+                                name={'repeat_password'}
+                                value={formik.values.repeat_password}
+                                type={'password'}
+                            />
+                            {error ?
+                                <div>
+                                    {error.message}
+                                </div> : null}
                         </div>
                         <div className={classes.register__content__buttons}>
-                        <button
-                            className={classes.register__content__buttons__item}
-                            type={'submit'}>
-                            Регистрация
-                        </button>
+                            <button
+                                className={classes.register__content__buttons__item}
+                                onClick={()=>formik.handleSubmit()}>
+                                Регистрация
+                            </button>
                         </div>
                         <div onClick={e => loginHandler(e)} className={classes.register__content__link}>
                             Уже есть аккаунт? Войти

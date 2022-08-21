@@ -4,10 +4,11 @@ import {imagesURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './album-item.module.scss'
 import {IAlbum} from '../../types/album'
-import {deleteAlbum} from "../../store/action-creators/album";
+import {deleteAlbum, fetchAlbum} from "../../store/action-creators/album";
 import Image from 'next/image'
 import PlayImage from "../play-image/play-image";
 import {PlayerActionTypes} from "../../types/player";
+import PlayAlbumImage from "../play-album-image/play-album-image";
 
 interface AlbumItemProps {
     album: IAlbum
@@ -22,29 +23,23 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album, token, userId}) => {
         dispatch(deleteAlbum(album.id, token))
     }
 
-    function clickHandler(e){
+    function clickHandler(e) {
         e.stopPropagation()
-        dispatch({
-            type: PlayerActionTypes.SET_ACTIVE__ALBUM, album
-
-        })
+        dispatch(fetchAlbum(album.id, token))
     }
+
     return (
-        <div className={classes.album}>
+        <div className={classes.album} onClick={() => {
+            router.push('/albums/' + album.id)
+        }
+        }>
             <SwitchView deleteOne={deleteOne}
                         album={album}
                         userId={userId}/>
             <div className={classes.album__info}
-                 onClick={() => {
-                     router.push('/albums/' + album.id)
-                 }
-                 }>
-                <div onClick={e=>clickHandler(e)}>
-                    123123
-                    {
-                        album.tracks.length &&                   <PlayImage list={true} track={album.tracks[0]}></PlayImage>
-
-                    }
+            >
+                <div onClick={e => clickHandler(e)}>
+                    <PlayAlbumImage token={token} album={album} list={true}/>
                 </div>
 
                 <div className={classes.album__name}>
@@ -56,7 +51,8 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album, token, userId}) => {
         </div>
     )
 }
-interface ISwitchVIew{
+
+interface ISwitchVIew {
     deleteOne: any
     userId: number,
     album: IAlbum

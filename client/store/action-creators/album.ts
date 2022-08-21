@@ -1,6 +1,7 @@
 import {Dispatch} from 'react'
 import {AlbumsAPI} from '../../api/albumsAPI'
 import {AlbumAction, AlbumActionTypes} from '../../types/album'
+import {PlayerActionTypes} from "../../types/player";
 
 export const fetchAlbums = (token) => {
     return async (dispatch: Dispatch<AlbumAction>) => {
@@ -50,5 +51,17 @@ export const deleteAlbum = (id: string, token: string) => {
                 payload: 'Произошла ошибка удаления альбома'
             })
         }
+    }
+}
+
+
+
+export const fetchAlbum = (id: string, token: string) => {
+    return async (dispatch: any) => {
+        const response = await AlbumsAPI.getOneAlbum(id, token)
+        dispatch({
+            type: PlayerActionTypes.SET_ACTIVE__ALBUM,
+            payload: response.data
+        })
     }
 }

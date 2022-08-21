@@ -1,6 +1,6 @@
 import React from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import classes from './index.module.scss'
+import classes from './register.module.scss'
 
 
 const RegSuccess = () => {

@@ -23,7 +23,6 @@ const Player = () => {
                 // В случае отстуствия аудио, создаем его
                 audio = new Audio()
             }
-
             if (active) {
                 // В случае, если id'шник другой, обнуляем currentTime и присваеваем новый src
                 if (audio.src.split('/')[4] != active?.id) {
@@ -41,6 +40,8 @@ const Player = () => {
                 // При воспроизведении аудио
                 audio.ontimeupdate = () => {
                     if (audio.duration >= audio.currentTime) {
+                        setDuration(Math.ceil(audio.duration))
+
                         setCurrentTime(Math.ceil(audio.currentTime))
                     }
                 }
@@ -61,6 +62,8 @@ const Player = () => {
     )
 
     function nextTrack(tracks: ITrack[]): void {
+        console.log('test')
+        console.log(tracks)
         if (tracks.length > 0) {
             const currentIndex = tracks.indexOf(tracks.filter(value => value.id == active.id)[0])
 
