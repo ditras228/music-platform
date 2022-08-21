@@ -9,7 +9,6 @@ import {useDispatch} from 'react-redux'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateAlbum} from '../../store/action-creators/user'
 import MultiStepForm, {FormStep} from '../../ui/step-form/multi-step-form'
-import InputField from '../../ui/step-form/input-field'
 import {fetchTracks} from '../../store/action-creators/track'
 import {setPlayer} from '../../store/action-creators/player'
 import cookies from 'next-cookies'
@@ -17,6 +16,8 @@ import {UsersActionTypes} from '../../types/user'
 import AlertStep from '../../ui/step-form/alert-step'
 import TrackList from "../../components/track-list/track-list";
 import FileUpload from "../../ui/file-upload/file-upload";
+import InputField from "../../ui/input-field/input-field";
+import classes from './create.module.scss'
 
 const InfoSchema = Yup.object({
     name: Yup.string()
@@ -30,7 +31,7 @@ const ImageSchema = Yup.object().shape({
         .nullable()
         .test({
             message: "Должна быть квардатной",
-            test: img=> img?.width===img?.height
+            test: img => img?.width === img?.height
         })
 })
 
@@ -78,7 +79,7 @@ const Create = ({token, userId}) => {
                     <FormStep stepName={'Инфо'}
                               validationSchema={InfoSchema}>
                         <div
-                              style={{padding: 20, maxWidth: 900, margin: '0 auto'}}>
+                            className={classes.createAlbumContent__info}>
                             <InputField
                                 name={'name'}
                                 label={'Название альбома'}
@@ -93,10 +94,8 @@ const Create = ({token, userId}) => {
                     <FormStep stepName={'Обложка'}
                               validationSchema={ImageSchema}>
                         <AlertStep/>
-                        <div >
-                            <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
-                                <button>Загрузить изображение</button>
-                            </FileUpload>
+                        <div>
+                            <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}/>
                         </div>
 
                         <ImagePreview src={image} previewCanvasRef={previewCanvasRef}/>
@@ -105,11 +104,8 @@ const Create = ({token, userId}) => {
                     <FormStep stepName={'Треки'}
                               validationSchema={TrackSchema}
                     >
-                        <div >Выберите 3+ треков</div>
-                        <div style={{padding: '0 40px'}}>
-
-                            <TrackList tracks={tracks} token={token} user_id={userId} view={'checkbox'}/>
-                        </div>
+                        <div className={classes.createAlbumContent__tracksTitle}>Выберите 3+ треков</div>
+                        <TrackList tracks={tracks} token={token} user_id={userId} view={'checkbox'}/>
                     </FormStep>
                 </MultiStepForm>
             </div>
@@ -133,13 +129,9 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
     const player = cookies(ctx).player
-    const theme = cookies(ctx).theme
 
     dispatch(setPlayer(player))
-    dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
+
     return {
         props: {
             userId: session.id || null,

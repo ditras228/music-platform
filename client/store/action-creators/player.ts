@@ -28,14 +28,3 @@ export const savePlayer = (player) => {
         cookie.set('player', `${JSON.stringify(player)}`)
     }
 }
-export const deletePlayer = () => {
-    return async () => {
-        cookie.set('player', '')
-    }
-}
-
-
-
-
-
-

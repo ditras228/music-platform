@@ -11,7 +11,6 @@ import {getSession} from 'next-auth/client'
 import AlbumList from '../../components/album-list/album-list'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
-import {UsersActionTypes} from '../../types/user'
 
 const Index = ({token, userId}) => {
     const router = useRouter()
@@ -42,9 +41,6 @@ const Index = ({token, userId}) => {
         return (
             <MainLayout title={error}>
                 <div className={classes.error}>
-                    <button>
-                        {/*<RotateLeft/>*/}
-                    </button>
                     <h2>{error}</h2>
                 </div>
             </MainLayout>
@@ -52,15 +48,15 @@ const Index = ({token, userId}) => {
     }
     return (
         <MainLayout title={'Альбомы'}>
-
-            <div>
-                <div className={classes.card}>
-                    <div>
-                        <h2 className={classes.title}>Альбомы</h2>
-                        <button onClick={() => router.push('/albums/create')}>Новый альбом</button>
+            <div className={classes.albums}>
+                <div className={classes.albums__top}>
+                    <div className={classes.albums__top__title}> Альбомы</div>
+                    <div className={classes.albums__top__createBtn}
+                         onClick={() => router.push('/albums/create')}>Загрузить
                     </div>
-                    <AlbumList albums={albums} token={token} userId={userId}/>
                 </div>
+
+                <AlbumList albums={albums} token={token} userId={userId}/>
             </div>
         </MainLayout>
     )
@@ -83,12 +79,8 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
         await dispatch(fetchAlbums(session.accessToken))
         const player = cookies(ctx).player;
-        const theme = cookies(ctx).theme;
-        dispatch( setPlayer(player))
-        dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
+        dispatch(setPlayer(player))
+
         return {
             props: {
                 token: session.accessToken || null,

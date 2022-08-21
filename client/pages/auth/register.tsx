@@ -105,13 +105,8 @@ export default Register
 
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const theme = cookies(ctx).theme
     const session = await getSession({req: ctx.req})
-    dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
+
     if (session) {
         return {
             redirect: {

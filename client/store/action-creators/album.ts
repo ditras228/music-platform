@@ -40,6 +40,7 @@ export const deleteAlbum = (id: string, token: string) => {
                         })
                     }
                 )
+            await dispatch(fetchAlbums(token))
 
         } catch (e) {
             dispatch({

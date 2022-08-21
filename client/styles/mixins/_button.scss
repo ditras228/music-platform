@@ -43,6 +43,12 @@
   color: $button;
   border: 2px solid $button;
 
+  &:disabled{
+    border-color: $button-hover;
+    color: $button-hover;
+    background-color: transparent;
+  }
+
   &:hover {
     border-color: $button-hover;
     color: $button-hover;

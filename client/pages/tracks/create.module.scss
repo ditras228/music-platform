@@ -1,9 +1,9 @@
 @import "../../styles/mixins/button";
 
 .createContent{
-    &__btn{
-        @include button();
-        width: 100%;
+    &__info{
+        display: grid;
+        grid-row-gap: 35px;
     }
 }
 .waveSuffer{

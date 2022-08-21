@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Form, Formik, FormikConfig, FormikHelpers, FormikValues} from 'formik'
-import FormNavigation from './form-navigation'
+import FormNavigation from './form-navigation/form-navigation'
 import classes from './multi-step-form.module.scss'
 
 interface Props extends FormikConfig<FormikValues> {
@@ -24,6 +24,7 @@ const MultiStepForm = ({children, initialValues, onSubmit}: Props) => {
         setSnapshot(values)
 
     }
+
     const handleSubmit = async (values: FormikValues, actions: FormikHelpers<FormikValues>) => {
         if (step.props.onSubmit) {
             await step.props.onSubmit(values)

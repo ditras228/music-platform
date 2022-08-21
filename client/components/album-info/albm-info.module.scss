@@ -1,6 +1,7 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/icon";
-.trackInfo {
+
+.albumInfo {
   display: grid;
   grid-template-columns: auto 1fr;
   padding: 0 20px 0 0;
@@ -21,8 +22,7 @@
       max-width: 100%;
       transition: 1s;
     }
-
-    &__pauseIcon, &__playIcon{
+    &__icon{
       position: absolute;
       left: 50%;
       top: 50%;
@@ -34,24 +34,15 @@
       display: grid;
       align-items: center;
       justify-content: center;
-      //opacity: 0;
+      opacity: 0;
       transition: 0.25s;
 
       &::before{
+        @include icon('play.svg');
         width: 30px;
         height: 30px;
         display: block;
         content: '';
-      }
-    }
-    &__playIcon{
-      &:before{
-        @include icon('play.svg');
-      }
-    }
-    &__pauseIcon{
-      &:before{
-        @include icon('pause.svg');
       }
     }
     &:hover {

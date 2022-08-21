@@ -14,7 +14,7 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateTrack} from '../../store/action-creators/user'
 import cookies from 'next-cookies'
 import {setPlayer} from '../../store/action-creators/player'
-import FileUpload from '../../ui/file-upload/file-upload'
+import FileUpload, {fileFormats} from '../../ui/file-upload/file-upload'
 
 if (typeof window !== 'undefined') {
     var WaveSurfer = require('wavesurfer.js')
@@ -54,7 +54,7 @@ const Create = ({token}) => {
         if (chart.current)
             chart.current.innerHTML = ''
 
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && audio !=null) {
             const wavesurfer = WaveSurfer.create({
                 container: chart.current,
                 barWidth: 3,
@@ -70,7 +70,8 @@ const Create = ({token}) => {
 
     return (
         <MainLayout title={'Загрузить трек'}>
-            <div>
+            <>
+                <div ref={chart} className={classes.waveSuffer}/>
                 <MultiStepForm
                     initialValues={{
                         name: '',
@@ -87,16 +88,12 @@ const Create = ({token}) => {
                 >
                     <FormStep stepName={'Аудио'}
                               validationSchema={AudioSchema}>
-                        <FileUpload accept={'audio/*'} name={'audio'} setAudio={setAudio}>
-                            <button className={classes.createContent__btn}>Загрузить аудио</button>
-                        </FileUpload>
-                        <div ref={chart} className={classes.waveSuffer}/>
+                        <FileUpload accept={fileFormats.AUDIO} name={'audio'} setAudio={setAudio}/>
                     </FormStep>
 
                     <FormStep stepName={'Инфо'}
                               validationSchema={InfoSchema}>
-                        <div
-                              style={{padding: 20, maxWidth: 900, margin: '0 auto'}}>
+                        <div className={classes.createContent__info}>
                             <InputField
                                 name={'name'}
                                 label={'Название трека'}
@@ -119,14 +116,14 @@ const Create = ({token}) => {
                     >
                         <div>
                             <FileUpload accept={'image/*'} name={'picture'} setImage={setImage}>
-                                <button>Загрузить изображение</button>
+                                <button className={classes.createContent__btn}>Загрузить изображение</button>
                             </FileUpload>
                         </div>
                         <ImagePreview src={image} previewCanvasRef={previewCanvasRef}/>
                     </FormStep>
 
                 </MultiStepForm>
-            </div>
+            </>
 
         </MainLayout>
     )
@@ -137,14 +134,10 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session = await getSession({req: ctx.req})
-    const theme = cookies(ctx).theme;
     const player = cookies(ctx).player;
 
     dispatch(setPlayer(player))
-    dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
+
     if (!session) {
         return {
             redirect: {

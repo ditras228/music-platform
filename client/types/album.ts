@@ -3,11 +3,11 @@ import {IComment, ITrack} from './track'
 export interface IAlbum {
     id: string
     listens: number
-    userId: string
+    user_id: number
     name: string
     text: string
     author: string
-    picture: string
+    image: string
     tracks: ITrack[]
     comments: IComment[]
 }

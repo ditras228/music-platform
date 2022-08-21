@@ -10,7 +10,7 @@ import Image from 'next/image'
 interface AlbumItemProps {
     album: IAlbum
     token: string
-    userId: string
+    userId: number
 }
 
 const AlbumItem: React.FC<AlbumItemProps> = ({album, token, userId}) => {
@@ -19,19 +19,39 @@ const AlbumItem: React.FC<AlbumItemProps> = ({album, token, userId}) => {
     const deleteOne = async () => {
         dispatch(deleteAlbum(album.id, token))
     }
-    const isNotOwner = album.userId != userId
 
     return (
-        <div className={classes.track}>
-            <Image className={classes.image} src={imagesURL + album.picture} alt={'Обложка альбома'} width={70} height={70}/>
-            <div className={classes.name} onClick={() => router.push('/albums/' + album.id)}>
-                <div>{album.name}</div>
-                <div className={classes.author}>{album.author}</div>
+        <div className={classes.album}>
+            <SwitchView deleteOne={deleteOne}
+                        album={album}
+                        userId={userId}/>
+            <div className={classes.album__info}
+                 onClick={() => {
+                     router.push('/albums/' + album.id)
+                 }
+                 }>
+                <Image className={classes.album__image} src={imagesURL + album.image} alt={'Обложка альбома'} width={70}
+                       height={70}/>
+                <div className={classes.album__name}>
+                    <div>{album.name}</div>
+                    <div className={classes.album__author}>{album.author}</div>
+                </div>
             </div>
-            <button disabled={isNotOwner} className={classes.delete} onClick={e => e.stopPropagation()}>
-                <div onClick={deleteOne}/>
-            </button>
+
         </div>
     )
 }
+interface ISwitchVIew{
+    deleteOne: any
+    userId: number,
+    album: IAlbum
+}
+
+const SwitchView = ({deleteOne, userId, album}: ISwitchVIew) => {
+    const isNotOwner = userId != album.user_id
+    return <button disabled={isNotOwner} className={classes.album__delete} onClick={deleteOne}>
+    </button>
+
+}
+
 export default AlbumItem

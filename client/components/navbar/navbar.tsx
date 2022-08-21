@@ -47,12 +47,3 @@ export default function Navbar() {
         </div>
     )
 }
-const getIcon = (index) => {
-    switch (index) {
-        case 0:
-            return <div>tracks</div>
-        case 1:
-            return <div>album</div>
-    }
-}
-

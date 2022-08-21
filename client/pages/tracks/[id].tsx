@@ -31,9 +31,9 @@ const TrackPage = ({serverTrack, token}) => {
                 >
                     К списку
                 </div>
-                <TrackInfo track={track}></TrackInfo>
-                <TrackLyrics lyrics={track.lyrics}></TrackLyrics>
-                <TrackComments track={track} session={session} token={token}></TrackComments>
+                <TrackInfo track={track}/>
+                <TrackLyrics lyrics={track.lyrics}/>
+                <TrackComments track={track} session={session} token={token}/>
             </div>
         </MainLayout>
     )
@@ -53,13 +53,10 @@ export const getServerSideProps = wrapper.getServerSideProps
             },
         }
     }
-    const player = cookies(ctx).player;
-    dispatch(setPlayer(player))
-    const theme = cookies(ctx).theme;
-    dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
+        const player = cookies(ctx).player;
+    if(player)
+
+        dispatch(setPlayer(player))
 
     const response = await TracksAPI.getOne(ctx.params.id, session.accessToken)
     return {

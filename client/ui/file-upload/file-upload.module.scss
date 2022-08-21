@@ -1,0 +1,28 @@
+@import '../../styles/mixins/input';
+@import '../../styles/mixins/button';
+
+.fileUpload {
+  $root: &;
+
+  &__input{
+    display: none;
+  }
+
+  &__btn{
+    @include button();
+    width: 100%;
+  }
+
+  &__label {
+    color: #6e7191;
+  }
+
+  &__error {
+    color: #c30052;
+  }
+
+  &__label, &__error {
+    @include fontSmall();
+    margin-top: 20px;
+  }
+}

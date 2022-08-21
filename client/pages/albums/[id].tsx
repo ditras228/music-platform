@@ -15,6 +15,11 @@ import {UsersActionTypes} from '../../types/user'
 import * as yup from 'yup'
 import TrackList from "../../components/track-list/track-list";
 import Image from "next/image";
+import AlbumInfo from "../../components/album-info/album-info";
+import TrackComments from "../../components/track-comments/track-comments";
+import AlbumComments from "../../components/album-comments/album-comments";
+import TrackInfo from "../../components/track-info/track-info";
+import TrackLyrics from "../../components/track-lyrics/track-lyrics";
 
 const commentSchema = yup.object({
     text: yup.string()
@@ -23,7 +28,7 @@ const commentSchema = yup.object({
         .required()
 })
 
-const AlbumPage = ({serverAlbum, token}) => {
+const AlbumPage = ({serverAlbum, token, userId}) => {
     const router = useRouter()
     const [album, setAlbum] = useState<IAlbum>(serverAlbum)
     const [session, loading] = useSession() as any
@@ -45,84 +50,16 @@ const AlbumPage = ({serverAlbum, token}) => {
             title={'Музыкальная площадка - ' + album.name + ' - ' + album.author}
             keywords={'Музыка, артисты,' + album.name + album.author}
         >
-            <div className={classes.grid}>
+            <div className={classes.albumId}>
                 <div
-                    style={{fontSize: 20}}
+                    className={classes.albumId__title}
                     onClick={() => router.push('/albums')}
                 >
-                    <div></div> К списку
+                    К списку
                 </div>
-                <div>
-
-                    <div className={classes.info}>
-                        <div className={classes.img_thumb}>
-                            <Image src={baseURL + album.picture} className={classes.img} alt={'Обложка трека'}/>
-                        </div>
-                        <div>
-                            <div className={classes.line}>
-                                <h3 className={classes.item_title}>Название</h3>
-                                <h3 className={classes.item_value}>{album.name}</h3>
-                            </div>
-                            <div className={classes.line}>
-                                <h3 className={classes.item_title}>Автор</h3>
-                                <h3 className={classes.item_value}>{album.author}</h3>
-                            </div>
-                            <div className={classes.line}>
-                                <h3 className={classes.item_title}>Прослушиваний</h3>
-                                <h3 className={classes.item_value}>{album.listens}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className={classes.card}>
-                        <h3 className={classes.title}>Треки</h3>
-                        <TrackList tracks={album.tracks} token={token} user_id={token}/>
-                    </div>
-                </div>
-                <div>
-                    <div className={classes.card}>
-                        <form onSubmit={formik.handleSubmit} className={classes.form}>
-                            <h3 className={classes.title}>
-                                {
-                                album.comments.length === 0
-                                    ? 'нет комментариев'
-                                    : 'комментарии'
-                            }
-                            </h3>
-                            {session &&
-                                <div className={classes.comments_form}>
-                                    <div className={classes.avatar_comment}>
-                                        {/*<Avatar alt="Remy Sharp" src={session.image}*/}
-                                        {/*        style={{backgroundColor: session.color || 'gray', marginRight: 20}}>*/}
-                                        {/*    {session.user?.name?.substring(0, 1)}*/}
-                                        {/*</Avatar>*/}
-                                        <input
-                                            value={formik.values.text}
-                                            onChange={formik.handleChange}
-                                            name={'text'}
-                                        >
-                                        </input>
-                                    </div>
-                                    {formik.errors.text && formik.touched.text &&
-                                        <div>
-                                            {formik.errors.text}
-                                        </div>}
-                                    <button
-                                        type={'submit'}
-                                        className={classes.comments_submit}
-                                    >Отправить
-                                    </button>
-                                </div>
-                            }
-                        </form>
-                    </div>
-                    {
-                        album.comments.map((comment: any) =>
-                            <CommentFC comment={comment} key={comment.id}></CommentFC>
-                        )
-                    }
-                </div>
+                <AlbumInfo album={album}/>
+                <TrackList tracks={album.tracks} token={token} user_id={userId} hideSearch={true}/>
+                <AlbumComments album={album} session={session} token={token}/>
             </div>
         </MainLayout>
     )
@@ -144,20 +81,15 @@ export const getServerSideProps = wrapper.getServerSideProps
         }
     }
     const player = cookies(ctx).player;
-    const theme = cookies(ctx).theme;
 
     dispatch(setPlayer(player))
     const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
 
-
-    dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
     return {
         props: {
             serverAlbum: response.data,
             token: session.accessToken || null,
+            userId: session.userId
         }
 
     }

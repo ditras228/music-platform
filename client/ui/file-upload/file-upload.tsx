@@ -1,10 +1,22 @@
 import React, {ReactElement, useRef, useState} from 'react'
 import {FieldConfig, useField, useFormikContext} from 'formik'
+import classes from "./file-upload.module.scss";
+
+export const fileFormats = {
+    IMAGE: 'image/*',
+    AUDIO: 'audio/*'
+}
 
 interface Props extends FieldConfig {
     accept: string
     setImage?: any
     setAudio?: any
+}
+
+interface IGetTitle{
+    accept: string,
+    fileName: string,
+    error: string
 }
 
 const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props): ReactElement => {
@@ -18,7 +30,7 @@ const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props): Re
         let reader = new FileReader();
 
         reader.onloadend = function () {
-            if (accept === 'image/*') {
+            if (accept === fileFormats.IMAGE) {
                 setImage(reader.result)
             } else {
                 setAudio(reader.result)
@@ -29,14 +41,14 @@ const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props): Re
         if (file) {
             reader.readAsDataURL(file);
         } else {
-            if (accept === 'image/*') {
+            if (accept === fileFormats.IMAGE) {
                 setImage('')
             } else {
                 setAudio('none')
             }
         }
 
-        if (accept === 'audio/*') {
+        if (accept === fileFormats.AUDIO) {
             field.value = file
         }
         setFieldValue(field.name, field.value)
@@ -46,21 +58,41 @@ const FileUpload = ({accept, children, setImage, setAudio, ...props}: Props): Re
             <input
                 type="file"
                 accept={accept}
-                style={{display: 'none'}}
+                className={classes.fileUpload__input}
                 ref={ref}
                 onChange={onChange}
                 {...props}
             />
-            {children}
-            {meta.error
-                ? <div >{meta.error}</div>
-                : fileName &&
-                <div >{fileName}</div>
-            }
-
-
+            <button type={'button'} className={classes.fileUpload__btn}>
+                {
+                  GetTitle({accept, fileName, error: meta.error})
+                }
+            </button>
         </div>
     )
 }
+
+function GetTitle({accept, fileName, error}: IGetTitle): string{
+    if(error){
+        return error
+    }
+
+    if(fileName){
+        return fileName
+    }
+
+    switch (accept){
+        case fileFormats.IMAGE:{
+            return 'Загрузить изображение'
+        }
+        case fileFormats.AUDIO:{
+            return 'Загрузить аудио'
+        }
+        default:{
+            return 'Загрузить файл'
+        }
+    }
+}
+
 
 export default FileUpload

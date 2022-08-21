@@ -103,14 +103,9 @@ export default LogIn
 
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const theme = cookies(ctx).theme;
     const session = await getSession({req: ctx.req})
     const csrfToken = await getCsrfToken(ctx)
-    dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
+
     if (session?.accessToken) {
         return {
             redirect: {

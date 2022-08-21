@@ -45,7 +45,6 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session = await getSession({req: ctx.req})
-    //const token= await getToken({req: ctx.req})
     if (!session) {
         return {
             redirect: {
@@ -57,16 +56,12 @@ export const getServerSideProps = wrapper.getServerSideProps
     await dispatch(fetchTracks(session.accessToken))
 
     const player = cookies(ctx).player;
-    const theme = cookies(ctx).theme;
+    if(player)
     dispatch(setPlayer(player))
-    dispatch({
-        type: UsersActionTypes.HANDLE_CHANGE_DARK,
-        payload: theme || false
-    })
     return {
         props: {
-            token: session.accessToken || null,
-            userId: session.userId || null,
+            token: session.accessToken,
+            userId: session.userId
         }
     }
 })

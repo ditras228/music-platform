@@ -14,7 +14,7 @@ interface TrackItemProps {
     active?: boolean
     view?: string
     token: string
-    userId: string
+    userId: number
 }
 
 type formik = {
@@ -46,12 +46,14 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
             }
         }
     }
+
     const play = (e): void => {
         e.stopPropagation()
         e.preventDefault()
         setActiveTrack(track)
         playTrack()
     }
+
     const pause = (e): void => {
         e.stopPropagation()
         e.preventDefault()
@@ -59,16 +61,17 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         setActiveTrack(track)
         pauseTrack()
     }
+
     return (
         <div className={classes.track}>
             <SwitchView view={view}
                         checked={isChecked}
                         deleteOne={deleteOne}
                         track={track}
-                        userId={userId}
-                        editState={editState}/>
+                        userId={userId}/>
             <div className={classes.track__play}>
-                {active
+                {
+                    active
                     ? <div onClick={play}></div>
                     : <div onClick={pause}></div>
                 }
@@ -90,8 +93,10 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
         </div>
     )
 }
-const SwitchView = ({view, deleteOne, checked, userId, track, editState}) => {
-    const isNotOwner = userId != track.userId
+
+const SwitchView = ({view, deleteOne, checked, userId, track}) => {
+    const isNotOwner = userId != track.user_id
+
     switch (view) {
         case 'checkbox':
             return (

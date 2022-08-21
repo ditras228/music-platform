@@ -1,15 +1,16 @@
 import React, {useState} from 'react'
-import classes from '../track-list/track-list.module.scss'
-import {useFormik} from 'formik'
+import classes from './album-list.module.scss'
+import {Formik, useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import AlbumItem from '../album-item/album-item'
 import {searchAlbums} from '../../store/action-creators/album'
 import {IAlbum} from '../../types/album'
+import InputField from "../../ui/input-field/input-field";
 
 interface AlbumListProps {
     albums: IAlbum[]
     token: string
-    userId: string
+    userId: number
 }
 
 const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
@@ -36,20 +37,23 @@ const AlbumList: React.FC<AlbumListProps> = ({albums, token, userId}) => {
 
     return (
         <>
-            <form onSubmit={formik.handleSubmit}>
-                <input
-                    name={'query'}
-                    value={formik.values.query}
-                    onChange={async (e) => {
-                        formik.handleChange(e)
-                        await handleSearch(formik.values)
-                    }}
-                    style={{marginBottom: 20}}
+            <Formik initialValues={{
+                query: '',
+            }} onSubmit={(values) => {
+                handleSearch(values.query)
+            }}>{(formik) =>
+                <div className={classes.albumList__search}>
+                    <InputField
+                        label={'Введите запрос'}
+                        name={'query'}
+                        value={formik.values.query}
 
-                />
-            </form>
+                    />
+                </div>
+            }
+            </Formik>
             <div>
-                <div p={0} className={classes.box}>
+                <div className={classes.albumList__content}>
                     {albums.map(album =>
                         <AlbumItem
                             key={album.id}

@@ -1,0 +1,53 @@
+@import "../../styles/mixins/font";
+@import "../../styles/mixins/icon";
+
+.player {
+  height: 80px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: auto 2fr 1fr;
+  align-items: center;
+  grid-gap: 20px;
+  max-width: 1200px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+
+  &__play{
+    @include icon('play.svg');
+  }
+  &__pause{
+    @include icon('pause.svg');
+  }
+
+  &__play, &__pause{
+    width: 30px;
+    height: 30px;
+
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+  &__info{
+    &__name{
+      @include fontMedium();
+      line-height: 20px;
+    }
+    &__author{
+      @include fontSmall();
+    }
+  }
+
+  &__column {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    grid-column-gap: 20px;
+    @include fontMedium();
+  }
+
+}
+

@@ -10,11 +10,12 @@ import InputField from "../../ui/input-field/input-field";
 interface TrackListProps {
     tracks: ITrack[]
     token: string
-    user_id: string
+    user_id: number
     view?: string
+    hideSearch?: boolean
 }
 
-const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => {
+const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view, hideSearch}) => {
     const [timer, setTimer] = useState(null)
     const dispatch = useDispatch();
 
@@ -30,22 +31,24 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => 
     }
 
     return (
-        <>
-            <Formik initialValues={{
-                query: '',
-            }} onSubmit={(values) => {
-                handleSearch(values.query)
-            }}>{(formik) =>
-                <div className={classes.trackList__search}>
-                    <InputField
-                        label={'Введите запрос'}
-                        name={'query'}
-                        value={formik.values.query}
+        <div className={classes.trackList}>
+            {!hideSearch &&
+                <Formik initialValues={{
+                    query: '',
+                }} onSubmit={(values) => {
+                    handleSearch(values.query)
+                }}>{(formik) =>
+                    <div className={classes.trackList__search}>
+                        <InputField
+                            label={'Введите запрос'}
+                            name={'query'}
+                            value={formik.values.query}
 
-                    />
-                </div>
+                        />
+                    </div>
+                }
+                </Formik>
             }
-            </Formik>
             <div className={classes.trackList__content}>
                     {tracks.map(track =>
                         <TrackItem
@@ -57,7 +60,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view}) => 
                         />
                     )}
             </div>
-        </>
+        </div>
 
     )
 }

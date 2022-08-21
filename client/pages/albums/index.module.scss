@@ -1,17 +1,21 @@
-.error{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    padding: 20px;
-    font-weight: normal;
+@import "../../styles/mixins/font";
+@import "../../styles/mixins/button";
 
-}
-.card{
-    width: 900px;
-    padding: 30px
-}
-.title{
-    margin-left: 10px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-gap: 10px;
+.albums{
+    &__top{
+        display: grid;
+        grid-template-columns: 1fr auto;
+        margin-bottom: 15px;
+
+        &__title{
+            @include fontHeaderSmall();
+        }
+        &__createBtn{
+            @include button-small();
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+
 }
