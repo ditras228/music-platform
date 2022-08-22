@@ -6,39 +6,17 @@ use App\Models\Album;
 use App\Models\Comment;
 use App\Models\Track;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Track[]|\Illuminate\Database\Eloquent\Collection|Response
-     */
     public function index()
     {
         return Comment::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create($request)
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse|Response|object
-     */
     public function store(Request $request)
     {
         $validator = Validator::make(
@@ -88,35 +66,7 @@ class CommentController extends Controller
         return $comment;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return void
-     */
-    public function show($id)
-    {
 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse|Response|object
-     */
     public function update(Request $request, int $id)
     {
         $validator = Validator::make(
@@ -142,12 +92,6 @@ class CommentController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return JsonResponse|object
-     */
     public function destroy($id)
     {
         $comment = Comment::find($id);

@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Track;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -17,11 +13,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TrackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Track[]|\Illuminate\Database\Eloquent\Collection|Response
-     */
     public function streamResponse($id): BinaryFileResponse
     {
         $audioPath = Track::Find($id)->audio;
@@ -39,26 +30,11 @@ class TrackController extends Controller
         return Track::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create($request)
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return JsonResponse|Response|object
-     */
     public function store(Request $request)
     {
         $validator = Validator::make(
-            $request->all(),[
-                'user_id'=> ['required'],
+            $request->all(), [
+                'user_id' => ['required'],
                 'name' => ['required'],
                 'lyrics' => ['required'],
                 'artist' => ['required'],
@@ -67,20 +43,20 @@ class TrackController extends Controller
             ]
         );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>false,
-                'errors'=> $validator->messages()
+                'status' => false,
+                'errors' => $validator->messages()
             ])->setStatusCode(422);
         }
 
         $image = $request->file('image');
         $audio = $request->file('audio');
-        $imagePath = $image->store('tracks','public');
-        $audioPath = $audio->store('audio','public');
+        $imagePath = $image->store('tracks', 'public');
+        $audioPath = $audio->store('audio', 'public');
 
         return Track::create([
-            'user_id'=> $request->user_id,
+            'user_id' => $request->user_id,
             'name' => $request->name,
             'lyrics' => $request->lyrics,
             'artist' => $request->artist,
@@ -90,12 +66,6 @@ class TrackController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return JsonResponse|Response|object
-     */
     public function show($id)
     {
         $track = Track::find($id);
@@ -107,9 +77,9 @@ class TrackController extends Controller
         }
 
         $comments = DB::table('comments')
-            ->join('users','users.id','=', 'comments.user_id')
+            ->join('users', 'users.id', '=', 'comments.user_id')
             ->select('name', 'image', 'text')
-            ->where('comments.track_id', '=', $id )
+            ->where('comments.track_id', '=', $id)
             ->orderBy('comments.id', 'desc')
             ->get();
 
@@ -117,28 +87,10 @@ class TrackController extends Controller
         return $track;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse|Response|object
-     */
     public function update(Request $request, int $id)
     {
         $validator = Validator::make(
-            $request->all(),[
+            $request->all(), [
                 'name' => ['required'],
                 'lyrics' => ['required'],
                 'artist' => ['required'],
@@ -147,10 +99,10 @@ class TrackController extends Controller
             ]
         );
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                'status'=>false,
-                'errors'=> $validator->messages()
+                'status' => false,
+                'errors' => $validator->messages()
             ])->setStatusCode(422);
         }
 
@@ -162,19 +114,15 @@ class TrackController extends Controller
         $audioPath = $audio->store('audio', 'public');
 
 
-        if(Storage::exists($track->image)){
+        if (Storage::exists($track->image)) {
             Storage::delete($track->image);
-        }else{
-            dd('Image does not exists.');
         }
 
-        if(Storage::exists($track->audio)){
+        if (Storage::exists($track->audio)) {
             Storage::delete($track->audio);
-        }else{
-            dd('Audio does not exists.');
         }
 
-         $track->update([
+        $track->update([
             'name' => $request->name,
             'lyrics' => $request->lyrics,
             'artist' => $request->artist,
@@ -186,17 +134,11 @@ class TrackController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return JsonResponse|Response|object
-     */
-    public function destroy( $id)
+    public function destroy($id)
     {
         $track = Track::find($id);
 
-        if(!$track){
+        if (!$track) {
             return response()->json([
                 'status' => false,
                 'message' => 'Track not found',
@@ -206,10 +148,8 @@ class TrackController extends Controller
         $track->delete();
 
         return response()->json([
-            'status'=> true,
-            'message'=> 'Success delete'
+            'status' => true,
+            'message' => 'Success delete'
         ])->setStatusCode(200);
     }
-
-
 }
