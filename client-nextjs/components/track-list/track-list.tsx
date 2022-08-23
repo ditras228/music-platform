@@ -1,11 +1,13 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import classes from './track-list.module.scss'
 import {Formik, useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
-import {searchTracks} from "../../store/action-creators/track";
+import {fetchTracks, searchTracks} from "../../store/action-creators/track";
 import TrackItem from "../track-item/track-item";
-import {ITrack} from "../../types/track";
+import {ITrack, TrackActionTypes} from "../../types/track";
 import InputField from "../../ui/input-field/input-field";
+import {useRouter} from "next/router";
+import {useTypedSelector} from "../../hooks/useTypedSelector";
 
 interface TrackListProps {
     tracks: ITrack[]
@@ -17,7 +19,28 @@ interface TrackListProps {
 
 const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view, hideSearch}) => {
     const [timer, setTimer] = useState(null)
-    const dispatch = useDispatch();
+    const { total, current_page, isFetching} = useTypedSelector(state => state.track)
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        document.addEventListener('scroll', scrollHandler);
+
+        return function (){
+            document.removeEventListener('scroll', null)
+        }
+    },[])
+
+    useEffect(()=>{
+        if(isFetching===true && total != tracks.length){
+            dispatch(fetchTracks(token,current_page+1))
+        }
+    }, [isFetching])
+
+    const scrollHandler=(e): void=> {
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
+            dispatch({type: TrackActionTypes.SET_IS_FETCHING, payload: true})
+        }
+    }
 
     const handleSearch = async (values) => {
         if (timer) {
@@ -29,8 +52,6 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view, hide
             }, 500)
         )
     }
-
-
 
     return (
         <div className={classes.trackList}>

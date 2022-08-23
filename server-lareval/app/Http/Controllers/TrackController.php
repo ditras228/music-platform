@@ -27,7 +27,7 @@ class TrackController extends Controller
 
     public function index()
     {
-        return Track::all();
+        return Track::paginate(15);
     }
 
     public function store(Request $request)

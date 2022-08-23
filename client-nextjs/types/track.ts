@@ -4,7 +4,11 @@ export interface IComment {
     name: string
     text: string
 }
-
+export interface ITracks{
+    current_page: number
+    total: number
+    data: ITrack[]
+}
 export interface ITrack {
     id: string
     name: string
@@ -19,12 +23,16 @@ export interface ITrack {
 }
 
 export interface TrackState {
+    isFetching: boolean
+    current_page: number
+    total: number
     tracks: ITrack[]
     error: string
 }
 
 export enum TrackActionTypes {
     FETCH_TRACKS = 'FETCH_TRACKS',
+    SET_IS_FETCHING = 'SET_IS_FETCHING',
     FETCH_TRACKS_ERROR = 'FETCH_TRACKS_ERROR',
     REMOVE_TRACK = 'REMOVE_TRACK',
 }
@@ -36,7 +44,12 @@ interface RemoveTrack {
 
 interface FetchTracksAction {
     type: TrackActionTypes.FETCH_TRACKS
-    payload: ITrack[]
+    payload: ITracks
+}
+
+interface SetIsFetchingAction {
+    type: TrackActionTypes.SET_IS_FETCHING
+    payload: boolean
 }
 
 interface FetchTracksErrorAction {
@@ -44,4 +57,4 @@ interface FetchTracksErrorAction {
     payload: string
 }
 
-export type TrackAction = FetchTracksAction | FetchTracksErrorAction | RemoveTrack
+export type TrackAction = FetchTracksAction | FetchTracksErrorAction | RemoveTrack | SetIsFetchingAction

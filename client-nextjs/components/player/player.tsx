@@ -87,7 +87,7 @@ const Player = () => {
     }, [pause])
 
 
-    useEffect(() => {
+    useEffect(() =>     {
         //Сохраняем в куки плеер
         active && cookie.set('player', `${JSON.stringify({
             ...player,

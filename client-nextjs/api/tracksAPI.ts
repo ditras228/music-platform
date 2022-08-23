@@ -1,8 +1,8 @@
 import {instance} from './index'
 
 export const TracksAPI = {
-    getTracks(token): any {
-        return instance.get('/track',
+    getTracks(token, page): any {
+        return instance.get(`/track?page=${page}`,
             {headers: {Authorization: `Bearer ${token}`}})
     },
 

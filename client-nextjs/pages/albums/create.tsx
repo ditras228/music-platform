@@ -119,7 +119,7 @@ export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const session = await getSession({req: ctx.req})
-    await dispatch(fetchTracks(session.accessToken))
+    await dispatch(fetchTracks(session.accessToken, 1))
     if (!session) {
         return {
             redirect: {

@@ -2,12 +2,13 @@ import {Dispatch} from 'react'
 import {TrackAction, TrackActionTypes} from '../../types/track'
 import {TracksAPI} from '../../api/tracksAPI'
 
-export const fetchTracks = (token) => {
+export const fetchTracks = (token, page) => {
     return async (dispatch: Dispatch<TrackAction>) => {
 
-        await TracksAPI.getTracks(token)
+        await TracksAPI.getTracks(token, page)
             .then(res => {
                     dispatch({type: TrackActionTypes.FETCH_TRACKS, payload: res.data})
+                    dispatch({type: TrackActionTypes.SET_IS_FETCHING, payload: false})
                 }
             )
             .catch(e => {
