@@ -7,7 +7,6 @@ import classes from './register.module.scss'
 import {useDispatch, useSelector} from 'react-redux'
 import {Registration} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
-import {getSession} from 'next-auth/client'
 import {baseServerSideProps, wrapper} from '../../store'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import InputField from "../../ui/input-field/input-field";
@@ -103,6 +102,6 @@ export default Register
 
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-        await baseServerSideProps({ctx, isAuthPage: true})
+        await baseServerSideProps({ctx})
     }
 )

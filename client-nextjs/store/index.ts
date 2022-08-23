@@ -21,24 +21,14 @@ export const makeStore = (context: Context) => createStore(reducer, bindMiddlewa
 export const wrapper = createWrapper<Store<RootState>>(makeStore, {debug: true});
 export type NextThunkDispatch = ThunkDispatch<RootState, void, AnyAction>
 
-interface IBaseServerSideProps{
-    ctx: GetServerSidePropsContext & {store: Store}
-    isAuthPage?: boolean
+interface IBaseServerSideProps {
+    ctx: GetServerSidePropsContext & { store: Store }
 }
 
-export const baseServerSideProps = async ({ctx, isAuthPage}: IBaseServerSideProps):  Promise<Session>  => {
+export const baseServerSideProps = async ({ctx}: IBaseServerSideProps): Promise<Session> => {
     const session = await getSession(ctx)
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const player = cookies(ctx).player;
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: isAuthPage?'/tracks': '/',
-                permanent: false,
-            },
-        }
-    }
 
     if (player) {
         dispatch(setPlayer(player))

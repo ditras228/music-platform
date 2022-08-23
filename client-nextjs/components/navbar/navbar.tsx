@@ -4,22 +4,21 @@ import {useRouter} from 'next/router'
 import classes from './navbar.module.scss'
 
 export default function Navbar() {
-    const [session, loading] = useSession() as any
+    const [session] = useSession() as any
     const router = useRouter()
+
     useEffect(() => {
-        if (!session?.user?.email) {
-            logOutHandler
+        if (!session && router.pathname == '') {
+            logOutHandler()
         }
     }, [session])
 
     const logOutHandler = async () => {
         await signOut()
     }
+
     const tracksHandler = async () => {
         await router.push('/tracks')
-    }
-    const logInHandler = async () => {
-        await router.push('/')
     }
 
     return (
@@ -35,11 +34,7 @@ export default function Navbar() {
                 </div>
                 <div className={classes.navbar__container__auth}>
                     {
-                        !session
-                            ? <div onClick={() => logInHandler()}>Login</div>
-                            : <>
-                                <div onClick={logOutHandler}>Logout</div>
-                            </>
+                        session && <div onClick={logOutHandler}>Logout</div>
                     }
                 </div>
             </div>

@@ -46,8 +46,17 @@ export default Index
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const session = await baseServerSideProps({ctx})
+    if(!session){
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     await dispatch(fetchTracks(session.accessToken,1))
+
 
     return {
         props: {
