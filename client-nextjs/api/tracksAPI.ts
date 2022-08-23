@@ -1,8 +1,12 @@
 import {instance} from './index'
+import FormData from 'form-data';
 
 export const TracksAPI = {
     getTracks(token, page): any {
-        return instance.get(`/track?page=${page}`,
+        let formData = new FormData()
+        formData.append('search', '')
+
+        return instance.post(`/track?page=${page}`, formData,
             {headers: {Authorization: `Bearer ${token}`}})
     },
 
@@ -16,8 +20,11 @@ export const TracksAPI = {
             {headers: {Authorization: `Bearer ${token}`}})
     },
 
-    searchTracks(query, token): any {
-        return instance.get('/track/search?query=' + query,
+    searchTracks(query, token, page): any {
+        let formData = new FormData()
+        formData.append('search', query)
+
+        return instance.post(`/track?page=${page}`, formData,
             {headers: {Authorization: `Bearer ${token}`}})
     },
 

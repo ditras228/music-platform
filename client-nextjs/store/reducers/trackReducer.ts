@@ -19,6 +19,14 @@ export const trackReducer = (state = initialState, action: TrackAction): TrackSt
                 total: action.payload.total,
                 current_page: action.payload.current_page
             }
+        case TrackActionTypes.SEARCH_TRACKS:
+            return {
+                ...state,
+                error: '',
+                tracks: action.payload.data,
+                total: action.payload.total,
+                current_page: action.payload.current_page
+            }
         case TrackActionTypes.SET_IS_FETCHING:
             return {
                 ...state,

@@ -12,7 +12,8 @@ export const fetchTracks = (token, page) => {
                 }
             )
             .catch(e => {
-
+                    console.log('ОШИБКА')
+                    console.log(e)
                     dispatch({
                         type: TrackActionTypes.FETCH_TRACKS_ERROR,
                         payload: 'Произошла ошибка загрузки треков'
@@ -22,11 +23,13 @@ export const fetchTracks = (token, page) => {
             )
     }
 }
-export const searchTracks = (query: string, token: string) => {
+export const searchTracks = (query: string, token: string, page: number) => {
     return async (dispatch: Dispatch<TrackAction>) => {
         try {
-            const response = await TracksAPI.searchTracks(query, token)
-            dispatch({type: TrackActionTypes.FETCH_TRACKS, payload: response.data})
+            await TracksAPI.searchTracks(query, token, page)    .then(res => {
+                    dispatch({type: TrackActionTypes.SEARCH_TRACKS, payload: res.data})
+                }
+            )
         } catch (e) {
             dispatch({
                 type: TrackActionTypes.FETCH_TRACKS_ERROR,

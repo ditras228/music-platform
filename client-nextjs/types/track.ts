@@ -32,6 +32,7 @@ export interface TrackState {
 
 export enum TrackActionTypes {
     FETCH_TRACKS = 'FETCH_TRACKS',
+    SEARCH_TRACKS = 'SEARCH_TRACKS',
     SET_IS_FETCHING = 'SET_IS_FETCHING',
     FETCH_TRACKS_ERROR = 'FETCH_TRACKS_ERROR',
     REMOVE_TRACK = 'REMOVE_TRACK',
@@ -47,6 +48,11 @@ interface FetchTracksAction {
     payload: ITracks
 }
 
+interface SearchTracksAction {
+    type: TrackActionTypes.SEARCH_TRACKS
+    payload: ITracks
+}
+
 interface SetIsFetchingAction {
     type: TrackActionTypes.SET_IS_FETCHING
     payload: boolean
@@ -57,4 +63,4 @@ interface FetchTracksErrorAction {
     payload: string
 }
 
-export type TrackAction = FetchTracksAction | FetchTracksErrorAction | RemoveTrack | SetIsFetchingAction
+export type TrackAction = FetchTracksAction | FetchTracksErrorAction | RemoveTrack | SetIsFetchingAction | SearchTracksAction

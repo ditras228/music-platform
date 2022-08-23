@@ -5,9 +5,8 @@ import {useDispatch} from 'react-redux'
 import {fetchTracks, searchTracks} from "../../store/action-creators/track";
 import TrackItem from "../track-item/track-item";
 import {ITrack, TrackActionTypes} from "../../types/track";
-import InputField from "../../ui/input-field/input-field";
-import {useRouter} from "next/router";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
+import TrackSearch from "../track-search/track-search";
 
 interface TrackListProps {
     tracks: ITrack[]
@@ -18,7 +17,6 @@ interface TrackListProps {
 }
 
 const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view, hideSearch}) => {
-    const [timer, setTimer] = useState(null)
     const { total, current_page, isFetching} = useTypedSelector(state => state.track)
     const dispatch = useDispatch()
 
@@ -42,36 +40,9 @@ const TrackList: React.FC<TrackListProps> = ({tracks, token, user_id, view, hide
         }
     }
 
-    const handleSearch = async (values) => {
-        if (timer) {
-            clearTimeout(timer)
-        }
-        setTimer(
-            setTimeout(async () => {
-                await dispatch(searchTracks(values, token))
-            }, 500)
-        )
-    }
-
     return (
         <div className={classes.trackList}>
-            {!hideSearch &&
-                <Formik initialValues={{
-                    query: '',
-                }} onSubmit={(values) => {
-                    handleSearch(values.query)
-                }}>{(formik) =>
-                    <div className={classes.trackList__search}>
-                        <InputField
-                            label={'Введите запрос'}
-                            name={'query'}
-                            value={formik.values.query}
-
-                        />
-                    </div>
-                }
-                </Formik>
-            }
+           <TrackSearch token={token} hideSearch={hideSearch}></TrackSearch>
             <div className={classes.trackList__content}>
                     {tracks.map(track =>
                         <TrackItem
