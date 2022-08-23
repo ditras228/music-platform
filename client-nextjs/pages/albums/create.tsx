@@ -1,6 +1,6 @@
 import ImagePreview from '../../ui/image-preview/image-preview'
 import React, {useEffect, useRef, useState} from 'react'
-import {NextThunkDispatch, wrapper} from '../../store'
+import {baseServerSideProps, NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
@@ -117,20 +117,9 @@ const Create = ({token, userId}) => {
 export default Create
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
+    const session = await baseServerSideProps({ctx})
     const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session = await getSession({req: ctx.req})
     await dispatch(fetchTracks(session.accessToken, 1))
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
-    const player = cookies(ctx).player
-
-    dispatch(setPlayer(player))
 
     return {
         props: {

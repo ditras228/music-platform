@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import classes from './track-progress.module.scss'
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useActions} from "../../hooks/useAction";
@@ -9,10 +9,10 @@ interface TrackVolume {
 
 const Slider: React.FC<TrackVolume> =
     ({
-        audio
+         audio
      }) => {
         const player = useTypedSelector(state => state.player)
-        const {active, volume, duration, currentTime} = player
+        const {volume} = player
 
         const {setVolume} = useActions()
 

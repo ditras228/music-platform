@@ -1,0 +1,22 @@
+@import "../../styles/mixins/font";
+@import "../../styles/mixins/icon";
+
+.icon {
+  &__play{
+    @include icon('play.svg');
+  }
+  &__pause{
+    @include icon('pause.svg');
+  }
+
+  &__play, &__pause{
+    width: 30px;
+    height: 30px;
+
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+}
+

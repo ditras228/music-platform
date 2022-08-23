@@ -7,7 +7,6 @@ const initialState: PlayerState = {
     activeAlbum: null,
     pause: true,
     volume: 50
-
 }
 
 export const playerReducer = (state = initialState, action: PlayerActions) => {

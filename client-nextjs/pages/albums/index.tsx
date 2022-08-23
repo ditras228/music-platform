@@ -2,15 +2,12 @@ import React, {useState} from 'react'
 import MainLayout from '../../layouts/MainLayout'
 import {useRouter} from 'next/router'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
-import {NextThunkDispatch, wrapper} from '../../store'
+import {baseServerSideProps, NextThunkDispatch, wrapper} from '../../store'
 import {useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
 import classes from './index.module.scss'
 import {fetchAlbums, searchAlbums} from '../../store/action-creators/album'
-import {getSession} from 'next-auth/client'
 import AlbumList from '../../components/album-list/album-list'
-import cookies from 'next-cookies'
-import {setPlayer} from '../../store/action-creators/player'
 
 const Index = ({token, userId}) => {
     const router = useRouter()
@@ -66,21 +63,11 @@ export default Index
 
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
+        const session = await baseServerSideProps({ctx})
         const dispatch = ctx.store.dispatch as NextThunkDispatch
-        const session = await getSession({req: ctx.req})
 
-        if (!session) {
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent: false,
-                },
-            }
-        }
         await dispatch(fetchAlbums(session.accessToken))
-        const player = cookies(ctx).player;
-        dispatch(setPlayer(player))
-
+    
         return {
             props: {
                 token: session.accessToken || null,

@@ -7,7 +7,7 @@ import TrackVolume from "../track-volume/track-volume";
 import TrackProgress from "../track-progress/track-progress";
 import Play from "../play/play";
 import cookie from 'js-cookie'
-import {setActiveTrack} from "../../store/action-creators/player";
+import {setActiveTrack, setPlayer} from "../../store/action-creators/player";
 import {ITrack} from "../../types/track";
 
 let audio
@@ -15,14 +15,20 @@ let audio
 const Player = () => {
     const player = useTypedSelector(state => state.player)
     const track = useTypedSelector(state => state.track)
-    const {active, pause, volume, currentTime, activeAlbum} = player
-    const {setCurrentTime, setDuration, setActiveTrack} = useActions()
+    const {active, pause, volume, activeAlbum, currentTime, duration} = player
+    const {setCurrentTime, setDuration, setActiveTrack, setPlayer} = useActions()
+
 
     useEffect(() => {
             if (!audio) {
                 // В случае отстуствия аудио, создаем его
                 audio = new Audio()
             }
+
+            if (!duration) {
+                setDuration(Math.ceil(audio.duration))
+            }
+
             if (active) {
                 // В случае, если id'шник другой, обнуляем currentTime и присваеваем новый src
                 if (audio.src.split('/')[4] != active?.id) {
@@ -40,8 +46,6 @@ const Player = () => {
                 // При воспроизведении аудио
                 audio.ontimeupdate = () => {
                     if (audio.duration >= audio.currentTime) {
-                        setDuration(Math.ceil(audio.duration))
-
                         setCurrentTime(Math.ceil(audio.currentTime))
                     }
                 }
@@ -49,12 +53,9 @@ const Player = () => {
                 // Если аудио закончило проигрывание..
                 audio.onended = () => {
                     if (track) {
-                        console.log(track.tracks)
                         nextTrack(track.tracks)
                     }
                     if (activeAlbum) {
-                        console.log('al')
-                        console.log(activeAlbum.tracks)
                         nextTrack(activeAlbum.tracks)
                     }
                 }
@@ -87,7 +88,7 @@ const Player = () => {
     }, [pause])
 
 
-    useEffect(() =>     {
+    useEffect(() => {
         //Сохраняем в куки плеер
         active && cookie.set('player', `${JSON.stringify({
             ...player,
@@ -100,6 +101,7 @@ const Player = () => {
         })}`)
 
     }, [currentTime, pause, volume])
+
 
 // В случае отстуствия трека, возвращаем нуль
     if (active === null) return null

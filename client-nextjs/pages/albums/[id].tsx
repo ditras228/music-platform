@@ -5,7 +5,7 @@ import {IAlbum} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
 import {getSession, useSession} from 'next-auth/client'
 import {setPlayer,} from '../../store/action-creators/player'
-import {NextThunkDispatch, wrapper} from '../../store'
+import {baseServerSideProps, NextThunkDispatch, wrapper} from '../../store'
 import TrackList from "../../components/track-list/track-list";
 import AlbumInfo from "../../components/album-info/album-info";
 import AlbumComments from "../../components/album-comments/album-comments";
@@ -42,28 +42,13 @@ const AlbumPage = ({serverAlbum, token, userId}) => {
 export default AlbumPage
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-
-    const session = await getSession(ctx)
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
-    const player = cookies(ctx).player;
-    dispatch(setPlayer(player))
-
+    const session = await baseServerSideProps({ctx})
     const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
-    dispatch({type: PlayerActionTypes.SET_ACTIVE__ALBUM, payload: response.data})
 
     return {
         props: {
             serverAlbum: response.data,
-            token: session.accessToken || null,
+            token: session.accessToken,
             userId: session.userId
         }
 

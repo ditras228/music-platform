@@ -1,7 +1,7 @@
 import React from 'react'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {useActions} from '../../hooks/useAction'
-import classes from './player.module.scss'
+import classes from './play.module.scss'
 
 interface IPlay{
     audio: any
@@ -27,8 +27,8 @@ const Play = ({audio}:IPlay) => {
     return (
         <div onClick={()=>play()}>
             {pause
-                ? <div className={classes.player__play}></div>
-                : <div className={classes.player__pause}></div>
+                ? <div className={classes.icon__play}></div>
+                : <div className={classes.icon__pause}></div>
             }
         </div>
     )

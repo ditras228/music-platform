@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {Registration} from '../../store/action-creators/user'
 import {GetError} from '../../store/selectors'
 import {getSession} from 'next-auth/client'
-import {wrapper} from '../../store'
+import {baseServerSideProps, wrapper} from '../../store'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import InputField from "../../ui/input-field/input-field";
 
@@ -85,7 +85,7 @@ const Register = () => {
                         <div className={classes.register__content__buttons}>
                             <button
                                 className={classes.register__content__buttons__item}
-                                onClick={()=>formik.handleSubmit()}>
+                                onClick={() => formik.handleSubmit()}>
                                 Регистрация
                             </button>
                         </div>
@@ -103,17 +103,6 @@ export default Register
 
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const session = await getSession({req: ctx.req})
-
-    if (session) {
-        return {
-            redirect: {
-                destination: '/tracks',
-                permanent: false,
-            },
-        }
+        await baseServerSideProps({ctx, isAuthPage: true})
     }
-
-    return ({props: {session}})
-
-})
+)

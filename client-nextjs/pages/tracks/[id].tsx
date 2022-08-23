@@ -4,11 +4,8 @@ import {useRouter} from 'next/router'
 import {TracksAPI} from '../../api/tracksAPI'
 import {ITrack} from '../../types/track'
 import classes from './[id].module.scss'
-import cookies from 'next-cookies'
-import {setPlayer} from '../../store/action-creators/player'
-import {NextThunkDispatch, wrapper} from '../../store'
-import {getSession, useSession} from 'next-auth/client'
-import {UsersActionTypes} from '../../types/user'
+import {baseServerSideProps, wrapper} from '../../store'
+import {useSession} from 'next-auth/client'
 import TrackLyrics from "../../components/track-lyrics/track-lyrics";
 import TrackComments from "../../components/track-comments/track-comments";
 import TrackInfo from "../../components/track-info/track-info";
@@ -40,32 +37,16 @@ const TrackPage = ({serverTrack, token}) => {
 }
 
 export default TrackPage
+
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session = await getSession(ctx)
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
-        const player = cookies(ctx).player;
-    console.log(player)
-
-    if(player)
-
-        dispatch(setPlayer(player))
-
+    const session = await baseServerSideProps({ctx})
     const response = await TracksAPI.getOne(ctx.params.id, session.accessToken)
+
     return {
         props: {
             serverTrack: response.data,
-            token: session.accessToken || null
+            token: session.accessToken
         }
-
     }
 })

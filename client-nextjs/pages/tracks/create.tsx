@@ -1,6 +1,6 @@
 import ImagePreview from '../../ui/image-preview/image-preview'
 import React, {useEffect, useRef, useState} from 'react'
-import {NextThunkDispatch, wrapper} from '../../store'
+import {baseServerSideProps, NextThunkDispatch, wrapper} from '../../store'
 import {getSession} from 'next-auth/client'
 import {useRouter} from 'next/router'
 import MultiStepForm, {FormStep} from '../../ui/step-form/multi-step-form'
@@ -132,23 +132,11 @@ const Create = ({token}) => {
 export default Create
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
-    const dispatch = ctx.store.dispatch as NextThunkDispatch
-    const session = await getSession({req: ctx.req})
-    const player = cookies(ctx).player;
+    const session = await baseServerSideProps({ctx})
 
-    dispatch(setPlayer(player))
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
-    }
     return {
         props: {
-            token: session.accessToken || null,
+            token: session.accessToken
         }
     }
 })

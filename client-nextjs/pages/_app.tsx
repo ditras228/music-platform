@@ -13,5 +13,4 @@ const WrappedApp: FC<AppProps> = ({Component, pageProps}) => {
    )
 }
 
-
 export default wrapper.withRedux(WrappedApp);
