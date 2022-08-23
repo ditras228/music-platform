@@ -1,8 +1,6 @@
 import {PlayerActions, PlayerActionTypes} from '../../types/player'
-import {ITrack, TrackAction, TrackActionTypes} from '../../types/track'
+import {ITrack} from '../../types/track'
 import {Dispatch} from "react";
-import {TracksAPI} from "../../api/tracksAPI";
-import {AlbumsAPI} from "../../api/albumsAPI";
 
 export const playTrack = (): PlayerActions => {
     return {type: PlayerActionTypes.PLAY}
@@ -30,10 +28,6 @@ export const setActiveTrack = (payload: ITrack): PlayerActions => {
 
 export const setPlayer = (payload): PlayerActions => {
     return {type: PlayerActionTypes.SET_PLAYER, payload}
-}
-
-export const setActiveAlbum = (payload): PlayerActions => {
-    return {type: PlayerActionTypes.SET_ACTIVE__ALBUM__FIRST, payload}
 }
 
 export const setPreview = (active, track, pause) => {

@@ -6,7 +6,7 @@ import {baseURL, imagesURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './track-item.module.scss'
 import {useFormikContext} from 'formik'
-import {deleteTrack} from "../../store/action-creators/track";
+import {deleteTrack, fetchTracks} from "../../store/action-creators/track";
 import Image from "next/image";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import PlayImage from "../play-image/play-image";
@@ -66,7 +66,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false, view, userI
 
             <div className={classes.track__info}
             >
-                <PlayImage track={track} list={true}></PlayImage>
+                <PlayImage track={track} list={true} token={token}></PlayImage>
                 <div className={classes.track__name}>
                     <div>{track.name}</div>
                     <div className={classes.track__author}>{track.artist}</div>

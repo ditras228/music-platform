@@ -20,6 +20,7 @@ export interface ITrack {
     comments: IComment[]
     checked: boolean
     userId: string
+    page: number
 }
 
 export interface TrackState {

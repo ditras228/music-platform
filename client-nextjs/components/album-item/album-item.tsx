@@ -1,13 +1,9 @@
 import React from 'react'
 import {useRouter} from 'next/router'
-import {imagesURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './album-item.module.scss'
 import {IAlbum} from '../../types/album'
 import {deleteAlbum, fetchAlbum} from "../../store/action-creators/album";
-import Image from 'next/image'
-import PlayImage from "../play-image/play-image";
-import {PlayerActionTypes} from "../../types/player";
 import PlayAlbumImage from "../play-album-image/play-album-image";
 
 interface AlbumItemProps {

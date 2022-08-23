@@ -40,7 +40,6 @@ export default (req, res) => {
         callbacks: {
             async jwt(token, user, account, profile, isNewUser) {
                 if (token?.sub) {
-                    console.log(token.sub)
                     token = await UsersAPI.getOne(token.sub).then(res => res.data)
                     token.accessToken = token.access_token
                 }
@@ -52,7 +51,6 @@ export default (req, res) => {
                 return token
             },
             async session(session, token) {
-                console.log(token)
                 session.accessToken = token.accessToken
                 session.color = token.color
                 session.userId = token.id

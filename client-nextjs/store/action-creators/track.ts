@@ -12,8 +12,6 @@ export const fetchTracks = (token, page) => {
                 }
             )
             .catch(e => {
-                    console.log('ОШИБКА')
-                    console.log(e)
                     dispatch({
                         type: TrackActionTypes.FETCH_TRACKS_ERROR,
                         payload: 'Произошла ошибка загрузки треков'

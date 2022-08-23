@@ -28,7 +28,14 @@ Route::get('/auth/registration/confirm/{id}/{hash}', [RegistrationController::cl
 
 
 Route::middleware([Authorization::class])->group(function () {
-    Route::apiResource('/track', TrackController::class);
+//    Route::apiResource('/track', TrackController::class);
+
+    Route::post('/track/', [TrackController::class, 'index']);
+    Route::get('/track/{id}', [TrackController::class, 'show']);
+    Route::post('/track/create', [TrackController::class, 'store']);
+    Route::put('/track/{id}', [TrackController::class, 'update']);
+    Route::delete('/track/{id}', [TrackController::class, 'destroy']);
+
     Route::put('/listen/{track}', [TrackListensController::class, 'update']);
 
     Route::apiResource('/album', AlbumController::class);

@@ -4,12 +4,14 @@ import {HYDRATE} from 'next-redux-wrapper'
 import {trackReducer} from './trackReducer'
 import {usersReducer} from './userReducer'
 import {albumReducer} from './albumReducer'
+import {playlistReducer} from "./playlistReducer";
 
 export const rootReducer = combineReducers({
     player: playerReducer,
     track: trackReducer,
     album: albumReducer,
-    user: usersReducer
+    user: usersReducer,
+    playlist: playlistReducer
 })
 
 export const reducer = (state, action) => {

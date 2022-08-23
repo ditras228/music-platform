@@ -7,17 +7,19 @@ import TrackVolume from "../track-volume/track-volume";
 import TrackProgress from "../track-progress/track-progress";
 import Play from "../play/play";
 import cookie from 'js-cookie'
-import {setActiveTrack, setPlayer} from "../../store/action-creators/player";
+import {setActiveTrack} from "../../store/action-creators/player";
 import {ITrack} from "../../types/track";
+import {fetchNextPlaylist} from "../../store/action-creators/playlist";
+import {useSession} from "next-auth/client";
 
 let audio
 
 const Player = () => {
     const player = useTypedSelector(state => state.player)
-    const track = useTypedSelector(state => state.track)
+    const playlist = useTypedSelector(state => state.playlist)
     const {active, pause, volume, activeAlbum, currentTime, duration} = player
-    const {setCurrentTime, setDuration, setActiveTrack, setPlayer} = useActions()
-
+    const {setCurrentTime, setDuration, setActiveTrack, fetchNextPlaylist} = useActions()
+    const [session] = useSession()
 
     useEffect(() => {
             if (!audio) {
@@ -52,8 +54,8 @@ const Player = () => {
 
                 // Если аудио закончило проигрывание..
                 audio.onended = () => {
-                    if (track) {
-                        nextTrack(track.tracks)
+                    if (playlist) {
+                        nextTrack(playlist.tracks)
                     }
                     if (activeAlbum) {
                         nextTrack(activeAlbum.tracks)
@@ -62,17 +64,17 @@ const Player = () => {
 
             }
 
-        }, [active?.id, pause]
+        }, [active?.id, pause, currentTime]
     )
 
-    function nextTrack(tracks: ITrack[]): void {
+    async function nextTrack(tracks: ITrack[]) {
         if (tracks.length > 0) {
             const currentIndex = tracks.indexOf(tracks.filter(value => value.id == active.id)[0])
-
+            console.log(currentIndex)
             if (tracks.length - 1 > currentIndex) {
                 setActiveTrack(tracks[currentIndex + 1])
             } else {
-                setActiveTrack(tracks[0])
+                await fetchNextPlaylist(session.accessToken, active.page + 1)
             }
         }
 
@@ -100,6 +102,9 @@ const Player = () => {
             }
         })}`)
 
+        active && cookie.set('page', `${JSON.stringify({
+            page: active.page
+        })}`)
     }, [currentTime, pause, volume])
 
 

@@ -6,21 +6,25 @@ import {useActions} from "../../hooks/useAction";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {setPreview} from "../../store/action-creators/player";
 import {ITrack} from "../../types/track";
+import {fetchPlaylist} from "../../store/action-creators/playlist";
+import {useDispatch} from "react-redux";
 
 interface IPlayImage{
     track?: ITrack,
     list?: boolean
+    token: string
 }
 
-const PlayImage = ({track, list}: IPlayImage) => {
+const PlayImage = ({track, list, token}: IPlayImage) => {
     const player = useTypedSelector(state => state.player)
 
     const { setPreview} = useActions()
     const {pause, active} = player
-
-    const trackClickHandler = (e):void => {
+    const dispatch = useDispatch()
+    const trackClickHandler = async (e) => {
         e.stopPropagation()
         setPreview(active, track, pause )
+        await dispatch(fetchPlaylist(token,track.page))
     }
 
     let size = 170

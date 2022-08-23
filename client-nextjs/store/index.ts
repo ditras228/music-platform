@@ -7,6 +7,7 @@ import cookies from "next-cookies";
 import {setPlayer} from "./action-creators/player";
 import {getSession} from "next-auth/client";
 import {Session} from "next-auth";
+import {fetchPlaylist} from "./action-creators/playlist";
 
 const bindMiddleware = (middleware) => {
     if (process.env.NODE_ENV !== "production") {
@@ -29,10 +30,17 @@ export const baseServerSideProps = async ({ctx}: IBaseServerSideProps): Promise<
     const session = await getSession(ctx)
     const dispatch = ctx.store.dispatch as NextThunkDispatch
     const player = cookies(ctx).player;
+    const page = cookies(ctx).page;
 
     if (player) {
         dispatch(setPlayer(player))
+        console.log('123')
     }
+    await dispatch(fetchPlaylist(session.accessToken, page))
+
+    // 1. при старте трека получить его страницу и запушить в стор страницу, а её номер в куки.
+    // 2. проигрывать трек не с фронтового стора, а с редакса при переходе на другую страницу
+    // 3. если индекс трека превышает колличество предметов в массиве, подгружать новую страницу ok
 
     return session
 }

@@ -28,7 +28,7 @@ const TrackPage = ({serverTrack, token}) => {
                 >
                     К списку
                 </div>
-                <TrackInfo track={track}/>
+                <TrackInfo track={track} token={token}/>
                 <TrackLyrics lyrics={track.lyrics}/>
                 <TrackComments track={track} session={session} token={token}/>
             </div>

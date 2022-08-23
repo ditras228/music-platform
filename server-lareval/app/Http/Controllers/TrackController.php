@@ -25,9 +25,15 @@ class TrackController extends Controller
         return $response;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return Track::paginate(15);
+        $search = $request->search;
+        $tracks = Track::where('name', 'LIKE', "%{$search}%")->paginate(15);
+
+        foreach($tracks as $newTracks){
+            $newTracks->page = $tracks->currentPage();
+        }
+        return $tracks;
     }
 
     public function store(Request $request)
@@ -87,7 +93,8 @@ class TrackController extends Controller
         return $track;
     }
 
-    public function update(Request $request, int $id)
+    public
+    function update(Request $request, int $id)
     {
         $validator = Validator::make(
             $request->all(), [
