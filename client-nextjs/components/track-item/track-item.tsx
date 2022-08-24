@@ -2,12 +2,10 @@ import React, {useState} from 'react'
 import {ITrack} from '../../types/track'
 import {useRouter} from 'next/router'
 import {useActions} from '../../hooks/useAction'
-import {baseURL, imagesURL} from '../../api'
 import {useDispatch} from 'react-redux'
 import classes from './track-item.module.scss'
 import {useFormikContext} from 'formik'
-import {deleteTrack, fetchTracks} from "../../store/action-creators/track";
-import Image from "next/image";
+import {deleteTrack} from "../../store/action-creators/track";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import PlayImage from "../play-image/play-image";
 

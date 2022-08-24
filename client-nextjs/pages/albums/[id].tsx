@@ -1,23 +1,17 @@
 import {useRouter} from 'next/router'
 import classes from './[id].module.scss'
-import cookies from 'next-cookies'
-import {IAlbum} from '../../types/album'
 import {AlbumsAPI} from '../../api/albumsAPI'
-import {getSession, useSession} from 'next-auth/client'
-import {setPlayer,} from '../../store/action-creators/player'
-import {baseServerSideProps, NextThunkDispatch, wrapper} from '../../store'
+import {useSession} from 'next-auth/client'
+import {baseServerSideProps, wrapper} from '../../store'
 import TrackList from "../../components/track-list/track-list";
 import AlbumInfo from "../../components/album-info/album-info";
 import AlbumComments from "../../components/album-comments/album-comments";
-import {useState} from "react";
 import MainLayout from "../../layouts/MainLayout";
-import {PlayerActionTypes} from "../../types/player";
 
 
-const AlbumPage = ({serverAlbum, token, userId}) => {
+const AlbumPage = ({album, token, userId}) => {
     const router = useRouter()
-    const [album, setAlbum] = useState<IAlbum>(serverAlbum)
-    const [session, loading] = useSession() as any
+    const [session] = useSession() as any
 
     return (
         <MainLayout
@@ -32,7 +26,7 @@ const AlbumPage = ({serverAlbum, token, userId}) => {
                     К списку
                 </div>
                 <AlbumInfo album={album} token={token}/>
-                <TrackList tracks={album.tracks} token={token} user_id={userId} hideSearch={true}/>
+                <TrackList tracks={album.tracks.data} token={token} user_id={userId} hideSearch={true}/>
                 <AlbumComments album={album} session={session} token={token}/>
             </div>
         </MainLayout>
@@ -40,14 +34,14 @@ const AlbumPage = ({serverAlbum, token, userId}) => {
 }
 
 export default AlbumPage
+
 export const getServerSideProps = wrapper.getServerSideProps
 (async (ctx) => {
     const session = await baseServerSideProps({ctx})
     const response = await AlbumsAPI.getOneAlbum(ctx.params.id, session.accessToken)
-
     return {
         props: {
-            serverAlbum: response.data,
+            album: response.data,
             token: session.accessToken,
             userId: session.userId
         }

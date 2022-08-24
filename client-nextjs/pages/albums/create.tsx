@@ -1,7 +1,6 @@
 import ImagePreview from '../../ui/image-preview/image-preview'
 import React, {useEffect, useRef, useState} from 'react'
 import {baseServerSideProps, NextThunkDispatch, wrapper} from '../../store'
-import {getSession} from 'next-auth/client'
 import {useRouter} from 'next/router'
 import * as Yup from 'yup'
 import MainLayout from '../../layouts/MainLayout'
@@ -10,9 +9,6 @@ import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {CreateAlbum} from '../../store/action-creators/user'
 import MultiStepForm, {FormStep} from '../../ui/step-form/multi-step-form'
 import {fetchTracks} from '../../store/action-creators/track'
-import {setPlayer} from '../../store/action-creators/player'
-import cookies from 'next-cookies'
-import {UsersActionTypes} from '../../types/user'
 import AlertStep from '../../ui/step-form/alert-step'
 import TrackList from "../../components/track-list/track-list";
 import FileUpload from "../../ui/file-upload/file-upload";

@@ -4,12 +4,8 @@ import {useRouter} from 'next/router'
 import {useTypedSelector} from '../../hooks/useTypedSelector'
 import {baseServerSideProps, NextThunkDispatch, wrapper} from '../../store'
 import {fetchTracks} from '../../store/action-creators/track'
-import cookies from 'next-cookies'
-import {setPlayer} from '../../store/action-creators/player'
-import {getSession} from 'next-auth/client'
 import TrackList from "../../components/track-list/track-list";
 import classes from './index.module.scss'
-import {useDispatch} from "react-redux";
 
 const Index = ({token, userId}) => {
     const router = useRouter()

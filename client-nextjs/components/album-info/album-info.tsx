@@ -1,6 +1,4 @@
 import React from "react";
-import {PlayerActionTypes} from "../../types/player";
-import {useDispatch} from "react-redux";
 import classes from './albm-info.module.scss'
 import PlayAlbumImage from "../play-album-image/play-album-image";
 import {IAlbum} from "../../types/album";

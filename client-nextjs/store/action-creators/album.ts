@@ -17,7 +17,6 @@ export const fetchAlbums = (token) => {
     }
 }
 
-
 export const searchAlbums = (query: string, token: string) => {
     return async (dispatch: Dispatch<AlbumAction>) => {
         try {
@@ -53,8 +52,6 @@ export const deleteAlbum = (id: string, token: string) => {
         }
     }
 }
-
-
 
 export const fetchAlbum = (id: string, token: string) => {
     return async (dispatch: any) => {

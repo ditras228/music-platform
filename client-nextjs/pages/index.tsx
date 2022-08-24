@@ -7,8 +7,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {GetError} from '../store/selectors'
 import {getCsrfToken, getSession, signIn} from 'next-auth/client'
 import {UsersActionTypes} from '../types/user'
-import {NextThunkDispatch, wrapper} from '../store'
-import cookies from 'next-cookies'
+import {wrapper} from '../store'
 import classes from './index.module.scss'
 import InputField from "../ui/input-field/input-field";
 

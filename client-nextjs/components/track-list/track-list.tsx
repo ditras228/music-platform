@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import classes from './track-list.module.scss'
-import {Formik, useFormik} from 'formik'
 import {useDispatch} from 'react-redux'
-import {fetchTracks, searchTracks} from "../../store/action-creators/track";
+import {fetchTracks} from "../../store/action-creators/track";
 import TrackItem from "../track-item/track-item";
 import {ITrack, TrackActionTypes} from "../../types/track";
 import {useTypedSelector} from "../../hooks/useTypedSelector";

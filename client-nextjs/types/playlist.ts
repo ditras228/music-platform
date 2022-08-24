@@ -1,5 +1,4 @@
 import {ITrack} from './track'
-import {IAlbum} from "./album";
 
 export interface PlaylistState {
     tracks: ITrack[]

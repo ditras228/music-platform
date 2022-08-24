@@ -1,34 +1,31 @@
 import React from 'react';
-import {Card, Container, Grid, Step, StepLabel, Stepper} from '@material-ui/core'
+import classes from './step-wrapper.module.css'
 
 interface StepWrapperProps {
     steps: Array<String>
     activeStep: number
 }
 
-import classes from './step-wrapper.module.css'
-
 const StepWrapper: React.FC<StepWrapperProps> = ({steps, activeStep, children}) => {
     return (
-        <Container>
-            <Stepper activeStep={activeStep}>
+        <div>
+            <div>
                 {steps.map((step, index) =>
-                    <Step
+                    <div
                         key={index}
-                        completed={activeStep > index}
                     >
-                        <StepLabel>
+                        <div>
                             {step}
-                        </StepLabel>
-                    </Step>
+                        </div>
+                    </div>
                 )}
-            </Stepper>
-            <Grid container justify={'center'} style={{margin: '70px 0', height: 270}}>
-                <Card className={classes.card}>
+            </div>
+            <div>
+                <div className={classes.card}>
                     {children}
-                </Card>
-            </Grid>
-        </Container>
+                </div>
+            </div>
+        </div>
     );
 };
 

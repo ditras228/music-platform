@@ -73,7 +73,9 @@ class AlbumController extends Controller
 
     public function show($id)
     {
-        $album = Album::with('tracks')->where('id', $id)->first();
+        $album = Album::where('id', $id)->first();
+        $tracks =  $album->tracks()->paginate(15);
+
         $comments = DB::table('comments')
             ->join('users', 'users.id', '=', 'comments.user_id')
             ->select('name', 'image', 'text')
@@ -82,6 +84,7 @@ class AlbumController extends Controller
             ->get();
 
         $album['comments'] = $comments;
+        $album['tracks'] = $tracks;
         return $album;
     }
 
