@@ -54,8 +54,11 @@ const PlayImage = ({ track, list, token }: IPlayImage) => {
 
       {pause ||
         (active?.id == track.id && (
-          <div className={classes.playImage__pauseIcon} />
+          <div className={classes.playImage__nowIcon} />
         ))}
+      {pause && active?.id == track.id && (
+        <div className={classes.playImage__dotsIcon} />
+      )}
       {list && active?.id != track.id && (
         <div className={classes.playImage__playIcon} />
       )}

@@ -60,6 +60,10 @@
       width: 30px;
       height: 38px;
       background-position: center;
+
+      @include screen-lg {
+        display: none;
+      }
     }
 
     &__logo {
@@ -87,6 +91,9 @@
       &:hover {
         cursor: pointer;
       }
+    }
+    @include screen-lg {
+      grid-template-columns: auto 1fr;
     }
   }
 }

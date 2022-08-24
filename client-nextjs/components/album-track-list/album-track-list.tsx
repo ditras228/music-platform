@@ -36,7 +36,11 @@ const AlbumTrackList: React.FC<TrackListProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isFetching === true && tracks.last_page != tracks.current_page) {
+    if (
+      tracks?.last_page &&
+      isFetching === true &&
+      tracks.last_page != tracks.current_page
+    ) {
       dispatch(fetchAlbumNext(album_id, token, tracks.current_page + 1));
     }
   }, [isFetching]);

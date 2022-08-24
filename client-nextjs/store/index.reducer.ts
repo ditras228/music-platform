@@ -15,6 +15,7 @@ import { createAlbumReducer } from "../pages/albums/create/store/create-album.re
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk, { ThunkDispatch } from "redux-thunk";
 import { albumReducer } from "../pages/albums/store/album.reducer";
+import { navbarReducer } from "../components/navbar/store/navbar.reducer";
 
 export const rootReducer = combineReducers({
   player: playerReducer,
@@ -24,6 +25,7 @@ export const rootReducer = combineReducers({
   user: usersReducer,
   playlist: playlistReducer,
   createAlbum: createAlbumReducer,
+  navbar: navbarReducer,
 });
 
 export const reducer = (state, action) => {
