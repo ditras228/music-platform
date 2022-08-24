@@ -13,9 +13,9 @@
     max-width: 100%;
     transition: 1s;
   }
+
   &__dotsIcon,
   &__nowIcon,
-  &__pauseIcon,
   &__playIcon {
     position: absolute;
     left: 50%;
@@ -46,23 +46,12 @@
     &:before {
       @include icon("equalizer.svg");
     }
-    &:hover {
-      &:before {
-        @include icon("pause.svg");
-      }
-    }
   }
 
   &__playIcon {
     opacity: 0;
     &:before {
       @include icon("play.svg");
-    }
-  }
-
-  &__pauseIcon {
-    &:before {
-      @include icon("pause.svg");
     }
   }
 
@@ -76,6 +65,11 @@
 
     #{$root}__playIcon {
       opacity: 1;
+    }
+    #{$root}__nowIcon {
+      &:before {
+        @include icon("pause.svg");
+      }
     }
   }
 }

@@ -14,7 +14,8 @@
     transition: 1s;
   }
 
-  &__pauseIcon,
+  &__dotsIcon,
+  &__nowIcon,
   &__playIcon {
     position: absolute;
     left: 50%;
@@ -36,17 +37,21 @@
       content: "";
     }
   }
+  &__dotsIcon {
+    &:before {
+      @include icon("dots.svg");
+    }
+  }
+  &__nowIcon {
+    &:before {
+      @include icon("equalizer.svg");
+    }
+  }
 
   &__playIcon {
     opacity: 0;
     &:before {
       @include icon("play.svg");
-    }
-  }
-
-  &__pauseIcon {
-    &:before {
-      @include icon("pause.svg");
     }
   }
 
@@ -60,6 +65,11 @@
 
     #{$root}__playIcon {
       opacity: 1;
+    }
+    #{$root}__nowIcon {
+      &:before {
+        @include icon("pause.svg");
+      }
     }
   }
 }

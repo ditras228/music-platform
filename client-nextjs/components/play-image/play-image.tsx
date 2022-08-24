@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { imagesURL } from "../../API";
 import classes from "./play-image.module.scss";
@@ -21,7 +21,7 @@ interface IPlayImage {
 const PlayImage = ({ track, list, token }: IPlayImage) => {
   const player = useTypedSelector((state) => state.player);
   const album = useTypedSelector((state) => state.albumPage);
-
+  const [isHover, setIsHover] = useState(false);
   const { setPreview } = useActions();
   const { pause, active } = player;
   const dispatch = useDispatch();
@@ -42,6 +42,10 @@ const PlayImage = ({ track, list, token }: IPlayImage) => {
     size = 70;
   }
 
+  const hoverHandler = () => {
+    setIsHover(!isHover);
+  };
+
   return (
     <div className={classes.playImage} onClick={(e) => trackClickHandler(e)}>
       <Image
@@ -50,6 +54,8 @@ const PlayImage = ({ track, list, token }: IPlayImage) => {
         src={imagesURL + track.image}
         className={classes.playImage__img}
         alt={"Обложка трека"}
+        onMouseEnter={() => hoverHandler()}
+        onMouseLeave={() => hoverHandler()}
       />
 
       {pause ||
@@ -59,7 +65,8 @@ const PlayImage = ({ track, list, token }: IPlayImage) => {
       {pause && active?.id == track.id && (
         <div className={classes.playImage__dotsIcon} />
       )}
-      {list && active?.id != track.id && (
+      {((list && active?.id != track.id) ||
+        (pause && active?.id == track.id)) && (
         <div className={classes.playImage__playIcon} />
       )}
     </div>

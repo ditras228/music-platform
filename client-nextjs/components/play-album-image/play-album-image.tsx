@@ -5,7 +5,6 @@ import classes from "./play-album-image.module.scss";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useDispatch } from "react-redux";
 import { IAlbum } from "../../types/album";
-import { useActions } from "../../hooks/useAction";
 import { fetchNextAlbumPlaylist } from "../player/store/playlist.actions";
 
 interface IPlayAlbumImage {
@@ -16,11 +15,9 @@ interface IPlayAlbumImage {
 
 const PlayAlbumImage = ({ album, token, list }: IPlayAlbumImage) => {
   const player = useTypedSelector((state) => state.player);
-  const activeAlbum = useTypedSelector((state) => state.albumPage);
+  const { currentAlbum } = useTypedSelector((state) => state.album);
   const dispatch = useDispatch();
-  const { pauseTrack } = useActions();
-
-  const { active, pause } = player;
+  const { pause } = player;
 
   const trackClickHandler = (e): void => {
     e.stopPropagation();
@@ -42,12 +39,15 @@ const PlayAlbumImage = ({ album, token, list }: IPlayAlbumImage) => {
         className={classes.playImage__img}
         alt={"Обложка альбома"}
       />
-
       {pause ||
-        (activeAlbum?.id == album.id && (
-          <div className={classes.playImage__pauseIcon} />
+        (currentAlbum == album.id && (
+          <div className={classes.playImage__nowIcon} />
         ))}
-      {list && activeAlbum?.id != album.id && (
+      {pause && currentAlbum == album.id && (
+        <div className={classes.playImage__dotsIcon} />
+      )}
+      {((list && currentAlbum != album.id) ||
+        (pause && currentAlbum == album.id)) && (
         <div className={classes.playImage__playIcon} />
       )}
     </div>

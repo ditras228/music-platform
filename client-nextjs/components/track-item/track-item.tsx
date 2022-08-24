@@ -35,7 +35,6 @@ const TrackItem: React.FC<TrackItemProps> = ({
   const dispatch = useDispatch();
   const [isChecked, setChecked] = useState(false);
   const formik = useFormikContext<formik>();
-  const player = useTypedSelector((state) => state.player);
 
   const deleteOne = (): void => {
     dispatch(deleteTrack(track.id, token));

@@ -3,6 +3,7 @@ import { TracksAPI } from "../../../API/tracksAPI";
 import { PlaylistActions, PlaylistActionTypes } from "../../../types/playlist";
 import { PlayerActionTypes } from "../../../types/player";
 import { AlbumsAPI } from "../../../API/albumsAPI";
+import { AlbumActionTypes } from "../../../types/album";
 
 export const fetchPlaylist = (token, page) => {
   return async (dispatch: Dispatch<PlaylistActions>) => {
@@ -60,6 +61,10 @@ export const fetchNextAlbumPlaylist = (token, page, albumId) => {
         dispatch({
           type: PlaylistActionTypes.SET_PLAYLIST,
           payload: res.data.tracks,
+        });
+        dispatch({
+          type: AlbumActionTypes.SET_CURRENT_ALBUM,
+          payload: res.data.id,
         });
         dispatch({
           type: PlayerActionTypes.SET_ACTIVE,
