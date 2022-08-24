@@ -7,14 +7,13 @@ export interface PlayerState {
   duration: number;
   currentTime: number;
   pause: boolean;
-  activeAlbum: IAlbum;
+  page: number;
 }
 
 export enum PlayerActionTypes {
   PLAY = "PLAY",
   PAUSE = "PAUSE",
   SET_ACTIVE = "SET_ACTIVE",
-  SET_ACTIVE__ALBUM__FIRST = "SET_ACTIVE__ALBUM__FIRST",
   SET_ACTIVE__ALBUM = "SET_ACTIVE__ALBUM",
   SET_DURATION = "SET_DURATION",
   SET_CURRENT_TIME = "SET_CURRENT_TIME",
@@ -38,11 +37,6 @@ interface PauseAction {
 interface SetActiveAction {
   type: PlayerActionTypes.SET_ACTIVE;
   payload: ITrack;
-}
-
-interface SetActiveAlbumFirstAction {
-  type: PlayerActionTypes.SET_ACTIVE__ALBUM__FIRST;
-  payload: any;
 }
 
 interface SetActiveAlbumAction {
@@ -73,5 +67,4 @@ export type PlayerActions =
   | SetCurrentTimeAction
   | SetVolumeAction
   | PlayerAction
-  | SetActiveAlbumFirstAction
   | SetActiveAlbumAction;

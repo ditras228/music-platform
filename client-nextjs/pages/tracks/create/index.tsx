@@ -1,16 +1,16 @@
-import ImagePreview from "../../ui/image-preview/image-preview";
+import ImagePreview from "../../../ui/image-preview/image-preview";
 import React, { useEffect, useRef, useState } from "react";
-import { baseServerSideProps, wrapper } from "../../store";
+import { baseServerSideProps, wrapper } from "../../../store";
 import { useRouter } from "next/router";
-import MultiStepForm, { FormStep } from "../../ui/step-form/multi-step-form";
-import InputField from "../../ui/input-field/input-field";
+import MultiStepForm, { FormStep } from "../../../ui/step-form/multi-step-form";
+import InputField from "../../../ui/input-field/input-field";
 import * as Yup from "yup";
 import classes from "./create.module.scss";
-import MainLayout from "../../layouts/MainLayout";
+import MainLayout from "../../../layouts/MainLayout";
 import { useDispatch } from "react-redux";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { CreateTrack } from "../../store/action-creators/user";
-import FileUpload, { fileFormats } from "../../ui/file-upload/file-upload";
+import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import { CreateTrack } from "../../../store/action-creators/user";
+import FileUpload, { fileFormats } from "../../../ui/file-upload/file-upload";
 
 if (typeof window !== "undefined") {
   var WaveSurfer = require("wavesurfer.js");
@@ -28,7 +28,7 @@ const AudioSchema = Yup.object({
   audio: Yup.mixed().required("Обязательно"),
 });
 
-const Create = ({ token }) => {
+const Index = ({ token }) => {
   const [image, setImage] = useState("");
   const [audio, setAudio] = useState("none");
   const router = useRouter();
@@ -117,7 +117,7 @@ const Create = ({ token }) => {
   );
 };
 
-export default Create;
+export default Index;
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await baseServerSideProps({ ctx });
 

@@ -84,6 +84,10 @@ class AlbumController extends Controller
             ->get();
 
         $album['comments'] = $comments;
+
+        foreach($tracks as $newTracks){
+            $newTracks->page = $tracks->currentPage();
+        }
         $album['tracks'] = $tracks;
         return $album;
     }

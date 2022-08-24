@@ -3,10 +3,10 @@ import Image from "next/image";
 import { imagesURL } from "../../api";
 import classes from "./play-album-image.module.scss";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { fetchAlbum } from "../../store/action-creators/album";
 import { useDispatch } from "react-redux";
 import { IAlbum } from "../../types/album";
 import { useActions } from "../../hooks/useAction";
+import { fetchNextAlbumPlaylist } from "../../store/action-creators/playlist";
 
 interface IPlayAlbumImage {
   album?: IAlbum;
@@ -16,18 +16,15 @@ interface IPlayAlbumImage {
 
 const PlayAlbumImage = ({ album, token, list }: IPlayAlbumImage) => {
   const player = useTypedSelector((state) => state.player);
+  const activeAlbum = useTypedSelector((state) => state.albumPage);
   const dispatch = useDispatch();
   const { pauseTrack } = useActions();
 
-  const { pause, activeAlbum } = player;
+  const { active, pause } = player;
 
   const trackClickHandler = (e): void => {
     e.stopPropagation();
-    if (pause) {
-      dispatch(fetchAlbum(album.id, token));
-    } else {
-      pauseTrack();
-    }
+    dispatch(fetchNextAlbumPlaylist(token, 1, album.id));
   };
 
   let size = 170;

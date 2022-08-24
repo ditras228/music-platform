@@ -3,9 +3,9 @@ import classes from "./album-list.module.scss";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import AlbumItem from "../album-item/album-item";
-import { searchAlbums } from "../../store/action-creators/album";
 import { IAlbum } from "../../types/album";
 import InputField from "../../ui/input-field/input-field";
+import { searchAlbums } from "../../store/action-creators/album.actions";
 
 interface AlbumListProps {
   albums: IAlbum[];

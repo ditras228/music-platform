@@ -31,7 +31,7 @@ export const searchTracks = (query: string, token: string, page: number) => {
     }
   };
 };
-export const deleteTrack = (id: string, token: string) => {
+export const deleteTrack = (id: number, token: string) => {
   return async (dispatch: any) => {
     try {
       TracksAPI.deleteOne(id, token).then((response) => {

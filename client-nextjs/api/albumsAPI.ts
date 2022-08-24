@@ -13,8 +13,8 @@ export const AlbumsAPI = {
     });
   },
 
-  getOneAlbum(params, token) {
-    return instance.get("/album/" + params, {
+  getOneAlbum(params, token, page: number) {
+    return instance.get("/album/" + params + "?page=" + page, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },

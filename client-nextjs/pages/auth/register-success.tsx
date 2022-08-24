@@ -2,7 +2,7 @@ import React from "react";
 import MainLayout from "../../layouts/MainLayout";
 import classes from "./register.module.scss";
 
-const RegSuccess = () => {
+const RegisterSuccess = () => {
   return (
     <MainLayout>
       <div className={classes.error}>
@@ -12,4 +12,4 @@ const RegSuccess = () => {
   );
 };
 
-export default RegSuccess;
+export default RegisterSuccess;

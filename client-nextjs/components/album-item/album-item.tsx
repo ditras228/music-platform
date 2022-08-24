@@ -3,8 +3,11 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import classes from "./album-item.module.scss";
 import { IAlbum } from "../../types/album";
-import { deleteAlbum, fetchAlbum } from "../../store/action-creators/album";
 import PlayAlbumImage from "../play-album-image/play-album-image";
+import {
+  deleteAlbum,
+  fetchAlbum,
+} from "../../store/action-creators/album.actions";
 
 interface AlbumItemProps {
   album: IAlbum;
@@ -21,7 +24,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({ album, token, userId }) => {
 
   function clickHandler(e) {
     e.stopPropagation();
-    dispatch(fetchAlbum(album.id, token));
+    dispatch(fetchAlbum(album.id, token, 1));
   }
 
   return (

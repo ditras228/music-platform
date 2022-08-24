@@ -3,11 +3,13 @@ import { ITrack } from "./track";
 export interface PlaylistState {
   tracks: ITrack[];
   page: number;
+  total: number;
 }
 
 export enum PlaylistActionTypes {
   SET_PLAYLIST = "SET_PLAYLIST",
   SET_PAGE = "SET_PAGE",
+  SET_TOTAL = "SET_TOTAL",
 }
 
 interface PlaylistAction {
@@ -20,4 +22,12 @@ interface SetPageAction {
   payload: number;
 }
 
-export type PlaylistActions = PlaylistAction | SetPageAction;
+interface SetTotalPageAction {
+  type: PlaylistActionTypes.SET_TOTAL;
+  payload: number;
+}
+
+export type PlaylistActions =
+  | PlaylistAction
+  | SetPageAction
+  | SetTotalPageAction;

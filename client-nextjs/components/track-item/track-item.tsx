@@ -21,7 +21,7 @@ type formik = {
   name: "";
   artist: "";
   picture: undefined;
-  tracks: Array<string>;
+  tracks: Array<number>;
 };
 
 const TrackItem: React.FC<TrackItemProps> = ({

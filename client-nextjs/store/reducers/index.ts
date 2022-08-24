@@ -1,17 +1,21 @@
 import { combineReducers } from "redux";
-import { playerReducer } from "./playerReducer";
+import { playerReducer } from "./player.reducer";
 import { HYDRATE } from "next-redux-wrapper";
-import { trackReducer } from "./trackReducer";
-import { usersReducer } from "./userReducer";
-import { albumReducer } from "./albumReducer";
-import { playlistReducer } from "./playlistReducer";
+import { trackReducer } from "./track.reducer";
+import { usersReducer } from "./user.reducer";
+import { playlistReducer } from "./playlist.reducer";
+import { albumReducer } from "./album-reducer";
+import { albumPageReducer } from "../../pages/albums/[id]/store/album-page.reducer";
+import { createAlbumReducer } from "../../pages/albums/create/store/create-album.reducer";
 
 export const rootReducer = combineReducers({
   player: playerReducer,
   track: trackReducer,
   album: albumReducer,
+  albumPage: albumPageReducer,
   user: usersReducer,
   playlist: playlistReducer,
+  createAlbum: createAlbumReducer,
 });
 
 export const reducer = (state, action) => {
@@ -26,4 +30,5 @@ export const reducer = (state, action) => {
     return rootReducer(state, action);
   }
 };
+
 export type RootState = ReturnType<typeof rootReducer>;

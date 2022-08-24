@@ -10,7 +10,7 @@ export interface ITracks {
   data: ITrack[];
 }
 export interface ITrack {
-  id: string;
+  id: number;
   name: string;
   artist: string;
   lyrics: string;
@@ -41,7 +41,7 @@ export enum TrackActionTypes {
 
 interface RemoveTrack {
   type: TrackActionTypes.REMOVE_TRACK;
-  payload: string;
+  payload: number;
 }
 
 interface FetchTracksAction {

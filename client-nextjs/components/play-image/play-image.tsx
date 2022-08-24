@@ -6,7 +6,10 @@ import { useActions } from "../../hooks/useAction";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { setPreview } from "../../store/action-creators/player";
 import { ITrack } from "../../types/track";
-import { fetchPlaylist } from "../../store/action-creators/playlist";
+import {
+  fetchAlbumPlaylist,
+  fetchPlaylist,
+} from "../../store/action-creators/playlist";
 import { useDispatch } from "react-redux";
 
 interface IPlayImage {
@@ -17,6 +20,7 @@ interface IPlayImage {
 
 const PlayImage = ({ track, list, token }: IPlayImage) => {
   const player = useTypedSelector((state) => state.player);
+  const album = useTypedSelector((state) => state.albumPage);
 
   const { setPreview } = useActions();
   const { pause, active } = player;
@@ -24,7 +28,12 @@ const PlayImage = ({ track, list, token }: IPlayImage) => {
   const trackClickHandler = async (e) => {
     e.stopPropagation();
     setPreview(active, track, pause);
-    await dispatch(fetchPlaylist(token, track.page));
+
+    if (album.id) {
+      await dispatch(fetchAlbumPlaylist(token, track.page, album.id));
+    } else {
+      await dispatch(fetchPlaylist(token, track.page));
+    }
   };
 
   let size = 170;

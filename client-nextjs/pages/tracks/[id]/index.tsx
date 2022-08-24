@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import MainLayout from "../../layouts/MainLayout";
+import MainLayout from "../../../layouts/MainLayout";
 import { useRouter } from "next/router";
-import { TracksAPI } from "../../api/tracksAPI";
-import { ITrack } from "../../types/track";
+import { TracksAPI } from "../../../api/tracksAPI";
+import { ITrack } from "../../../types/track";
 import classes from "./[id].module.scss";
-import { baseServerSideProps, wrapper } from "../../store";
+import { baseServerSideProps, wrapper } from "../../../store";
 import { useSession } from "next-auth/client";
-import TrackLyrics from "../../components/track-lyrics/track-lyrics";
-import TrackComments from "../../components/track-comments/track-comments";
-import TrackInfo from "../../components/track-info/track-info";
+import TrackLyrics from "../../../components/track-lyrics/track-lyrics";
+import TrackComments from "../../../components/track-comments/track-comments";
+import TrackInfo from "../../../components/track-info/track-info";
 
 const TrackPage = ({ serverTrack, token }) => {
   const router = useRouter();

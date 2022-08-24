@@ -5,6 +5,7 @@ const initialState: UserState = {
   isLoading: false,
   redirectTo: "",
 };
+
 export const usersReducer = (
   state = initialState,
   action: UserAction

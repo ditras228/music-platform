@@ -12,6 +12,7 @@ import { setPlayer } from "./action-creators/player";
 import { getSession } from "next-auth/client";
 import { Session } from "next-auth";
 import { fetchPlaylist } from "./action-creators/playlist";
+import { ITrack } from "../types/track";
 
 const bindMiddleware = (middleware) => {
   if (process.env.NODE_ENV !== "production") {
@@ -38,13 +39,15 @@ export const baseServerSideProps = async ({
 }: IBaseServerSideProps): Promise<Session> => {
   const session = await getSession(ctx);
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
-  const player = cookies(ctx).player;
-  const page = cookies(ctx).page;
+  const player = cookies(ctx).player as unknown as ITrack;
 
   if (player) {
     dispatch(setPlayer(player));
   }
-  await dispatch(fetchPlaylist(session.accessToken, page));
+
+  if (session?.accessToken) {
+    await dispatch(fetchPlaylist(session.accessToken, player?.page || 1));
+  }
 
   return session;
 };

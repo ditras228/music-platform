@@ -6,8 +6,11 @@ import { baseServerSideProps, NextThunkDispatch, wrapper } from "../../store";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import classes from "./index.module.scss";
-import { fetchAlbums, searchAlbums } from "../../store/action-creators/album";
 import AlbumList from "../../components/album-list/album-list";
+import {
+  fetchAlbums,
+  searchAlbums,
+} from "../../store/action-creators/album.actions";
 
 const Index = ({ token, userId }) => {
   const router = useRouter();

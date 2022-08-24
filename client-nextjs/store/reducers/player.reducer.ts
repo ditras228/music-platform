@@ -8,9 +8,9 @@ const initialState: PlayerState = {
   currentTime: 0,
   duration: 0,
   active: null,
-  activeAlbum: null,
   pause: true,
   volume: 50,
+  page: 0,
 };
 
 export const playerReducer = (state = initialState, action: PlayerActions) => {
@@ -28,15 +28,6 @@ export const playerReducer = (state = initialState, action: PlayerActions) => {
         currentTime: 0,
         active: action.payload,
         pause: false,
-      };
-    case PlayerActionTypes.SET_ACTIVE__ALBUM__FIRST:
-      return {
-        ...state,
-        duration: 0,
-        currentTime: 0,
-        activeAlbum: action.payload,
-        pause: false,
-        active: action.payload.tracks[0],
       };
     case PlayerActionTypes.SET_ACTIVE__ALBUM:
       return {
@@ -59,6 +50,7 @@ export const playerReducer = (state = initialState, action: PlayerActions) => {
           active: action.payload.active,
           pause: action.payload.pause,
           volume: action.payload.volume,
+          page: action.payload.page,
         };
       break;
     default:

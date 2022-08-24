@@ -7,6 +7,7 @@ const initialState: TrackState = {
   tracks: [],
   error: "",
 };
+
 export const trackReducer = (
   state = initialState,
   action: TrackAction

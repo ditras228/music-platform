@@ -2,6 +2,7 @@ import { Dispatch } from "react";
 import { TracksAPI } from "../../api/tracksAPI";
 import { PlaylistActions, PlaylistActionTypes } from "../../types/playlist";
 import { PlayerActionTypes } from "../../types/player";
+import { AlbumsAPI } from "../../api/albumsAPI";
 
 export const fetchPlaylist = (token, page) => {
   return async (dispatch: Dispatch<PlaylistActions>) => {
@@ -24,6 +25,45 @@ export const fetchNextPlaylist = (token, page) => {
         dispatch({
           type: PlayerActionTypes.SET_ACTIVE,
           payload: res.data.data[0],
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+};
+
+export const fetchAlbumPlaylist = (token, page, albumId) => {
+  return async (dispatch: Dispatch<PlaylistActions>) => {
+    await AlbumsAPI.getOneAlbum(albumId, token, page)
+      .then((res) => {
+        dispatch({
+          type: PlaylistActionTypes.SET_PLAYLIST,
+          payload: res.data.tracks,
+        });
+        dispatch({
+          type: PlaylistActionTypes.SET_TOTAL,
+          payload: res.data.tracks.last_page,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+};
+
+export const fetchNextAlbumPlaylist = (token, page, albumId) => {
+  return async (dispatch: Dispatch<any>) => {
+    await AlbumsAPI.getOneAlbum(albumId, token, page)
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: PlaylistActionTypes.SET_PLAYLIST,
+          payload: res.data.tracks,
+        });
+        dispatch({
+          type: PlayerActionTypes.SET_ACTIVE,
+          payload: res.data.tracks.data[0],
         });
       })
       .catch((e) => {

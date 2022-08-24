@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { AlbumsAPI } from "../../api/albumsAPI";
 import { AlbumAction, AlbumActionTypes } from "../../types/album";
-import { PlayerActionTypes } from "../../types/player";
+import { AlbumPageActionTypes } from "../../types/albumPage";
 
 export const fetchAlbums = (token) => {
   return async (dispatch: Dispatch<AlbumAction>) => {
@@ -31,7 +31,7 @@ export const searchAlbums = (query: string, token: string) => {
   };
 };
 
-export const deleteAlbum = (id: string, token: string) => {
+export const deleteAlbum = (id: number, token: string) => {
   return async (dispatch: any) => {
     try {
       AlbumsAPI.deleteOneAlbum(id, token).then((response) => {
@@ -50,11 +50,22 @@ export const deleteAlbum = (id: string, token: string) => {
   };
 };
 
-export const fetchAlbum = (id: string, token: string) => {
+export const fetchAlbum = (id, token, page) => {
   return async (dispatch: any) => {
-    const response = await AlbumsAPI.getOneAlbum(id, token);
+    const response = await AlbumsAPI.getOneAlbum(id, token, page);
     dispatch({
-      type: PlayerActionTypes.SET_ACTIVE__ALBUM__FIRST,
+      type: AlbumPageActionTypes.SET_ALBUM,
+      payload: response.data,
+    });
+  };
+};
+
+export const fetchAlbumNext = (id, token, page) => {
+  return async (dispatch: any) => {
+    const response = await AlbumsAPI.getOneAlbum(id, token, page);
+    console.log(response.data.tracks.data);
+    dispatch({
+      type: AlbumPageActionTypes.SET_ALBUM_TRACKS,
       payload: response.data,
     });
   };

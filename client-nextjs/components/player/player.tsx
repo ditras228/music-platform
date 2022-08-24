@@ -9,17 +9,24 @@ import Play from "../play/play";
 import cookie from "js-cookie";
 import { setActiveTrack } from "../../store/action-creators/player";
 import { ITrack } from "../../types/track";
-import { fetchNextPlaylist } from "../../store/action-creators/playlist";
+import {
+  fetchNextAlbumPlaylist,
+  fetchNextPlaylist,
+} from "../../store/action-creators/playlist";
 import { useSession } from "next-auth/client";
+import { PlayerActionTypes } from "../../types/player";
+import { useDispatch } from "react-redux";
 
 let audio;
 
 const Player = () => {
   const player = useTypedSelector((state) => state.player);
   const playlist = useTypedSelector((state) => state.playlist);
-  const { active, pause, volume, activeAlbum, currentTime, duration } = player;
-  const { setCurrentTime, setDuration, setActiveTrack, fetchNextPlaylist } =
-    useActions();
+  const activeAlbum = useTypedSelector((state) => state.albumPage);
+  const track = useTypedSelector((state) => state.track);
+  const { active, pause, volume, currentTime, duration } = player;
+  const { setCurrentTime, setDuration, setActiveTrack } = useActions();
+  const dispatch = useDispatch();
   const [session] = useSession();
 
   useEffect(() => {
@@ -58,9 +65,6 @@ const Player = () => {
         if (playlist) {
           nextTrack(playlist.tracks);
         }
-        if (activeAlbum) {
-          nextTrack(activeAlbum.tracks);
-        }
       };
     }
   }, [active?.id, pause, currentTime]);
@@ -74,7 +78,34 @@ const Player = () => {
       if (tracks.length - 1 > currentIndex) {
         setActiveTrack(tracks[currentIndex + 1]);
       } else {
-        await fetchNextPlaylist(session.accessToken, active.page + 1);
+        if (playlist.page === playlist.total) {
+          if (activeAlbum.id) {
+            dispatch({
+              type: PlayerActionTypes.SET_ACTIVE,
+              payload: activeAlbum.tracks.data[0],
+            });
+          } else {
+            console.log(track.tracks[0]);
+            dispatch({
+              type: PlayerActionTypes.SET_ACTIVE,
+              payload: track.tracks[0],
+            });
+          }
+        } else {
+          if (activeAlbum.id) {
+            await dispatch(
+              fetchNextAlbumPlaylist(
+                session.accessToken,
+                active.page + 1,
+                activeAlbum.id
+              )
+            );
+          } else {
+            await dispatch(
+              fetchNextPlaylist(session.accessToken, active.page + 1)
+            );
+          }
+        }
       }
     }
   }
@@ -100,18 +131,11 @@ const Player = () => {
             name: active.name,
             artist: active.artist,
             audio: active.audio,
+            page: active.page,
           },
         })}`
       );
-
-    active &&
-      cookie.set(
-        "page",
-        `${JSON.stringify({
-          page: active.page,
-        })}`
-      );
-  }, [currentTime, pause, volume]);
+  }, [currentTime, pause, volume, active?.page]);
 
   // В случае отстуствия трека, возвращаем нуль
   if (active === null) return null;
@@ -129,8 +153,8 @@ const Player = () => {
       <div className={classes.player__column}>
         <Play audio={audio} />
         <div className={classes.player__info}>
-          <div className={classes.player__info__name}>{active.name}</div>
-          <div className={classes.player__info__author}>{active.artist}</div>
+          <div className={classes.player__info__name}>{active?.name}</div>
+          <div className={classes.player__info__author}>{active?.artist}</div>
         </div>
       </div>
       <TrackProgress audio={audio} />
