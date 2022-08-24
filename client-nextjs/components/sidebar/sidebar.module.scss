@@ -1,10 +1,12 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/icon";
+@import "../../styles/mixins/screen";
 
 .sidebar {
   padding-left: 20px;
   position: fixed;
   top: 100px;
+  display: none;
 
   &__content {
     @include fontMedium();
@@ -34,5 +36,9 @@
         cursor: pointer;
       }
     }
+  }
+
+  @include screen-lg {
+    display: block;
   }
 }

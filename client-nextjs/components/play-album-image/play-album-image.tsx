@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { imagesURL } from "../../api";
+import { imagesURL } from "../../API";
 import classes from "./play-album-image.module.scss";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useDispatch } from "react-redux";

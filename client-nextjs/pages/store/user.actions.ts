@@ -1,8 +1,8 @@
 import { Dispatch } from "react";
-import { UsersAPI } from "../../api/usersAPI";
+import { UsersAPI } from "../../API/usersAPI";
 import { UserAction, UsersActionTypes } from "../../types/user";
-import { TracksAPI } from "../../api/tracksAPI";
-import { AlbumsAPI } from "../../api/albumsAPI";
+import { TracksAPI } from "../../API/tracksAPI";
+import { AlbumsAPI } from "../../API/albumsAPI";
 
 export const Registration = (name, email, password) => {
   return async (dispatch: Dispatch<UserAction>) => {

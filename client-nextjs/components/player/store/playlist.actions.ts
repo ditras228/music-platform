@@ -1,8 +1,8 @@
 import { Dispatch } from "react";
-import { TracksAPI } from "../../../api/tracksAPI";
+import { TracksAPI } from "../../../API/tracksAPI";
 import { PlaylistActions, PlaylistActionTypes } from "../../../types/playlist";
 import { PlayerActionTypes } from "../../../types/player";
-import { AlbumsAPI } from "../../../api/albumsAPI";
+import { AlbumsAPI } from "../../../API/albumsAPI";
 
 export const fetchPlaylist = (token, page) => {
   return async (dispatch: Dispatch<PlaylistActions>) => {

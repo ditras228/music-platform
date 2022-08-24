@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
-import { UsersAPI } from "../../../api/usersAPI";
+import { UsersAPI } from "../../../API/usersAPI";
 
 /* eslint-disable */
 export default (req, res) => {

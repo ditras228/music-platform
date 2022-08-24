@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import classes from "./[id].module.scss";
-import { AlbumsAPI } from "../../../api/albumsAPI";
+import { AlbumsAPI } from "../../../API/albumsAPI";
 import { useSession } from "next-auth/client";
 
 import AlbumInfo from "../../../components/album-info/album-info";

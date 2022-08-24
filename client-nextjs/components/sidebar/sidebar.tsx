@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import classes from "./sidebar.module.scss";
 
-const menuItem = [
+export const menuItem = [
   { text: "Треки", href: "/" },
   { text: "Альбомы", href: "/albums" },
 ];

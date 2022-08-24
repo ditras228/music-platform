@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MainLayout from "../../../layouts/MainLayout";
 import { useRouter } from "next/router";
-import { TracksAPI } from "../../../api/tracksAPI";
+import { TracksAPI } from "../../../API/tracksAPI";
 import { ITrack } from "../../../types/track";
 import classes from "./[id].module.scss";
 import { useSession } from "next-auth/client";

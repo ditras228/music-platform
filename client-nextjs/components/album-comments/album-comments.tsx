@@ -4,7 +4,7 @@ import CommentFC from "../comment/comment";
 import * as yup from "yup";
 import { Formik } from "formik";
 import InputField from "../../ui/input-field/input-field";
-import { AlbumsAPI } from "../../api/albumsAPI";
+import { AlbumsAPI } from "../../API/albumsAPI";
 
 const commentSchema = yup.object({
   text: yup

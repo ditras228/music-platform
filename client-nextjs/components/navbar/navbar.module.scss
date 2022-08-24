@@ -1,5 +1,6 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/icon";
+@import "../../styles/mixins/screen";
 
 .navbar {
   @include fontLarge();
@@ -14,10 +15,52 @@
   align-items: center;
   z-index: 1;
 
+  &__burger {
+    position: absolute;
+    top: 60px;
+    background-color: #1c1c1c;
+    width: 100%;
+    padding: 0 20px;
+
+    &__item {
+      @include fontLarge();
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-column-gap: 20px;
+      padding: 15px 0;
+
+      &__iconTrack {
+        @include icon("track-white.svg");
+      }
+
+      &__iconAlbum {
+        @include icon("album-white.svg");
+      }
+
+      &__iconTrack,
+      &__iconAlbum {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    @include screen-lg {
+      display: none;
+    }
+  }
+
   &__container {
     padding: 0 20px;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 30px auto 1fr;
+    grid-column-gap: 5px;
+    align-items: center;
+
+    &__burgerIcon {
+      @include icon("burger.svg");
+      width: 30px;
+      height: 38px;
+      background-position: center;
+    }
 
     &__logo {
       display: grid;
@@ -27,7 +70,8 @@
       &__icon {
         @include icon("logo.svg");
         width: 30px;
-        height: 30px;
+        height: 38px;
+        background-position: center;
       }
 
       &:hover {

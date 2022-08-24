@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useAction";
-import { audioURL } from "../../api";
+import { audioURL } from "../../API";
 import classes from "./player.module.scss";
 import TrackVolume from "../track-volume/track-volume";
 import TrackProgress from "../track-progress/track-progress";
