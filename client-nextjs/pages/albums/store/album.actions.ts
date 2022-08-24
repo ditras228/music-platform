@@ -68,5 +68,9 @@ export const fetchAlbumNext = (id, token, page) => {
       type: AlbumPageActionTypes.SET_ALBUM_TRACKS,
       payload: response.data,
     });
+    dispatch({
+      type: AlbumPageActionTypes.SET_IS_FETCHING,
+      payload: false,
+    });
   };
 };

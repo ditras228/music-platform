@@ -29,7 +29,9 @@ export const setActiveTrack = (payload: ITrack): PlayerActions => {
 export const setPlayer = (payload): PlayerActions => {
   return { type: PlayerActionTypes.SET_PLAYER, payload };
 };
-
+export const setCurrentAlbum = (payload): PlayerActions => {
+  return { type: PlayerActionTypes.SET_CURRENT_ALBUM, payload };
+};
 export const setPreview = (active, track, pause) => {
   return async (dispatch: Dispatch<PlayerActions>) => {
     if (active?.id == track.id) {

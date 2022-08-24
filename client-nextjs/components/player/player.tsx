@@ -68,12 +68,11 @@ const Player = () => {
     }
   }, [active?.id, pause, currentTime]);
 
-  async function nextTrack(tracks: ITrack[]) {
+  function nextTrack(tracks: ITrack[]) {
     if (tracks.length > 0) {
       const currentIndex = tracks.indexOf(
         tracks.filter((value) => value.id == active.id)[0]
       );
-      console.log(currentIndex);
       if (tracks.length - 1 > currentIndex) {
         setActiveTrack(tracks[currentIndex + 1]);
       } else {
@@ -92,7 +91,7 @@ const Player = () => {
           }
         } else {
           if (activeAlbum.id) {
-            await dispatch(
+            dispatch(
               fetchNextAlbumPlaylist(
                 session.accessToken,
                 active.page + 1,
@@ -100,9 +99,7 @@ const Player = () => {
               )
             );
           } else {
-            await dispatch(
-              fetchNextPlaylist(session.accessToken, active.page + 1)
-            );
+            dispatch(fetchNextPlaylist(session.accessToken, active.page + 1));
           }
         }
       }
@@ -127,11 +124,9 @@ const Player = () => {
           ...player,
           active: {
             id: active.id,
-            name: active.name,
-            artist: active.artist,
-            audio: active.audio,
             page: active.page,
           },
+          albumId: active?.pivot?.album_id || player.albumId,
         })}`
       );
   }, [currentTime, pause, volume, active?.page]);

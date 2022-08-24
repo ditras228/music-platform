@@ -33,7 +33,6 @@ export interface AlbumState {
   error: string;
   isFetching: boolean;
   current_page: 0;
-  currentAlbum: number;
   total: 0;
 }
 
@@ -44,7 +43,6 @@ export enum AlbumActionTypes {
   REMOVE_TRACK_FROM_ALBUM = "REMOVE_TRACK_FROM_ALBUM",
   REMOVE_ALBUM = "REMOVE_ALBUM",
   SET_IS_FETCHING = "SET_IS_FETCHING",
-  SET_CURRENT_ALBUM = "SET_CURRENT_ALBUM",
 }
 
 interface RemoveAlbum {
@@ -76,10 +74,6 @@ interface SetIsFetchingAction {
   type: AlbumActionTypes.SET_IS_FETCHING;
   payload: boolean;
 }
-interface SetCurrentAlbumAction {
-  type: AlbumActionTypes.SET_CURRENT_ALBUM;
-  payload: number;
-}
 
 export type AlbumAction =
   | FetchAlbumsAction
@@ -87,5 +81,4 @@ export type AlbumAction =
   | AddTrackToAlbum
   | RemoveTrackFromAlbum
   | RemoveAlbum
-  | SetIsFetchingAction
-  | SetCurrentAlbumAction;
+  | SetIsFetchingAction;

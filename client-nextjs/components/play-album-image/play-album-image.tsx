@@ -15,10 +15,8 @@ interface IPlayAlbumImage {
 
 const PlayAlbumImage = ({ album, token, list }: IPlayAlbumImage) => {
   const player = useTypedSelector((state) => state.player);
-  const { currentAlbum } = useTypedSelector((state) => state.album);
   const dispatch = useDispatch();
   const { pause } = player;
-
   const trackClickHandler = (e): void => {
     e.stopPropagation();
     dispatch(fetchNextAlbumPlaylist(token, 1, album.id));
@@ -40,14 +38,14 @@ const PlayAlbumImage = ({ album, token, list }: IPlayAlbumImage) => {
         alt={"Обложка альбома"}
       />
       {pause ||
-        (currentAlbum == album.id && (
+        (player?.albumId == album.id && (
           <div className={classes.playImage__nowIcon} />
         ))}
-      {pause && currentAlbum == album.id && (
+      {pause && player?.albumId == album.id && (
         <div className={classes.playImage__dotsIcon} />
       )}
-      {((list && currentAlbum != album.id) ||
-        (pause && currentAlbum == album.id)) && (
+      {((list && player?.albumId != album.id) ||
+        (pause && player?.albumId == album.id)) && (
         <div className={classes.playImage__playIcon} />
       )}
     </div>

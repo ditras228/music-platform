@@ -21,8 +21,12 @@ export interface ITrack {
   checked: boolean;
   userId: string;
   page: number;
+  pivot: ITrackPivot;
 }
-
+export interface ITrackPivot {
+  album_id: number;
+  track_id: number;
+}
 export interface TrackState {
   isFetching: boolean;
   current_page: number;

@@ -1,5 +1,5 @@
 import { ITrack } from "./track";
-import { IAlbum } from "./album";
+import { AlbumActionTypes, IAlbum } from "./album";
 
 export interface PlayerState {
   active: null | ITrack;
@@ -8,6 +8,7 @@ export interface PlayerState {
   currentTime: number;
   pause: boolean;
   page: number;
+  albumId: number;
 }
 
 export enum PlayerActionTypes {
@@ -19,11 +20,16 @@ export enum PlayerActionTypes {
   SET_CURRENT_TIME = "SET_CURRENT_TIME",
   SET_VOLUME = "SET_VOLUME",
   SET_PLAYER = "SET_PLAYER",
+  SET_CURRENT_ALBUM = "SET_CURRENT_ALBUM",
+}
+interface SetCurrentAlbumAction {
+  type: PlayerActionTypes.SET_CURRENT_ALBUM;
+  payload: number;
 }
 
 interface PlayerAction {
   type: PlayerActionTypes.SET_PLAYER;
-  payload: any;
+  payload: PlayerState;
 }
 
 interface PlayAction {
@@ -67,4 +73,5 @@ export type PlayerActions =
   | SetCurrentTimeAction
   | SetVolumeAction
   | PlayerAction
-  | SetActiveAlbumAction;
+  | SetActiveAlbumAction
+  | SetCurrentAlbumAction;

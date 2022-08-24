@@ -3,6 +3,7 @@ import {
   PlayerActionTypes,
   PlayerState,
 } from "../../../types/player";
+import { AlbumActionTypes } from "../../../types/album";
 
 const initialState: PlayerState = {
   currentTime: 0,
@@ -11,6 +12,7 @@ const initialState: PlayerState = {
   pause: true,
   volume: 50,
   page: 0,
+  albumId: 0,
 };
 
 export const playerReducer = (state = initialState, action: PlayerActions) => {
@@ -53,6 +55,11 @@ export const playerReducer = (state = initialState, action: PlayerActions) => {
           page: action.payload.page,
         };
       break;
+    case PlayerActionTypes.SET_CURRENT_ALBUM:
+      return {
+        ...state,
+        albumId: action.payload,
+      };
     default:
       return state;
   }

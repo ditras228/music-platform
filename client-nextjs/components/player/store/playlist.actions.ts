@@ -4,6 +4,7 @@ import { PlaylistActions, PlaylistActionTypes } from "../../../types/playlist";
 import { PlayerActionTypes } from "../../../types/player";
 import { AlbumsAPI } from "../../../API/albumsAPI";
 import { AlbumActionTypes } from "../../../types/album";
+import { AlbumPageActionTypes } from "../../../types/album-page";
 
 export const fetchPlaylist = (token, page) => {
   return async (dispatch: Dispatch<PlaylistActions>) => {
@@ -35,12 +36,16 @@ export const fetchNextPlaylist = (token, page) => {
 };
 
 export const fetchAlbumPlaylist = (token, page, albumId) => {
-  return async (dispatch: Dispatch<PlaylistActions>) => {
+  return async (dispatch: Dispatch<any>) => {
     await AlbumsAPI.getOneAlbum(albumId, token, page)
       .then((res) => {
         dispatch({
           type: PlaylistActionTypes.SET_PLAYLIST,
           payload: res.data.tracks,
+        });
+        dispatch({
+          type: PlayerActionTypes.SET_CURRENT_ALBUM,
+          payload: res.data.id,
         });
         dispatch({
           type: PlaylistActionTypes.SET_TOTAL,
@@ -63,7 +68,7 @@ export const fetchNextAlbumPlaylist = (token, page, albumId) => {
           payload: res.data.tracks,
         });
         dispatch({
-          type: AlbumActionTypes.SET_CURRENT_ALBUM,
+          type: PlayerActionTypes.SET_CURRENT_ALBUM,
           payload: res.data.id,
         });
         dispatch({

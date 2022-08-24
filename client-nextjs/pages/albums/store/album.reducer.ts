@@ -8,7 +8,6 @@ const initialState: AlbumState = {
   albums: [],
   error: "",
   isFetching: false,
-  currentAlbum: 0,
   current_page: 0,
   total: 0,
 };
@@ -35,11 +34,7 @@ export const albumReducer = (
         ...state,
         isFetching: action.payload,
       };
-    case AlbumActionTypes.SET_CURRENT_ALBUM:
-      return {
-        ...state,
-        currentAlbum: action.payload,
-      };
+
     default:
       return state;
   }
