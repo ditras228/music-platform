@@ -6,7 +6,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useDispatch } from "react-redux";
 import { IAlbum } from "../../types/album";
 import { useActions } from "../../hooks/useAction";
-import { fetchNextAlbumPlaylist } from "../../store/action-creators/playlist";
+import { fetchNextAlbumPlaylist } from "../player/store/playlist.actions";
 
 interface IPlayAlbumImage {
   album?: IAlbum;

@@ -5,11 +5,12 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import classes from "./register.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { Registration } from "../../store/action-creators/user";
-import { GetError } from "../../store/selectors";
-import { baseServerSideProps, wrapper } from "../../store";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import InputField from "../../ui/input-field/input-field";
+import { wrapper } from "../../store/index.reducer";
+import { getBaseServerSideProps } from "../../methods/getBaseServerSideProps";
+import { Registration } from "../store/user.actions";
+import { GetError } from "../../store/index.selectors";
 
 const SignupSchema = Yup.object({
   name: Yup.string()
@@ -108,5 +109,5 @@ const Register = () => {
 export default Register;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
-  await baseServerSideProps({ ctx });
+  await getBaseServerSideProps({ ctx });
 });

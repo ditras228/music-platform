@@ -1,23 +1,21 @@
 import ImagePreview from "../../../ui/image-preview/image-preview";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  baseServerSideProps,
-  NextThunkDispatch,
-  wrapper,
-} from "../../../store";
+
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import MainLayout from "../../../layouts/MainLayout";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { CreateAlbum } from "../../../store/action-creators/user";
 import MultiStepForm, { FormStep } from "../../../ui/step-form/multi-step-form";
-import { fetchTracks } from "../../../store/action-creators/track";
 import AlertStep from "../../../ui/step-form/alert-step";
 import TrackList from "../../../components/track-list/track-list";
 import FileUpload from "../../../ui/file-upload/file-upload";
 import InputField from "../../../ui/input-field/input-field";
 import classes from "./create.module.scss";
+import { NextThunkDispatch, wrapper } from "../../../store/index.reducer";
+import { fetchTracks } from "../../tracks/store/track.actions";
+import { CreateAlbum } from "../../store/user.actions";
+import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
 
 const InfoSchema = Yup.object({
   name: Yup.string().required("Обязательно"),
@@ -116,7 +114,7 @@ const Create = ({ token, userId }) => {
 export default Create;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
-  const session = await baseServerSideProps({ ctx });
+  const session = await getBaseServerSideProps({ ctx });
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
   await dispatch(fetchTracks(session.accessToken, 1));
 

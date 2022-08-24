@@ -4,11 +4,12 @@ import { useRouter } from "next/router";
 import { TracksAPI } from "../../../api/tracksAPI";
 import { ITrack } from "../../../types/track";
 import classes from "./[id].module.scss";
-import { baseServerSideProps, wrapper } from "../../../store";
 import { useSession } from "next-auth/client";
 import TrackLyrics from "../../../components/track-lyrics/track-lyrics";
 import TrackComments from "../../../components/track-comments/track-comments";
 import TrackInfo from "../../../components/track-info/track-info";
+import { wrapper } from "../../../store/index.reducer";
+import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
 
 const TrackPage = ({ serverTrack, token }) => {
   const router = useRouter();
@@ -38,7 +39,7 @@ const TrackPage = ({ serverTrack, token }) => {
 export default TrackPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
-  const session = await baseServerSideProps({ ctx });
+  const session = await getBaseServerSideProps({ ctx });
   const response = await TracksAPI.getOne(ctx.params.id, session.accessToken);
 
   return {

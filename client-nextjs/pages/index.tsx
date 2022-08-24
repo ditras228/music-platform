@@ -4,12 +4,12 @@ import { Formik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { GetError } from "../store/selectors";
 import { getCsrfToken, getSession, signIn } from "next-auth/client";
 import { UsersActionTypes } from "../types/user";
-import { wrapper } from "../store";
 import classes from "./index.module.scss";
 import InputField from "../ui/input-field/input-field";
+import { wrapper } from "../store/index.reducer";
+import { GetError } from "../store/index.selectors";
 
 const SignupSchema = Yup.object({
   email: Yup.string().email("Неккоректный email").required("Обязательно"),

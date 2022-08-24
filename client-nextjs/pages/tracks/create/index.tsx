@@ -1,6 +1,5 @@
 import ImagePreview from "../../../ui/image-preview/image-preview";
 import React, { useEffect, useRef, useState } from "react";
-import { baseServerSideProps, wrapper } from "../../../store";
 import { useRouter } from "next/router";
 import MultiStepForm, { FormStep } from "../../../ui/step-form/multi-step-form";
 import InputField from "../../../ui/input-field/input-field";
@@ -9,8 +8,10 @@ import classes from "./create.module.scss";
 import MainLayout from "../../../layouts/MainLayout";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { CreateTrack } from "../../../store/action-creators/user";
 import FileUpload, { fileFormats } from "../../../ui/file-upload/file-upload";
+import { wrapper } from "../../../store/index.reducer";
+import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
+import { CreateTrack } from "../../store/user.actions";
 
 if (typeof window !== "undefined") {
   var WaveSurfer = require("wavesurfer.js");
@@ -119,7 +120,7 @@ const Index = ({ token }) => {
 
 export default Index;
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
-  const session = await baseServerSideProps({ ctx });
+  const session = await getBaseServerSideProps({ ctx });
 
   return {
     props: {

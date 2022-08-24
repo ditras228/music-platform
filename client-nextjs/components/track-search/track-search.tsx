@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classes from "./track-search.module.scss";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
-import { searchTracks } from "../../store/action-creators/track";
+import { searchTracks } from "../../pages/tracks/store/track.actions";
 
 interface TrackSearchProps {
   token: string;

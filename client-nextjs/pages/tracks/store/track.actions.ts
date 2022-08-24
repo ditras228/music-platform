@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
-import { TrackAction, TrackActionTypes } from "../../types/track";
-import { TracksAPI } from "../../api/tracksAPI";
+import { TrackAction, TrackActionTypes } from "../../../types/track";
+import { TracksAPI } from "../../../api/tracksAPI";
 
 export const fetchTracks = (token, page) => {
   return async (dispatch: Dispatch<TrackAction>) => {
@@ -17,6 +17,7 @@ export const fetchTracks = (token, page) => {
       });
   };
 };
+
 export const searchTracks = (query: string, token: string, page: number) => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
@@ -31,6 +32,7 @@ export const searchTracks = (query: string, token: string, page: number) => {
     }
   };
 };
+
 export const deleteTrack = (id: number, token: string) => {
   return async (dispatch: any) => {
     try {

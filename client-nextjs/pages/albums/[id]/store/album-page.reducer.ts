@@ -3,7 +3,7 @@ import { IComment } from "../../../../types/track";
 import {
   AlbumPageAction,
   AlbumPageActionTypes,
-} from "../../../../types/albumPage";
+} from "../../../../types/album-page";
 
 const initialState: IAlbum = {
   id: 0,

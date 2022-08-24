@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import AlbumItem from "../album-item/album-item";
 import { IAlbum } from "../../types/album";
 import InputField from "../../ui/input-field/input-field";
-import { searchAlbums } from "../../store/action-creators/album.actions";
+import { searchAlbums } from "../../pages/albums/store/album.actions";
 
 interface AlbumListProps {
   albums: IAlbum[];

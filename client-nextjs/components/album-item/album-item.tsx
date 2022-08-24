@@ -7,7 +7,7 @@ import PlayAlbumImage from "../play-album-image/play-album-image";
 import {
   deleteAlbum,
   fetchAlbum,
-} from "../../store/action-creators/album.actions";
+} from "../../pages/albums/store/album.actions";
 
 interface AlbumItemProps {
   album: IAlbum;

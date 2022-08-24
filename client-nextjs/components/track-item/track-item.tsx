@@ -5,9 +5,9 @@ import { useActions } from "../../hooks/useAction";
 import { useDispatch } from "react-redux";
 import classes from "./track-item.module.scss";
 import { useFormikContext } from "formik";
-import { deleteTrack } from "../../store/action-creators/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import PlayImage from "../play-image/play-image";
+import { deleteTrack } from "../../pages/tracks/store/track.actions";
 
 interface TrackItemProps {
   track: ITrack;
@@ -35,9 +35,7 @@ const TrackItem: React.FC<TrackItemProps> = ({
   const dispatch = useDispatch();
   const [isChecked, setChecked] = useState(false);
   const formik = useFormikContext<formik>();
-  const { setPreview } = useActions();
   const player = useTypedSelector((state) => state.player);
-  const { pause } = player;
 
   const deleteOne = (): void => {
     dispatch(deleteTrack(track.id, token));

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import classes from "./track-list.module.scss";
 import { useDispatch } from "react-redux";
-import { fetchTracks } from "../../store/action-creators/track";
 import TrackItem from "../track-item/track-item";
 import { ITrack, TrackActionTypes } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import TrackSearch from "../track-search/track-search";
+import { fetchTracks } from "../../pages/tracks/store/track.actions";
 
 interface TrackListProps {
   tracks: ITrack[];

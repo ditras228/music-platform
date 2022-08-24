@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { useRouter } from "next/router";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { baseServerSideProps, NextThunkDispatch, wrapper } from "../../store";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import classes from "./index.module.scss";
 import AlbumList from "../../components/album-list/album-list";
-import {
-  fetchAlbums,
-  searchAlbums,
-} from "../../store/action-creators/album.actions";
+import { fetchAlbums, searchAlbums } from "./store/album.actions";
+import { NextThunkDispatch, wrapper } from "../../store/index.reducer";
+import { getBaseServerSideProps } from "../../methods/getBaseServerSideProps";
 
 const Index = ({ token, userId }) => {
   const router = useRouter();
@@ -68,7 +66,7 @@ const Index = ({ token, userId }) => {
 export default Index;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
-  const session = await baseServerSideProps({ ctx });
+  const session = await getBaseServerSideProps({ ctx });
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
 
   await dispatch(fetchAlbums(session.accessToken));

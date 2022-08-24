@@ -4,13 +4,13 @@ import { imagesURL } from "../../api";
 import classes from "./play-image.module.scss";
 import { useActions } from "../../hooks/useAction";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { setPreview } from "../../store/action-creators/player";
 import { ITrack } from "../../types/track";
+
+import { useDispatch } from "react-redux";
 import {
   fetchAlbumPlaylist,
   fetchPlaylist,
-} from "../../store/action-creators/playlist";
-import { useDispatch } from "react-redux";
+} from "../player/store/playlist.actions";
 
 interface IPlayImage {
   track?: ITrack;

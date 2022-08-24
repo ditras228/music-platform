@@ -2,10 +2,11 @@ import React from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { useRouter } from "next/router";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { baseServerSideProps, NextThunkDispatch, wrapper } from "../../store";
-import { fetchTracks } from "../../store/action-creators/track";
 import TrackList from "../../components/track-list/track-list";
 import classes from "./index.module.scss";
+import { fetchTracks } from "./store/track.actions";
+import { NextThunkDispatch, wrapper } from "../../store/index.reducer";
+import { getBaseServerSideProps } from "../../methods/getBaseServerSideProps";
 
 const Index = ({ token, userId }) => {
   const router = useRouter();
@@ -43,7 +44,7 @@ const Index = ({ token, userId }) => {
 export default Index;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
-  const session = await baseServerSideProps({ ctx });
+  const session = await getBaseServerSideProps({ ctx });
   if (!session) {
     return {
       redirect: {

@@ -1,4 +1,8 @@
-import { TrackAction, TrackActionTypes, TrackState } from "../../types/track";
+import {
+  TrackAction,
+  TrackActionTypes,
+  TrackState,
+} from "../../../types/track";
 
 const initialState: TrackState = {
   isFetching: false,

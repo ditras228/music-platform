@@ -2,7 +2,7 @@ import {
   PlayerActions,
   PlayerActionTypes,
   PlayerState,
-} from "../../types/player";
+} from "../../../types/player";
 
 const initialState: PlayerState = {
   currentTime: 0,

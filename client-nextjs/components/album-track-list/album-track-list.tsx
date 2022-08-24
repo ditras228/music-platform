@@ -5,8 +5,8 @@ import TrackItem from "../track-item/track-item";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import TrackSearch from "../track-search/track-search";
-import { AlbumPageActionTypes } from "../../types/albumPage";
-import { fetchAlbumNext } from "../../store/action-creators/album.actions";
+import { fetchAlbumNext } from "../../pages/albums/store/album.actions";
+import { AlbumPageActionTypes } from "../../types/album-page";
 
 interface TrackListProps {
   tracks: ITrack[];
