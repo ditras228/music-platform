@@ -1,35 +1,36 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/icon";
 
-.sidebar{
+.sidebar {
   padding-left: 20px;
   position: fixed;
   top: 100px;
 
-  &__content{
+  &__content {
     @include fontMedium();
     display: grid;
 
-    &__item{
+    &__item {
       display: grid;
       grid-template-columns: auto 1fr;
       grid-column-gap: 20px;
-      padding:  5px 0;
+      padding: 5px 0;
 
-      &__iconTrack{
-         @include icon('track.svg');
+      &__iconTrack {
+        @include icon("track.svg");
       }
 
-      &__iconAlbum{
-        @include icon('album.svg');
+      &__iconAlbum {
+        @include icon("album.svg");
       }
 
-      &__iconTrack, &__iconAlbum{
+      &__iconTrack,
+      &__iconAlbum {
         width: 30px;
         height: 30px;
       }
 
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
     }

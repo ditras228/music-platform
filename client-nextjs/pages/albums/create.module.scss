@@ -1,12 +1,12 @@
 @import "../../styles/mixins/button";
 @import "../../styles/mixins/font";
 
-.createAlbumContent{
-  &__info{
+.createAlbumContent {
+  &__info {
     display: grid;
     grid-row-gap: 35px;
   }
-  &__tracksTitle{
+  &__tracksTitle {
     @include fontLarge();
     margin-bottom: 25px;
   }

@@ -8,11 +8,11 @@
 
   &:hover {
     opacity: 0.8;
-    cursor: pointer
+    cursor: pointer;
   }
 
   &:active {
-    opacity: 0.7
+    opacity: 0.7;
   }
 
   &__info {
@@ -38,7 +38,7 @@
   }
 
   &__delete {
-    @include icon('trash.svg');
+    @include icon("trash.svg");
     height: 40px;
     width: 40px;
     background-size: contain;
@@ -48,14 +48,14 @@
     align-self: center;
     background-color: transparent;
 
-    &:hover{
+    &:hover {
       cursor: pointer;
     }
 
-    &:disabled{
+    &:disabled {
       opacity: 0.5;
 
-      &:hover{
+      &:hover {
         cursor: not-allowed;
       }
     }

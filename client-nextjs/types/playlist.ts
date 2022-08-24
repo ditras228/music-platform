@@ -1,24 +1,23 @@
-import {ITrack} from './track'
+import { ITrack } from "./track";
 
 export interface PlaylistState {
-    tracks: ITrack[]
-    page: number
+  tracks: ITrack[];
+  page: number;
 }
 
 export enum PlaylistActionTypes {
-    SET_PLAYLIST = 'SET_PLAYLIST',
-    SET_PAGE = 'SET_PAGE',
+  SET_PLAYLIST = "SET_PLAYLIST",
+  SET_PAGE = "SET_PAGE",
 }
 
 interface PlaylistAction {
-    type: PlaylistActionTypes.SET_PLAYLIST
-    payload: any
+  type: PlaylistActionTypes.SET_PLAYLIST;
+  payload: any;
 }
 
 interface SetPageAction {
-    type: PlaylistActionTypes.SET_PAGE
-    payload: number
+  type: PlaylistActionTypes.SET_PAGE;
+  payload: number;
 }
 
-export type PlaylistActions =
-    | PlaylistAction |SetPageAction
+export type PlaylistActions = PlaylistAction | SetPageAction;

@@ -1,14 +1,14 @@
-@import '../../styles/mixins/input';
-@import '../../styles/mixins/button';
+@import "../../styles/mixins/input";
+@import "../../styles/mixins/button";
 
 .fileUpload {
   $root: &;
 
-  &__input{
+  &__input {
     display: none;
   }
 
-  &__btn{
+  &__btn {
     @include button();
     width: 100%;
   }
@@ -21,7 +21,8 @@
     color: #c30052;
   }
 
-  &__label, &__error {
+  &__label,
+  &__error {
     @include fontSmall();
     margin-top: 20px;
   }

@@ -1,13 +1,13 @@
-@import '../variables';
+@import "../variables";
 
 @mixin screen-lg {
-  @media only screen and (min-width: map_get($screen-breakpoints, 'lg')) {
+  @media only screen and (min-width: map_get($screen-breakpoints, "lg")) {
     @content;
   }
 }
 
 @mixin screen-xlg {
-  @media only screen and (min-width: map_get($screen-breakpoints, 'xlg') + 1) {
+  @media only screen and (min-width: map_get($screen-breakpoints, "xlg") + 1) {
     @content;
   }
 }

@@ -1,16 +1,16 @@
 @import "../../styles/mixins/font";
 
 .albumId {
-    display: grid;
-    grid-template-columns: 1fr;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 0 auto;
 
-    &__title {
-        @include fontHeaderSmall();
-        margin-bottom: 15px;
+  &__title {
+    @include fontHeaderSmall();
+    margin-bottom: 15px;
 
-        &:hover{
-            cursor: pointer;
-        }
+    &:hover {
+      cursor: pointer;
     }
+  }
 }

@@ -22,11 +22,12 @@
       transition: 1s;
     }
 
-    &__pauseIcon, &__playIcon{
+    &__pauseIcon,
+    &__playIcon {
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
       width: 50px;
       height: 50px;
       background-color: #ffffff;
@@ -37,21 +38,21 @@
       //opacity: 0;
       transition: 0.25s;
 
-      &::before{
+      &::before {
         width: 30px;
         height: 30px;
         display: block;
-        content: '';
+        content: "";
       }
     }
-    &__playIcon{
-      &:before{
-        @include icon('play.svg');
+    &__playIcon {
+      &:before {
+        @include icon("play.svg");
       }
     }
-    &__pauseIcon{
-      &:before{
-        @include icon('pause.svg');
+    &__pauseIcon {
+      &:before {
+        @include icon("pause.svg");
       }
     }
     &:hover {
@@ -68,7 +69,7 @@
     }
   }
 
-  &__desc{
+  &__desc {
     @include fontMedium();
     line-height: 20px;
     display: grid;

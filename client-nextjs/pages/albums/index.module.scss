@@ -1,21 +1,20 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/button";
 
-.albums{
-    &__top{
-        display: grid;
-        grid-template-columns: 1fr auto;
-        margin-bottom: 15px;
+.albums {
+  &__top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-bottom: 15px;
 
-        &__title{
-            @include fontHeaderSmall();
-        }
-        &__createBtn{
-            @include button-small();
-            &:hover{
-                cursor: pointer;
-            }
-        }
+    &__title {
+      @include fontHeaderSmall();
     }
-
+    &__createBtn {
+      @include button-small();
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
 }

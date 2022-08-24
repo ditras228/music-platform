@@ -1,11 +1,11 @@
 @import "../../styles/mixins/button";
 
-.createContent{
-    &__info{
-        display: grid;
-        grid-row-gap: 35px;
-    }
+.createContent {
+  &__info {
+    display: grid;
+    grid-row-gap: 35px;
+  }
 }
-.waveSuffer{
-    margin-top: 20px;
+.waveSuffer {
+  margin-top: 20px;
 }

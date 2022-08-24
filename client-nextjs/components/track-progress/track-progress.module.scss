@@ -1,10 +1,10 @@
 @import "../../styles/mixins/font";
 
-.slider{
-  &__input{
+.slider {
+  &__input {
     width: 100%;
   }
-  &__text{
+  &__text {
     @include fontMedium();
     line-height: 20px;
   }

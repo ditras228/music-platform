@@ -16,12 +16,12 @@
   transform: translateX(-50%);
   background-color: #ffffff;
 
-  &__info{
-    &__name{
+  &__info {
+    &__name {
       @include fontMedium();
       line-height: 20px;
     }
-    &__author{
+    &__author {
       @include fontSmall();
     }
   }
@@ -32,6 +32,4 @@
     grid-column-gap: 20px;
     @include fontMedium();
   }
-
 }
-

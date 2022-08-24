@@ -1,19 +1,19 @@
 @import "../../styles/mixins/font";
 
-.comment{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-column-gap: 20px;
+.comment {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 20px;
 
-    &__content{
-        &__name{
-            @include fontLarge(bold);
-            line-height: 20px;
-        }
-
-        &__text{
-            @include fontMedium();
-            word-break: break-word;
-        }
+  &__content {
+    &__name {
+      @include fontLarge(bold);
+      line-height: 20px;
     }
+
+    &__text {
+      @include fontMedium();
+      word-break: break-word;
+    }
+  }
 }

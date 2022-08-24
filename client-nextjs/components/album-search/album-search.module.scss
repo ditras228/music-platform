@@ -1,52 +1,52 @@
-@import '../../styles/mixins/input';
+@import "../../styles/mixins/input";
 
 .AlbumSearch {
-    position: relative;
-    display: grid;
-    margin-bottom: 25px;
-    $root: &;
+  position: relative;
+  display: grid;
+  margin-bottom: 25px;
+  $root: &;
 
-    &__error {
-        color: #c30052;
-        @include fontXSmall(bold);
-        position: absolute;
-        bottom: -28px;
-    }
-    &__field {
-        @include input();
-        color: #14142b;
-        border: 2px solid transparent;
+  &__error {
+    color: #c30052;
+    @include fontXSmall(bold);
+    position: absolute;
+    bottom: -28px;
+  }
+  &__field {
+    @include input();
+    color: #14142b;
+    border: 2px solid transparent;
 
-        &:focus {
-            background-color: #fcfcfc;
-            border: 2px solid black;
-            outline: none;
-        }
-
-        &:focus ~ #{$root}__label,
-        &:not(:placeholder-shown) ~ #{$root}__label {
-            top: 13px;
-            @include fontXSmall();
-        }
+    &:focus {
+      background-color: #fcfcfc;
+      border: 2px solid black;
+      outline: none;
     }
 
-    &__label {
-        position: absolute;
-        left: 24px;
-        @include fontSmall();
-        top: 50%;
-        transform: translateY(-50%);
-        color: #6e7191;
-        transition: top 50ms linear;
+    &:focus ~ #{$root}__label,
+    &:not(:placeholder-shown) ~ #{$root}__label {
+      top: 13px;
+      @include fontXSmall();
     }
+  }
 
-    &--error {
-        #{$root}__field {
-            border: 2px solid #ed2e7e !important;
-            background: #fff3f8;
-        }
-        #{$root}__label {
-            color: #c30052;
-        }
+  &__label {
+    position: absolute;
+    left: 24px;
+    @include fontSmall();
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6e7191;
+    transition: top 50ms linear;
+  }
+
+  &--error {
+    #{$root}__field {
+      border: 2px solid #ed2e7e !important;
+      background: #fff3f8;
     }
+    #{$root}__label {
+      color: #c30052;
+    }
+  }
 }

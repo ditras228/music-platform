@@ -1,18 +1,17 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/screen";
 
-.trackLyrics{
+.trackLyrics {
   margin-bottom: 50px;
-  &__title{
+  &__title {
     @include fontMedium(bold);
   }
 
-  &__content{
+  &__content {
     @include fontSmall();
     white-space: pre-line;
-    @include screen-lg{
+    @include screen-lg {
       @include fontMedium();
-
     }
   }
 }

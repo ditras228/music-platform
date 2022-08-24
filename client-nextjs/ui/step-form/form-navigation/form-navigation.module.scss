@@ -1,14 +1,14 @@
 @import "../../../styles/mixins/button";
 
-.formNavigation{
-    display: grid;
-    grid-template-columns: 100px 1fr 100px;
-    margin-top: 50px;
-    &__button{
-        @include button();
+.formNavigation {
+  display: grid;
+  grid-template-columns: 100px 1fr 100px;
+  margin-top: 50px;
+  &__button {
+    @include button();
 
-        &:last-child{
-            grid-column: 3/4;
-        }
+    &:last-child {
+      grid-column: 3/4;
     }
+  }
 }

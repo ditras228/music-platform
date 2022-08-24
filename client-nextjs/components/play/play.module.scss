@@ -2,21 +2,20 @@
 @import "../../styles/mixins/icon";
 
 .icon {
-  &__play{
-    @include icon('play.svg');
+  &__play {
+    @include icon("play.svg");
   }
-  &__pause{
-    @include icon('pause.svg');
+  &__pause {
+    @include icon("pause.svg");
   }
 
-  &__play, &__pause{
+  &__play,
+  &__pause {
     width: 30px;
     height: 30px;
 
-    &:hover{
+    &:hover {
       cursor: pointer;
     }
   }
-
 }
-
