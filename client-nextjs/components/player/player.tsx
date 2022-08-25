@@ -42,9 +42,10 @@ const Player = () => {
       // В случае, если id'шник другой, обнуляем currentTime и присваеваем новый src
       if (audio.src.split("/")[4] != active?.id) {
         audio.src = audioURL + active.id;
-        setCurrentTime(0);
-        audio.play();
+        audio.currentTime = currentTime;
+        audio.play;
       }
+
       audio.volume = volume / 100;
 
       // По загрузке аудио
@@ -83,7 +84,6 @@ const Player = () => {
               payload: activeAlbum.tracks.data[0],
             });
           } else {
-            console.log(track.tracks[0]);
             dispatch({
               type: PlayerActionTypes.SET_ACTIVE,
               payload: track.tracks[0],

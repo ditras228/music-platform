@@ -4,10 +4,7 @@ import { useDispatch } from "react-redux";
 import classes from "./album-item.module.scss";
 import { IAlbum } from "../../types/album";
 import PlayAlbumImage from "../play-album-image/play-album-image";
-import {
-  deleteAlbum,
-  fetchAlbum,
-} from "../../pages/albums/store/album.actions";
+import { deleteAlbum } from "../../pages/albums/store/album.actions";
 
 interface AlbumItemProps {
   album: IAlbum;
@@ -22,11 +19,6 @@ const AlbumItem: React.FC<AlbumItemProps> = ({ album, token, userId }) => {
     dispatch(deleteAlbum(album.id, token));
   };
 
-  function clickHandler(e) {
-    e.stopPropagation();
-    dispatch(fetchAlbum(album.id, token, 1));
-  }
-
   return (
     <div
       className={classes.album}
@@ -36,9 +28,7 @@ const AlbumItem: React.FC<AlbumItemProps> = ({ album, token, userId }) => {
     >
       <SwitchView deleteOne={deleteOne} album={album} userId={userId} />
       <div className={classes.album__info}>
-        <div onClick={(e) => clickHandler(e)}>
-          <PlayAlbumImage token={token} album={album} list={true} />
-        </div>
+        <PlayAlbumImage token={token} album={album} list={true} />
 
         <div className={classes.album__name}>
           <div>{album.name}</div>

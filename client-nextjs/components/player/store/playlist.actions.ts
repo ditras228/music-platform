@@ -3,8 +3,6 @@ import { TracksAPI } from "../../../API/tracksAPI";
 import { PlaylistActions, PlaylistActionTypes } from "../../../types/playlist";
 import { PlayerActionTypes } from "../../../types/player";
 import { AlbumsAPI } from "../../../API/albumsAPI";
-import { AlbumActionTypes } from "../../../types/album";
-import { AlbumPageActionTypes } from "../../../types/album-page";
 
 export const fetchPlaylist = (token, page) => {
   return async (dispatch: Dispatch<PlaylistActions>) => {

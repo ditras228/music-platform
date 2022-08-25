@@ -1,7 +1,6 @@
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import cookies from "next-cookies";
-import { ITrack } from "../types/track";
 import { NextThunkDispatch } from "../store/index.reducer";
 import { GetServerSidePropsContext } from "next-redux-wrapper";
 import { Store } from "redux";
@@ -28,31 +27,26 @@ export const getBaseServerSideProps = async ({
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
   const player = cookies(ctx).player as unknown as PlayerState;
 
-  if (player) {
+  if (session?.accessToken && player) {
     const response = await TracksAPI.getOne(
       player.active.id,
       session.accessToken
     );
 
     dispatch(setPlayer({ ...player, active: response.data }));
+
     if (player.albumId) {
       dispatch(setCurrentAlbum(player.albumId));
-    }
-  }
-
-  if (session?.accessToken) {
-    if (player?.active?.pivot?.album_id) {
       await dispatch(
         fetchAlbumPlaylist(
           session.accessToken,
           player?.page || 1,
-          player?.active.pivot.album_id
+          player?.albumId
         )
       );
     } else {
       await dispatch(fetchPlaylist(session.accessToken, player?.page || 1));
     }
   }
-
   return session;
 };

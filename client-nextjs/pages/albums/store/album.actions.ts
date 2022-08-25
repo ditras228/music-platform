@@ -50,16 +50,6 @@ export const deleteAlbum = (id: number, token: string) => {
   };
 };
 
-export const fetchAlbum = (id, token, page) => {
-  return async (dispatch: any) => {
-    const response = await AlbumsAPI.getOneAlbum(id, token, page);
-    dispatch({
-      type: AlbumPageActionTypes.SET_ALBUM,
-      payload: response.data,
-    });
-  };
-};
-
 export const fetchAlbumNext = (id, token, page) => {
   return async (dispatch: any) => {
     const response = await AlbumsAPI.getOneAlbum(id, token, page);

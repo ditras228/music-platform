@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useActions } from "../../hooks/useAction";
 import { useDispatch } from "react-redux";
 import classes from "./track-item.module.scss";
-import { useFormikContext } from "formik";
+// import { useFormikContext } from "formik";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import PlayImage from "../play-image/play-image";
 import { deleteTrack } from "../../pages/tracks/store/track.actions";
@@ -34,34 +34,34 @@ const TrackItem: React.FC<TrackItemProps> = ({
   const router = useRouter();
   const dispatch = useDispatch();
   const [isChecked, setChecked] = useState(false);
-  const formik = useFormikContext<formik>();
+  // const formik = useFormikContext<formik>();
 
   const deleteOne = (): void => {
     dispatch(deleteTrack(track.id, token));
   };
 
   const editState = (): void => {
-    if (formik) {
-      setChecked(!isChecked);
-      if (isChecked === false) {
-        formik.setFieldValue(
-          "tracks",
-          [...formik.values.tracks, track.id],
-          true
-        );
-      }
-      if (isChecked === true) {
-        formik.setFieldValue(
-          "tracks",
-          [
-            ...formik.values.tracks.filter(
-              (thisTrack) => thisTrack !== track.id
-            ),
-          ],
-          true
-        );
-      }
-    }
+    // if (formik) {
+    //   setChecked(!isChecked);
+    //   if (isChecked === false) {
+    //     formik.setFieldValue(
+    //       "tracks",
+    //       [...formik.values.tracks, track.id],
+    //       true
+    //     );
+    //   }
+    //   if (isChecked === true) {
+    //     formik.setFieldValue(
+    //       "tracks",
+    //       [
+    //         ...formik.values.tracks.filter(
+    //           (thisTrack) => thisTrack !== track.id
+    //         ),
+    //       ],
+    //       true
+    //     );
+    //   }
+    // }
   };
 
   return (
