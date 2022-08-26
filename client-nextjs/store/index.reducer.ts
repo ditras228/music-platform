@@ -16,6 +16,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk, { ThunkDispatch } from "redux-thunk";
 import { albumReducer } from "../pages/albums/store/album.reducer";
 import { navbarReducer } from "../components/navbar/store/navbar.reducer";
+import { trackPageReducer } from "../pages/tracks/[id]/store/track-page.reducer";
 
 export const rootReducer = combineReducers({
   player: playerReducer,
@@ -26,6 +27,7 @@ export const rootReducer = combineReducers({
   playlist: playlistReducer,
   createAlbum: createAlbumReducer,
   navbar: navbarReducer,
+  trackPage: trackPageReducer,
 });
 
 export const reducer = (state, action) => {

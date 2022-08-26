@@ -1,7 +1,11 @@
+import { TrackPageActionTypes } from "./track-page.types";
+
 export enum AlbumPageActionTypes {
   SET_IS_FETCHING = "SET_IS_FETCHING",
   SET_ALBUM = "SET_ALBUM",
   SET_ALBUM_TRACKS = "SET_ALBUM_TRACKS",
+  ADD_COMMENT = "ADD_COMMENT",
+  SET_ERROR = "SET_ERROR",
 }
 
 interface SetAlbumFirstAction {
@@ -24,7 +28,17 @@ interface SetIsFetchingAction {
   payload: boolean;
 }
 
+interface AddComment {
+  type: AlbumPageActionTypes.ADD_COMMENT;
+  payload: any;
+}
+interface SetError {
+  type: AlbumPageActionTypes.SET_ERROR;
+  payload: string;
+}
 export type AlbumPageAction =
   | SetAlbumFirstAction
   | SetIsFetchingAction
-  | SetAlbumTracksFirstAction;
+  | SetAlbumTracksFirstAction
+  | AddComment
+  | SetError;

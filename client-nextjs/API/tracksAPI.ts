@@ -40,7 +40,7 @@ export const TracksAPI = {
     formData.append("image", data.picture);
     formData.append("audio", data.audio);
 
-    return instance.post("/track", formData, {
+    return instance.post("/track/create", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,

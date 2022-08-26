@@ -6,7 +6,7 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import TrackSearch from "../track-search/track-search";
 import { fetchAlbumNext } from "../../pages/albums/store/album.actions";
-import { AlbumPageActionTypes } from "../../types/album-page";
+import { AlbumPageActionTypes } from "../../pages/albums/[id]/store/album-page.types";
 
 interface TrackListProps {
   tracks: ITrack[];

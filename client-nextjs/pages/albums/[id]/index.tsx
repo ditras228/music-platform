@@ -9,8 +9,9 @@ import MainLayout from "../../../layouts/MainLayout";
 import AlbumTrackList from "../../../components/album-track-list/album-track-list";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { NextThunkDispatch, wrapper } from "../../../store/index.reducer";
-import { AlbumPageActionTypes } from "../../../types/album-page";
 import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
+import { AlbumPageActionTypes } from "./store/album-page.types";
+import { setAlbum } from "./store/album-page.actions";
 
 const AlbumPage = ({ album, token, userId }) => {
   const router = useRouter();
@@ -53,11 +54,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
     1
   );
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
+  dispatch(setAlbum(response.data));
 
-  dispatch({
-    type: AlbumPageActionTypes.SET_ALBUM,
-    payload: response.data,
-  });
   return {
     props: {
       album: response.data,

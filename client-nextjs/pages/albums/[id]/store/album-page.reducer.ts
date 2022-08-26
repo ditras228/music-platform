@@ -1,9 +1,6 @@
-import { AlbumActionTypes, IAlbum, ITrackData } from "../../../../types/album";
+import { IAlbum, ITrackData } from "../../../../types/album";
 import { IComment } from "../../../../types/track";
-import {
-  AlbumPageAction,
-  AlbumPageActionTypes,
-} from "../../../../types/album-page";
+import { AlbumPageAction, AlbumPageActionTypes } from "./album-page.types";
 
 const initialState: IAlbum = {
   id: 0,

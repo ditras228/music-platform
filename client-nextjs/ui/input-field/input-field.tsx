@@ -12,12 +12,22 @@ const InputField = ({ label, rows, multiline, ...props }: Props) => {
   const [field, meta] = useField(props);
   return (
     <div className={classes.input}>
-      <input
-        placeholder=" "
-        className={classes.input__field}
-        {...field}
-        {...props}
-      />
+      {multiline ? (
+        <textarea
+          placeholder=" "
+          className={classes.input__field}
+          {...field}
+          {...props}
+        ></textarea>
+      ) : (
+        <input
+          placeholder=" "
+          className={classes.input__field}
+          {...field}
+          {...props}
+        />
+      )}
+
       <label className={classes.input__label}>{label}</label>
       <div className={classes.input__error}>
         {meta.touched && Boolean(meta.error)}

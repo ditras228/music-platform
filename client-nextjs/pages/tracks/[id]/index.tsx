@@ -1,20 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import MainLayout from "../../../layouts/MainLayout";
 import { useRouter } from "next/router";
 import { TracksAPI } from "../../../API/tracksAPI";
-import { ITrack } from "../../../types/track";
 import classes from "./[id].module.scss";
 import { useSession } from "next-auth/client";
 import TrackLyrics from "../../../components/track-lyrics/track-lyrics";
 import TrackComments from "../../../components/track-comments/track-comments";
 import TrackInfo from "../../../components/track-info/track-info";
-import { wrapper } from "../../../store/index.reducer";
+import { NextThunkDispatch, wrapper } from "../../../store/index.reducer";
 import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
+import { setTrack } from "./store/track-page.actions";
 
-const TrackPage = ({ serverTrack, token }) => {
+const TrackPage = ({ track, token }) => {
   const router = useRouter();
-  const [track, setTrack] = useState<ITrack>(serverTrack);
-  const [session, loading] = useSession() as any;
+  const [session] = useSession() as any;
 
   return (
     <MainLayout
@@ -30,7 +29,7 @@ const TrackPage = ({ serverTrack, token }) => {
         </div>
         <TrackInfo track={track} token={token} />
         <TrackLyrics lyrics={track.lyrics} />
-        <TrackComments track={track} session={session} token={token} />
+        <TrackComments session={session} token={token} />
       </div>
     </MainLayout>
   );
@@ -41,10 +40,12 @@ export default TrackPage;
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await getBaseServerSideProps({ ctx });
   const response = await TracksAPI.getOne(ctx.params.id, session.accessToken);
+  const dispatch = ctx.store.dispatch as NextThunkDispatch;
+  dispatch(setTrack(response.data));
 
   return {
     props: {
-      serverTrack: response.data,
+      track: response.data,
       token: session.accessToken,
     },
   };

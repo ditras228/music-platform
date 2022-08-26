@@ -1,6 +1,6 @@
 export interface IComment {
   id: number;
-  userId: string;
+  userId: number;
   name: string;
   text: string;
 }
@@ -19,9 +19,10 @@ export interface ITrack {
   audio: string;
   comments: IComment[];
   checked: boolean;
-  userId: string;
+  userId: number;
   page: number;
   pivot: ITrackPivot;
+  error: string;
 }
 export interface ITrackPivot {
   album_id: number;
