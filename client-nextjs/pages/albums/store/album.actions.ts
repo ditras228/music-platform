@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { AlbumsAPI } from "../../../API/albumsAPI";
-import { AlbumAction, AlbumActionTypes } from "../../../types/album";
 import { AlbumPageActionTypes } from "../[id]/store/album-page.types";
+import { AlbumAction, AlbumActionTypes } from "./album.types";
 
 export const fetchAlbums = (token) => {
   return async (dispatch: Dispatch<AlbumAction>) => {

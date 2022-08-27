@@ -2,7 +2,7 @@ import {
   PlaylistActions,
   PlaylistActionTypes,
   PlaylistState,
-} from "../../../types/playlist";
+} from "./playlist.types";
 
 const initialState: PlaylistState = {
   tracks: [],

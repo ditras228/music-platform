@@ -11,13 +11,17 @@ interface Props extends FieldConfig {
 const InputField = ({ label, rows, multiline, ...props }: Props) => {
   const [field, meta] = useField(props);
   const textareaRef = useRef(null);
-  const [currentValue, setCurrentValue] = useState("");
+  const [currentValue, setCurrentValue] = useState({
+    target: undefined,
+  });
 
   useEffect(() => {
-    textareaRef.current.style.height = "0px";
-    const scrollHeight = textareaRef.current.scrollHeight;
-    textareaRef.current.style.height = scrollHeight + "px";
-  }, [currentValue]);
+    if (multiline) {
+      textareaRef.current.style.height = "0px";
+      const scrollHeight = textareaRef.current.scrollHeight;
+      textareaRef.current.style.height = scrollHeight + "px";
+    }
+  }, [currentValue.target?.value]);
 
   return (
     <div className={classes.input}>
@@ -29,7 +33,7 @@ const InputField = ({ label, rows, multiline, ...props }: Props) => {
           {...props}
           maxLength={250}
           ref={textareaRef}
-          onInput={(e) => setCurrentValue(e.target.value)}
+          onInput={(e) => setCurrentValue({ target: e.target })}
         ></textarea>
       ) : (
         <input

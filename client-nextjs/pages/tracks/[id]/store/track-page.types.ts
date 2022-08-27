@@ -1,9 +1,7 @@
-import { ITrack } from "../../../../types/track";
-
 export enum TrackPageActionTypes {
-  FETCH_TRACK = "SET_TRACK",
-  SET_ERROR = "SET_ERROR",
-  ADD_COMMENT = "ADD_COMMENT",
+  FETCH_TRACK = "[TrackPage] SET_TRACK",
+  SET_ERROR = "[TrackPage] SET_ERROR",
+  ADD_COMMENT = "[TrackPage] ADD_COMMENT",
 }
 
 interface SetTrack {

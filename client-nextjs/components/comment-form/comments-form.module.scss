@@ -1,0 +1,17 @@
+@import "../../styles/mixins/font";
+@import "../../styles/mixins/button";
+
+.commentsForm {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 25px;
+  margin-bottom: 25px;
+
+  &__title {
+    @include fontMedium(bold);
+    margin-bottom: 10px;
+  }
+  &__submitBtn {
+    @include button();
+  }
+}

@@ -3,6 +3,7 @@ export interface IComment {
   userId: number;
   name: string;
   text: string;
+  image: string;
 }
 export interface ITracks {
   current_page: number;
@@ -37,11 +38,11 @@ export interface TrackState {
 }
 
 export enum TrackActionTypes {
-  FETCH_TRACKS = "FETCH_TRACKS",
-  SEARCH_TRACKS = "SEARCH_TRACKS",
-  SET_IS_FETCHING = "SET_IS_FETCHING",
-  FETCH_TRACKS_ERROR = "FETCH_TRACKS_ERROR",
-  REMOVE_TRACK = "REMOVE_TRACK",
+  FETCH_TRACKS = "[Tracks] FETCH_TRACKS",
+  SEARCH_TRACKS = "[Tracks] SEARCH_TRACKS",
+  SET_IS_FETCHING = "[Tracks] SET_IS_FETCHING",
+  FETCH_TRACKS_ERROR = "[Tracks] FETCH_TRACKS_ERROR",
+  REMOVE_TRACK = "[Tracks] REMOVE_TRACK",
 }
 
 interface RemoveTrack {

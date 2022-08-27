@@ -1,4 +1,4 @@
-import { ITrack } from "./track";
+import { ITrack } from "../../../pages/tracks/store/track.types";
 
 export interface PlaylistState {
   tracks: ITrack[];
@@ -7,9 +7,9 @@ export interface PlaylistState {
 }
 
 export enum PlaylistActionTypes {
-  SET_PLAYLIST = "SET_PLAYLIST",
-  SET_PAGE = "SET_PAGE",
-  SET_TOTAL = "SET_TOTAL",
+  SET_PLAYLIST = "[Playlist] SET_PLAYLIST",
+  SET_PAGE = "[Playlist] SET_PAGE",
+  SET_TOTAL = "[Playlist] SET_TOTAL",
 }
 
 interface PlaylistAction {

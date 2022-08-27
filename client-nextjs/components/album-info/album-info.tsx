@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./albm-info.module.scss";
 import PlayAlbumImage from "../play-album-image/play-album-image";
-import { IAlbum } from "../../types/album";
+import { IAlbum } from "../../pages/albums/store/album.types";
 
 interface IAlbumInfo {
   album: IAlbum;

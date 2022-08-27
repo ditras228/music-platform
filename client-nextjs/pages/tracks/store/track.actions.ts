@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
-import { TrackAction, TrackActionTypes } from "../../../types/track";
 import { TracksAPI } from "../../../API/tracksAPI";
+import { TrackAction, TrackActionTypes } from "./track.types";
 
 export const fetchTracks = (token, page) => {
   return async (dispatch: Dispatch<TrackAction>) => {

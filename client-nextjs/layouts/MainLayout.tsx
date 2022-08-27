@@ -1,10 +1,10 @@
 import React from "react";
 import Navbar from "../components/navbar/navbar";
-import Player from "../components/player/player";
 import Head from "next/head";
 import classes from "./MainLayout.module.scss";
 import LoadingModal from "../modals/loading-modal/loading-modal";
 import Sidebar from "../components/sidebar/sidebar";
+import Player from "../components/player/player";
 
 interface MainLayoutProps {
   children: any;

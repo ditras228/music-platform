@@ -7,14 +7,14 @@ import TrackVolume from "../track-volume/track-volume";
 import TrackProgress from "../track-progress/track-progress";
 import Play from "../play/play";
 import cookie from "js-cookie";
-import { ITrack } from "../../types/track";
 import { useSession } from "next-auth/client";
-import { PlayerActionTypes } from "../../types/player";
 import { useDispatch } from "react-redux";
 import {
   fetchNextAlbumPlaylist,
   fetchNextPlaylist,
-} from "./store/playlist.actions";
+} from "../playlist/store/playlist.actions";
+import { ITrack } from "../../pages/tracks/store/track.types";
+import { PlayerActionTypes } from "./store/player.types";
 
 let audio;
 

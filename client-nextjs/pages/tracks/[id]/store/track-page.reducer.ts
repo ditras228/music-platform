@@ -42,7 +42,7 @@ export const trackPageReducer = (
     case TrackPageActionTypes.ADD_COMMENT:
       return {
         ...state,
-        comments: [, action.payload, ...state.comments],
+        comments: [action.payload, ...state.comments],
       };
     default:
       return state;

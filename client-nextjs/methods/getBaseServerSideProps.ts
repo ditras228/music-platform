@@ -11,9 +11,9 @@ import {
 import {
   fetchAlbumPlaylist,
   fetchPlaylist,
-} from "../components/player/store/playlist.actions";
-import { PlayerState } from "../types/player";
+} from "../components/playlist/store/playlist.actions";
 import { TracksAPI } from "../API/tracksAPI";
+import { PlayerState } from "../components/player/store/player.types";
 
 interface IBaseServerSideProps {
   ctx: GetServerSidePropsContext & { store: Store };

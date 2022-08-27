@@ -2,9 +2,9 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import classes from "./album-item.module.scss";
-import { IAlbum } from "../../types/album";
 import PlayAlbumImage from "../play-album-image/play-album-image";
 import { deleteAlbum } from "../../pages/albums/store/album.actions";
+import { IAlbum } from "../../pages/albums/store/album.types";
 
 interface AlbumItemProps {
   album: IAlbum;

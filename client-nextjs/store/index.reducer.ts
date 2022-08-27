@@ -9,7 +9,7 @@ import { playerReducer } from "../components/player/store/player.reducer";
 import { Context, createWrapper, HYDRATE } from "next-redux-wrapper";
 import { trackReducer } from "../pages/tracks/store/track.reducer";
 import { usersReducer } from "../pages/store/user.reducer";
-import { playlistReducer } from "../components/player/store/playlist.reducer";
+import { playlistReducer } from "../components/playlist/store/playlist.reducer";
 import { albumPageReducer } from "../pages/albums/[id]/store/album-page.reducer";
 import { createAlbumReducer } from "../pages/albums/create/store/create-album.reducer";
 import { composeWithDevTools } from "redux-devtools-extension";

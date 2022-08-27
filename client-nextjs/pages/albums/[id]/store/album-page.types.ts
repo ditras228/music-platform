@@ -1,11 +1,9 @@
-import { TrackPageActionTypes } from "./track-page.types";
-
 export enum AlbumPageActionTypes {
-  SET_IS_FETCHING = "SET_IS_FETCHING",
-  SET_ALBUM = "SET_ALBUM",
-  SET_ALBUM_TRACKS = "SET_ALBUM_TRACKS",
-  ADD_COMMENT = "ADD_COMMENT",
-  SET_ERROR = "SET_ERROR",
+  SET_IS_FETCHING = "[AlbumPage] SET_IS_FETCHING",
+  SET_ALBUM = "[AlbumPage] SET_ALBUM",
+  SET_ALBUM_TRACKS = "[AlbumPage] SET_ALBUM_TRACKS",
+  ADD_COMMENT = "[AlbumPage] ADD_COMMENT",
+  SET_ERROR = "[AlbumPage] SET_ERROR",
 }
 
 interface SetAlbumFirstAction {

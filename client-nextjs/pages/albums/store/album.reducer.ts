@@ -1,8 +1,4 @@
-import {
-  AlbumAction,
-  AlbumActionTypes,
-  AlbumState,
-} from "../../../types/album";
+import { AlbumAction, AlbumActionTypes, AlbumState } from "./album.types";
 
 const initialState: AlbumState = {
   albums: [],

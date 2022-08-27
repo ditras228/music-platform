@@ -10,7 +10,6 @@ import AlbumTrackList from "../../../components/album-track-list/album-track-lis
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { NextThunkDispatch, wrapper } from "../../../store/index.reducer";
 import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
-import { AlbumPageActionTypes } from "./store/album-page.types";
 import { setAlbum } from "./store/album-page.actions";
 
 const AlbumPage = ({ album, token, userId }) => {
@@ -38,7 +37,7 @@ const AlbumPage = ({ album, token, userId }) => {
           user_id={userId}
           hideSearch={true}
         />
-        <AlbumComments album={album} session={session} token={token} />
+        <AlbumComments session={session} token={token} />
       </div>
     </MainLayout>
   );

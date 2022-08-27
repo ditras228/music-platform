@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import classes from "./album-track-list.module.scss";
 import { useDispatch } from "react-redux";
 import TrackItem from "../track-item/track-item";
-import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import TrackSearch from "../track-search/track-search";
 import { fetchAlbumNext } from "../../pages/albums/store/album.actions";
 import { AlbumPageActionTypes } from "../../pages/albums/[id]/store/album-page.types";
+import { ITrack } from "../../pages/tracks/store/track.types";
 
 interface TrackListProps {
   tracks: ITrack[];

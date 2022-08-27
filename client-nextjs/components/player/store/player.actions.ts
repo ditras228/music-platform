@@ -1,6 +1,6 @@
-import { PlayerActions, PlayerActionTypes } from "../../../types/player";
-import { ITrack } from "../../../types/track";
 import { Dispatch } from "react";
+import { ITrack } from "../../../pages/tracks/store/track.types";
+import { PlayerActions, PlayerActionTypes } from "./player.types";
 
 export const playTrack = (): PlayerActions => {
   return { type: PlayerActionTypes.PLAY };

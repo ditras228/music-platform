@@ -1,4 +1,4 @@
-import { IComment, ITrack } from "./track";
+import { IComment, ITrack } from "../../tracks/store/track.types";
 
 export interface IAlbum {
   id: number;
@@ -37,12 +37,12 @@ export interface AlbumState {
 }
 
 export enum AlbumActionTypes {
-  FETCH_ALBUMS = "FETCH_ALBUMS",
-  FETCH_ALBUMS_ERROR = "FETCH_ALBUMS_ERROR",
-  ADD_TRACK_TO_ALBUM = "ADD_TRACK_TO_ALBUM",
-  REMOVE_TRACK_FROM_ALBUM = "REMOVE_TRACK_FROM_ALBUM",
-  REMOVE_ALBUM = "REMOVE_ALBUM",
-  SET_IS_FETCHING = "SET_IS_FETCHING",
+  FETCH_ALBUMS = "[Albums] FETCH_ALBUMS",
+  FETCH_ALBUMS_ERROR = "[Albums] FETCH_ALBUMS_ERROR",
+  ADD_TRACK_TO_ALBUM = "[Albums] ADD_TRACK_TO_ALBUM",
+  REMOVE_TRACK_FROM_ALBUM = "[Albums] REMOVE_TRACK_FROM_ALBUM",
+  REMOVE_ALBUM = "[Albums] REMOVE_ALBUM",
+  SET_IS_FETCHING = "[Albums] SET_IS_FETCHING",
 }
 
 interface RemoveAlbum {

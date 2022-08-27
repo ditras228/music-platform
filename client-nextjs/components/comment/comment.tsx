@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./comment.module.scss";
 import Avatar from "../avatar/avatar";
+import { IComment } from "../../pages/tracks/store/track.types";
 
 const CommentFC: React.FC<CommentProps> = ({ comment }) => {
   return (
@@ -18,10 +19,5 @@ const CommentFC: React.FC<CommentProps> = ({ comment }) => {
 export default CommentFC;
 
 type CommentProps = {
-  comment: {
-    name: string;
-    color: string;
-    text: string;
-    image: string;
-  };
+  comment: IComment;
 };

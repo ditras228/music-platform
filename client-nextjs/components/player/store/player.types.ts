@@ -1,5 +1,4 @@
-import { ITrack } from "./track";
-import { AlbumActionTypes, IAlbum } from "./album";
+import { ITrack } from "../../../pages/tracks/store/track.types";
 
 export interface PlayerState {
   active: null | ITrack;
@@ -12,15 +11,15 @@ export interface PlayerState {
 }
 
 export enum PlayerActionTypes {
-  PLAY = "PLAY",
-  PAUSE = "PAUSE",
-  SET_ACTIVE = "SET_ACTIVE",
-  SET_ACTIVE__ALBUM = "SET_ACTIVE__ALBUM",
-  SET_DURATION = "SET_DURATION",
-  SET_CURRENT_TIME = "SET_CURRENT_TIME",
-  SET_VOLUME = "SET_VOLUME",
-  SET_PLAYER = "SET_PLAYER",
-  SET_CURRENT_ALBUM = "SET_CURRENT_ALBUM",
+  PLAY = "[Player] PLAY",
+  PAUSE = "[Player] PAUSE",
+  SET_ACTIVE = "[Player] SET_ACTIVE",
+  SET_ACTIVE__ALBUM = "[Player] SET_ACTIVE__ALBUM",
+  SET_DURATION = "[Player] SET_DURATION",
+  SET_CURRENT_TIME = "[Player] SET_CURRENT_TIME",
+  SET_VOLUME = "[Player] SET_VOLUME",
+  SET_PLAYER = "[Player] SET_PLAYER",
+  SET_CURRENT_ALBUM = "[Player] SET_CURRENT_ALBUM",
 }
 interface SetCurrentAlbumAction {
   type: PlayerActionTypes.SET_CURRENT_ALBUM;

@@ -1,4 +1,4 @@
-import { ITrack } from "../../../../types/track";
+import { ITrack } from "../../../tracks/store/track.types";
 
 export interface CreateAlbumState {
   albumTracks: ITrack[];

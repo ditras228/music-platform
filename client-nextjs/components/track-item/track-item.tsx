@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ITrack } from "../../types/track";
 import { useRouter } from "next/router";
 import { useActions } from "../../hooks/useAction";
 import { useDispatch } from "react-redux";
@@ -8,6 +7,7 @@ import classes from "./track-item.module.scss";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import PlayImage from "../play-image/play-image";
 import { deleteTrack } from "../../pages/tracks/store/track.actions";
+import { ITrack } from "../../pages/tracks/store/track.types";
 
 interface TrackItemProps {
   track: ITrack;

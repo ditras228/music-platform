@@ -1,9 +1,4 @@
-import {
-  PlayerActions,
-  PlayerActionTypes,
-  PlayerState,
-} from "../../../types/player";
-import { AlbumActionTypes } from "../../../types/album";
+import { PlayerActions, PlayerActionTypes, PlayerState } from "./player.types";
 
 const initialState: PlayerState = {
   currentTime: 0,

@@ -5,9 +5,9 @@ export interface UserState {
 }
 
 export enum UsersActionTypes {
-  ADD_ERROR = "ADD_ERROR",
-  IS_LOADING = "IS_LOADING",
-  REDIRECT_TO = "REDIRECT_TO",
+  ADD_ERROR = "[User] ADD_ERROR",
+  IS_LOADING = "[User] IS_LOADING",
+  REDIRECT_TO = "[User] REDIRECT_TO",
 }
 
 interface FetchUsersErrorAction {
