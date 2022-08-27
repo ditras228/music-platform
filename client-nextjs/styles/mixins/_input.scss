@@ -10,3 +10,16 @@
     border: 2px solid #14142b;
   }
 }
+@mixin inputArea() {
+  background-color: #eff0f6;
+  padding: 18px 24px 0 24px;
+  color: #a0a3bd;
+  border-color: transparent;
+  overflow-y: hidden;
+  resize: none;
+  @include fontSmall();
+
+  &:focus {
+    border: 2px solid #14142b;
+  }
+}

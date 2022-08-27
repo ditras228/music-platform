@@ -28,7 +28,23 @@
       @include fontXSmall();
     }
   }
+  &__area {
+    @include inputArea();
+    color: #14142b;
+    border: 2px solid transparent;
 
+    &:focus {
+      background-color: #fcfcfc;
+      border: 2px solid black;
+      outline: none;
+    }
+
+    &:focus ~ #{$root}__label,
+    &:not(:placeholder-shown) ~ #{$root}__label {
+      top: 13px;
+      @include fontXSmall();
+    }
+  }
   &__label {
     position: absolute;
     left: 24px;
