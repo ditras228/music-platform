@@ -15,20 +15,19 @@ import classes from "./create.module.scss";
 import { NextThunkDispatch, wrapper } from "../../../store/index.reducer";
 import { fetchTracks } from "../../tracks/store/track.actions";
 import { CreateAlbum } from "../../store/user.actions";
-import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
+import {
+  die,
+  getBaseServerSideProps,
+} from "../../../methods/getBaseServerSideProps";
+import AlbumCreateTrackListWrapper from "../../../components/album-create-track-list-wrapper/album-create-track-list-wrapper";
 
 const InfoSchema = Yup.object({
   name: Yup.string().required("Обязательно"),
   author: Yup.string().required("Обязательно"),
 });
+
 const ImageSchema = Yup.object().shape({
-  picture: Yup.mixed()
-    .required("Обязательно")
-    .nullable()
-    .test({
-      message: "Должна быть квардатной",
-      test: (img) => img?.width === img?.height,
-    }),
+  picture: Yup.mixed().required("Обязательно"),
 });
 
 const TrackSchema = Yup.object().shape({
@@ -42,9 +41,11 @@ const TrackSchema = Yup.object().shape({
 
 const Create = ({ token, userId }) => {
   const [image, setImage] = useState("");
+  const [imageName, setImageName] = useState("");
+
   const router = useRouter();
   const redirectTo = useTypedSelector((state) => state.user.redirectTo);
-  const { tracks, error } = useTypedSelector((state) => state.track);
+  const { tracks } = useTypedSelector((state) => state.track);
   const dispatch = useDispatch();
   const previewCanvasRef = useRef(null);
 
@@ -58,7 +59,7 @@ const Create = ({ token, userId }) => {
         <MultiStepForm
           initialValues={{
             name: "",
-            artist: "",
+            author: "",
             image: undefined,
             tracks: [] as Array<string>,
           }}
@@ -88,6 +89,8 @@ const Create = ({ token, userId }) => {
                 accept={"image/*"}
                 name={"picture"}
                 setImage={setImage}
+                fileName={imageName}
+                setFileName={setImageName}
               />
             </div>
 
@@ -98,7 +101,7 @@ const Create = ({ token, userId }) => {
             <div className={classes.createAlbumContent__tracksTitle}>
               Выберите 3+ треков
             </div>
-            <TrackList
+            <AlbumCreateTrackListWrapper
               tracks={tracks}
               token={token}
               user_id={userId}
@@ -115,6 +118,10 @@ export default Create;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await getBaseServerSideProps({ ctx });
+  if (!session) {
+    return die();
+  }
+
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
   await dispatch(fetchTracks(session.accessToken, 1));
 

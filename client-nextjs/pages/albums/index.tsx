@@ -8,11 +8,16 @@ import classes from "./index.module.scss";
 import AlbumList from "../../components/album-list/album-list";
 import { fetchAlbums, searchAlbums } from "./store/album.actions";
 import { NextThunkDispatch, wrapper } from "../../store/index.reducer";
-import { getBaseServerSideProps } from "../../methods/getBaseServerSideProps";
+import {
+  die,
+  getBaseServerSideProps,
+} from "../../methods/getBaseServerSideProps";
 
 const Index = ({ token, userId }) => {
   const router = useRouter();
-  const { albums, error } = useTypedSelector((state) => state.album);
+  const { albums, error, current_page } = useTypedSelector(
+    (state) => state.album
+  );
   const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
 
@@ -30,7 +35,7 @@ const Index = ({ token, userId }) => {
     }
     setTimer(
       setTimeout(async () => {
-        await dispatch(searchAlbums(values, token));
+        await dispatch(searchAlbums(values, token, current_page + 1));
       }, 500)
     );
   };
@@ -67,8 +72,11 @@ export default Index;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await getBaseServerSideProps({ ctx });
-  const dispatch = ctx.store.dispatch as NextThunkDispatch;
+  if (!session) {
+    return die();
+  }
 
+  const dispatch = ctx.store.dispatch as NextThunkDispatch;
   await dispatch(fetchAlbums(session.accessToken));
 
   return {

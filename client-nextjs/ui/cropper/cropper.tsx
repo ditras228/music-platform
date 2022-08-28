@@ -64,7 +64,7 @@ export default function Cropper({ upImg, previewCanvasRef }: props) {
       guides={true}
       onChange={(c) => setCrop(c)}
       onComplete={(c) => setCompletedCrop(c)}
-      style={{ width: 300 }}
+      style={{ width: "auto" }}
     />
   );
 }

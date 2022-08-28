@@ -15,7 +15,8 @@ interface AlbumItemProps {
 const AlbumItem: React.FC<AlbumItemProps> = ({ album, token, userId }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const deleteOne = async () => {
+  const deleteOne = (e) => {
+    e.stopPropagation();
     dispatch(deleteAlbum(album.id, token));
   };
 
@@ -51,7 +52,7 @@ const SwitchView = ({ deleteOne, userId, album }: ISwitchVIew) => {
     <button
       disabled={isNotOwner}
       className={classes.album__delete}
-      onClick={deleteOne}
+      onClick={(e) => deleteOne(e)}
     ></button>
   );
 };

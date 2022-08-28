@@ -11,9 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class AlbumController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Album::paginate(15);
+        $search = $request->search;
+        $albums = Album::where('name', 'LIKE', "%{$search}%")->paginate(15);
+
+        foreach($albums as $newAlbums){
+            $newAlbums->page = $albums->currentPage();
+        }
+        return $albums;
     }
 
     public function store(Request $request)
@@ -81,7 +87,8 @@ class AlbumController extends Controller
             ->select('name', 'image', 'text')
             ->where('comments.album_id', '=', $id)
             ->orderBy('comments.id', 'desc')
-            ->get();
+            ->paginate(15);
+
 
         $album['comments'] = $comments;
 
@@ -166,11 +173,6 @@ class AlbumController extends Controller
 
         $album->delete();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Success delete'
-        ])->setStatusCode(200);
+        return $album->id;
     }
-
-
 }

@@ -1,4 +1,5 @@
 import { AlbumAction, AlbumActionTypes, AlbumState } from "./album.types";
+import { TrackActionTypes } from "../../tracks/store/track.types";
 
 const initialState: AlbumState = {
   albums: [],
@@ -30,7 +31,14 @@ export const albumReducer = (
         ...state,
         isFetching: action.payload,
       };
-
+    case AlbumActionTypes.SEARCH_ALBUMS:
+      return {
+        ...state,
+        error: "",
+        albums: action.payload.data,
+        total: action.payload.total,
+        current_page: action.payload.current_page,
+      };
     default:
       return state;
   }

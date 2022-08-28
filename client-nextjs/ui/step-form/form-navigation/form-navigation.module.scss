@@ -1,14 +1,29 @@
 @import "../../../styles/mixins/button";
+@import "../../../styles/mixins/font";
 
 .formNavigation {
   display: grid;
   grid-template-columns: 100px 1fr 100px;
   margin-top: 50px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px 0;
+  background-color: #ffffff;
+
   &__button {
     @include button();
 
     &:last-child {
       grid-column: 3/4;
     }
+  }
+
+  &__error {
+    color: #c30052;
+    @include fontLarge();
+    text-align: center;
+    align-self: center;
   }
 }

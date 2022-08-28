@@ -87,14 +87,13 @@ class TrackController extends Controller
             ->select('name', 'image', 'text')
             ->where('comments.track_id', '=', $id)
             ->orderBy('comments.id', 'desc')
-            ->get();
+            ->paginate(15);
 
         $track['comments'] = $comments;
         return $track;
     }
 
-    public
-    function update(Request $request, int $id)
+    public function update(Request $request, int $id)
     {
         $validator = Validator::make(
             $request->all(), [
@@ -154,9 +153,6 @@ class TrackController extends Controller
 
         $track->delete();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Success delete'
-        ])->setStatusCode(200);
+        return $track->id;
     }
 }

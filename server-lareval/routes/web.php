@@ -31,14 +31,19 @@ Route::middleware([Authorization::class])->group(function () {
 //    Route::apiResource('/track', TrackController::class);
 
     Route::post('/track/', [TrackController::class, 'index']);
-    Route::get('/track/{id}', [TrackController::class, 'show']);
+    Route::post('/track/{id}', [TrackController::class, 'show']);
     Route::post('/track/create', [TrackController::class, 'store']);
     Route::put('/track/{id}', [TrackController::class, 'update']);
     Route::delete('/track/{id}', [TrackController::class, 'destroy']);
 
     Route::put('/listen/{track}', [TrackListensController::class, 'update']);
 
-    Route::apiResource('/album', AlbumController::class);
+    Route::post('/album/', [AlbumController::class, 'index']);
+    Route::post('/album/{id}', [AlbumController::class, 'show']);
+    Route::post('/album/create', [AlbumController::class, 'store']);
+    Route::put('/album/{id}', [AlbumController::class, 'update']);
+    Route::delete('/album/{id}', [AlbumController::class, 'destroy']);
+
     Route::apiResource('/comment', CommentController::class);
 
 });

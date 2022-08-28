@@ -1,5 +1,6 @@
 import { AlbumPageAction, AlbumPageActionTypes } from "./album-page.types";
 import { IAlbum, ITrackData } from "../../store/album.types";
+import { TrackPageActionTypes } from "../../../tracks/[id]/store/track-page.types";
 
 const initialState: IAlbum = {
   id: 0,
@@ -10,7 +11,7 @@ const initialState: IAlbum = {
   author: "",
   image: "",
   tracks: null as ITrackData,
-  comments: [],
+  comments: null,
   isFetching: false,
 };
 
@@ -41,7 +42,25 @@ export const albumPageReducer = (
     case AlbumPageActionTypes.ADD_COMMENT:
       return {
         ...state,
-        comments: [action.payload, ...state.comments],
+        comments: {
+          ...state.comments,
+          data: [action.payload, ...state.comments.data],
+          total: state.comments.total + 1,
+        },
+      };
+    case AlbumPageActionTypes.SET_ALBUM_COMMENTS:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          data: [...state.comments.data, ...action.payload.comments.data],
+          current_page: action.payload.comments.current_page,
+        },
+      };
+    case AlbumPageActionTypes.SET_COMMENTS_FETCHING:
+      return {
+        ...state,
+        isFetching: action.payload,
       };
     default:
       return state;

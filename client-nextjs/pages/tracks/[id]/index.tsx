@@ -8,7 +8,10 @@ import TrackLyrics from "../../../components/track-lyrics/track-lyrics";
 import TrackComments from "../../../components/track-comments/track-comments";
 import TrackInfo from "../../../components/track-info/track-info";
 import { NextThunkDispatch, wrapper } from "../../../store/index.reducer";
-import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
+import {
+  die,
+  getBaseServerSideProps,
+} from "../../../methods/getBaseServerSideProps";
 import { setTrack } from "./store/track-page.actions";
 
 const TrackPage = ({ track, token }) => {
@@ -39,6 +42,10 @@ export default TrackPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await getBaseServerSideProps({ ctx });
+  if (!session) {
+    return die();
+  }
+
   const response = await TracksAPI.getOne(ctx.params.id, session.accessToken);
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
   dispatch(setTrack(response.data));

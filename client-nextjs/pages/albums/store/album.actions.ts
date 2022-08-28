@@ -3,11 +3,12 @@ import { AlbumsAPI } from "../../../API/albumsAPI";
 import { AlbumPageActionTypes } from "../[id]/store/album-page.types";
 import { AlbumAction, AlbumActionTypes } from "./album.types";
 
-export const fetchAlbums = (token) => {
+export const fetchAlbums = (token, page) => {
   return async (dispatch: Dispatch<AlbumAction>) => {
     try {
-      const { data } = await AlbumsAPI.getAlbums(token);
+      const { data } = await AlbumsAPI.getAlbums(token, page);
       dispatch({ type: AlbumActionTypes.FETCH_ALBUMS, payload: data.data });
+      dispatch({ type: AlbumActionTypes.SET_IS_FETCHING, payload: false });
     } catch (e) {
       dispatch({
         type: AlbumActionTypes.FETCH_ALBUMS_ERROR,
@@ -17,11 +18,14 @@ export const fetchAlbums = (token) => {
   };
 };
 
-export const searchAlbums = (query: string, token: string) => {
+export const searchAlbums = (query: string, token: string, page: number) => {
   return async (dispatch: Dispatch<AlbumAction>) => {
     try {
-      const response = await AlbumsAPI.searchAlbums(query, token);
-      dispatch({ type: AlbumActionTypes.FETCH_ALBUMS, payload: response.data });
+      const response = await AlbumsAPI.searchAlbums(query, token, page);
+      dispatch({
+        type: AlbumActionTypes.SEARCH_ALBUMS,
+        payload: response.data,
+      });
     } catch (e) {
       dispatch({
         type: AlbumActionTypes.FETCH_ALBUMS_ERROR,
@@ -40,7 +44,7 @@ export const deleteAlbum = (id: number, token: string) => {
           payload: response.data,
         });
       });
-      await dispatch(fetchAlbums(token));
+      await dispatch(fetchAlbums(token, 1));
     } catch (e) {
       dispatch({
         type: AlbumActionTypes.FETCH_ALBUMS_ERROR,

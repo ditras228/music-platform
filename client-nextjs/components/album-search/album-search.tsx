@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import classes from "./Album-search.module.scss";
+import classes from "./album-search.module.scss";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
+import { searchAlbums } from "../../pages/albums/store/album.actions";
 
 interface AlbumSearchProps {
   token: string;
-  hideSearch?: boolean;
 }
 
-const AlbumSearch: React.FC<AlbumSearchProps> = ({ token, hideSearch }) => {
+const AlbumSearch: React.FC<AlbumSearchProps> = ({ token }) => {
   const [timer, setTimer] = useState(null);
   const dispatch = useDispatch();
 
@@ -18,42 +18,36 @@ const AlbumSearch: React.FC<AlbumSearchProps> = ({ token, hideSearch }) => {
     }
     setTimer(
       setTimeout(async () => {
-        // dispatch({type: AlbumActionTypes.SET_IS_FETCHING, payload: true})
-        // dispatch(searchAlbums(values, token, 1))
+        dispatch(searchAlbums(values, token, 1));
       }, 500)
     );
   };
-
   return (
     <div className={classes.AlbumList}>
-      {!hideSearch && (
-        <Formik
-          initialValues={{
-            query: "",
-          }}
-          onSubmit={(values) => {
-            handleSearch(values.query);
-          }}
-        >
-          {(formik) => (
-            <div className={classes.AlbumSearch}>
-              <input
-                placeholder=" "
-                className={classes.AlbumSearch__field}
-                name={"query"}
-                value={formik.values.query}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                  formik.handleSubmit();
-                }}
-              />
-              <label className={classes.AlbumSearch__label}>
-                Введите запрос
-              </label>
-            </div>
-          )}
-        </Formik>
-      )}
+      <Formik
+        initialValues={{
+          query: "",
+        }}
+        onSubmit={(values) => {
+          handleSearch(values.query);
+        }}
+      >
+        {(formik) => (
+          <div className={classes.AlbumSearch}>
+            <input
+              placeholder=" "
+              className={classes.AlbumSearch__field}
+              name={"query"}
+              value={formik.values.query}
+              onChange={(e) => {
+                formik.handleChange(e);
+                formik.handleSubmit();
+              }}
+            />
+            <label className={classes.AlbumSearch__label}>Введите запрос</label>
+          </div>
+        )}
+      </Formik>
     </div>
   );
 };

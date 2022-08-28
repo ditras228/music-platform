@@ -13,6 +13,7 @@ interface TrackListProps {
   user_id: number;
   view?: string;
   hideSearch?: boolean;
+  formik?: any;
 }
 
 const TrackList: React.FC<TrackListProps> = ({
@@ -21,6 +22,7 @@ const TrackList: React.FC<TrackListProps> = ({
   user_id,
   view,
   hideSearch,
+  formik,
 }) => {
   const { total, current_page, isFetching } = useTypedSelector(
     (state) => state.track
@@ -62,6 +64,7 @@ const TrackList: React.FC<TrackListProps> = ({
             token={token}
             view={view}
             userId={user_id}
+            formik={formik}
           />
         ))}
       </div>

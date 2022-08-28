@@ -1,5 +1,11 @@
 import { IComment, ITrack } from "../../tracks/store/track.types";
+import { IComments } from "../../tracks/[id]/store/track-page.types";
 
+export interface IAlbums {
+  current_page: number;
+  total: number;
+  data: IAlbums[];
+}
 export interface IAlbum {
   id: number;
   listens: number;
@@ -9,7 +15,7 @@ export interface IAlbum {
   author: string;
   image: string;
   tracks: ITrackData;
-  comments: IComment[];
+  comments: IComments;
   isFetching: boolean;
 }
 
@@ -29,11 +35,11 @@ export interface ITrackData {
 }
 
 export interface AlbumState {
-  albums: IAlbum[];
+  albums: IAlbums;
   error: string;
   isFetching: boolean;
-  current_page: 0;
-  total: 0;
+  current_page: number;
+  total: number;
 }
 
 export enum AlbumActionTypes {
@@ -43,6 +49,7 @@ export enum AlbumActionTypes {
   REMOVE_TRACK_FROM_ALBUM = "[Albums] REMOVE_TRACK_FROM_ALBUM",
   REMOVE_ALBUM = "[Albums] REMOVE_ALBUM",
   SET_IS_FETCHING = "[Albums] SET_IS_FETCHING",
+  SEARCH_ALBUMS = "[Albums] SEARCH_ALBUMS",
 }
 
 interface RemoveAlbum {
@@ -74,6 +81,10 @@ interface SetIsFetchingAction {
   type: AlbumActionTypes.SET_IS_FETCHING;
   payload: boolean;
 }
+interface SearchAlbums {
+  type: AlbumActionTypes.SEARCH_ALBUMS;
+  payload: IAlbums;
+}
 
 export type AlbumAction =
   | FetchAlbumsAction
@@ -81,4 +92,5 @@ export type AlbumAction =
   | AddTrackToAlbum
   | RemoveTrackFromAlbum
   | RemoveAlbum
-  | SetIsFetchingAction;
+  | SetIsFetchingAction
+  | SearchAlbums;

@@ -6,7 +6,10 @@ import TrackList from "../../components/track-list/track-list";
 import classes from "./index.module.scss";
 import { fetchTracks } from "./store/track.actions";
 import { NextThunkDispatch, wrapper } from "../../store/index.reducer";
-import { getBaseServerSideProps } from "../../methods/getBaseServerSideProps";
+import {
+  die,
+  getBaseServerSideProps,
+} from "../../methods/getBaseServerSideProps";
 
 const Index = ({ token, userId }) => {
   const router = useRouter();
@@ -46,13 +49,9 @@ export default Index;
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await getBaseServerSideProps({ ctx });
   if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
+    return die();
   }
+
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
   await dispatch(fetchTracks(session.accessToken, 1));
 

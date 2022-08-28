@@ -1,5 +1,5 @@
 import React from "react";
-import { FormikValues } from "formik";
+import { FormikValues, useFormikContext } from "formik";
 import classes from "./form-navigation.module.scss";
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const FormNavigation = (props: Props) => {
+  const formik = useFormikContext();
   return (
     <div className={classes.formNavigation}>
       <button
@@ -19,6 +20,9 @@ const FormNavigation = (props: Props) => {
       >
         Назад
       </button>
+      <div className={classes.formNavigation__error}>
+        {formik.errors?.tracks}
+      </div>
       <button
         className={classes.formNavigation__button}
         type={"submit"}

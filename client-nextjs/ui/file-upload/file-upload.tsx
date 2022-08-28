@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { FieldConfig, useField, useFormikContext } from "formik";
 import classes from "./file-upload.module.scss";
 
@@ -9,8 +9,10 @@ export const fileFormats = {
 
 interface Props extends FieldConfig {
   accept: string;
-  setImage?: any;
-  setAudio?: any;
+  fileName: string;
+  setImage?: (result: string) => void;
+  setAudio?: (result: string) => void;
+  setFileName?: (result: string) => void;
 }
 
 interface IGetTitle {
@@ -24,10 +26,11 @@ const FileUpload = ({
   children,
   setImage,
   setAudio,
+  setFileName,
+  fileName,
   ...props
 }: Props): ReactElement => {
   const ref = useRef<HTMLInputElement>();
-  const [fileName, setFileName] = useState("");
   const [field, meta] = useField(props);
   const { setFieldValue } = useFormikContext();
 
@@ -37,9 +40,9 @@ const FileUpload = ({
 
     reader.onloadend = function () {
       if (accept === fileFormats.IMAGE) {
-        setImage(reader.result);
+        setImage(reader.result.toString());
       } else {
-        setAudio(reader.result);
+        setAudio(reader.result.toString());
       }
       setFileName(file.name);
     };

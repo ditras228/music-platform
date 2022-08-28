@@ -12,7 +12,19 @@ export const TracksAPI = {
   },
 
   getOne(params, token?): any {
-    return instance.get("/track/" + params, {
+    let formData = new FormData();
+    formData.append("page", 1);
+
+    return instance.post(`/track/${params}`, formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  next(params, page, token?): any {
+    let formData = new FormData();
+    formData.append("page", page);
+
+    return instance.post(`/track/${params}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },

@@ -9,7 +9,10 @@ import MainLayout from "../../../layouts/MainLayout";
 import AlbumTrackList from "../../../components/album-track-list/album-track-list";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { NextThunkDispatch, wrapper } from "../../../store/index.reducer";
-import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
+import {
+  die,
+  getBaseServerSideProps,
+} from "../../../methods/getBaseServerSideProps";
 import { setAlbum } from "./store/album-page.actions";
 
 const AlbumPage = ({ album, token, userId }) => {
@@ -47,6 +50,10 @@ export default AlbumPage;
 
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await getBaseServerSideProps({ ctx });
+  if (!session) {
+    return die();
+  }
+
   const response = await AlbumsAPI.getOneAlbum(
     ctx.params.id,
     session.accessToken,

@@ -1,68 +1,70 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useActions } from "../../hooks/useAction";
 import { useDispatch } from "react-redux";
 import classes from "./track-item.module.scss";
-// import { useFormikContext } from "formik";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
 import PlayImage from "../play-image/play-image";
 import { deleteTrack } from "../../pages/tracks/store/track.actions";
 import { ITrack } from "../../pages/tracks/store/track.types";
 
 interface TrackItemProps {
   track: ITrack;
-  active?: boolean;
   view?: string;
   token: string;
   userId: number;
+  formik?: any;
 }
-
-type formik = {
-  name: "";
-  artist: "";
-  picture: undefined;
-  tracks: Array<number>;
-};
 
 const TrackItem: React.FC<TrackItemProps> = ({
   track,
-  active = false,
   view,
   userId,
   token,
+  formik,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [isChecked, setChecked] = useState(false);
-  // const formik = useFormikContext<formik>();
 
-  const deleteOne = (): void => {
+  const deleteOne = (e): void => {
+    e.stopPropagation();
     dispatch(deleteTrack(track.id, token));
   };
 
   const editState = (): void => {
-    // if (formik) {
-    //   setChecked(!isChecked);
-    //   if (isChecked === false) {
-    //     formik.setFieldValue(
-    //       "tracks",
-    //       [...formik.values.tracks, track.id],
-    //       true
-    //     );
-    //   }
-    //   if (isChecked === true) {
-    //     formik.setFieldValue(
-    //       "tracks",
-    //       [
-    //         ...formik.values.tracks.filter(
-    //           (thisTrack) => thisTrack !== track.id
-    //         ),
-    //       ],
-    //       true
-    //     );
-    //   }
-    // }
+    if (formik) {
+      if (isChecked === false) {
+        formik.setFieldValue(
+          "tracks",
+          [...formik.values.tracks, track.id],
+          true
+        );
+      }
+      if (isChecked === true) {
+        formik.setFieldValue(
+          "tracks",
+          [
+            ...formik.values.tracks.filter(
+              (thisTrack) => thisTrack !== track.id
+            ),
+          ],
+          true
+        );
+      }
+    }
   };
+
+  useEffect(() => {
+    if (formik) {
+      const trackArray = formik?.values.tracks.filter(
+        (item) => item == track.id
+      );
+      if (trackArray[0] == track.id) {
+        setChecked(true);
+      } else {
+        setChecked(false);
+      }
+    }
+  }, [formik?.values]);
 
   return (
     <div
@@ -110,7 +112,7 @@ const SwitchView = ({ view, deleteOne, checked, userId, track, editState }) => {
         <button
           disabled={isNotOwner}
           className={classes.track__delete}
-          onClick={deleteOne}
+          onClick={(e) => deleteOne(e)}
         ></button>
       );
   }

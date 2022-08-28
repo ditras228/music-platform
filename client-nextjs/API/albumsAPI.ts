@@ -1,20 +1,40 @@
 import { instance } from "./index";
+import FormData from "form-data";
 
 export const AlbumsAPI = {
-  getAlbums(token) {
-    return instance.get("/album", {
+  getAlbums(token, page): any {
+    let formData = new FormData();
+    formData.append("search", "");
+
+    return instance.post(`/album?page=${page}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
-  searchAlbums(query, token) {
-    return instance.get("/album/search?query=" + query, {
+  searchAlbums(query, token, page) {
+    let formData = new FormData();
+    formData.append("search", query);
+    formData.append("page", page);
+
+    return instance.post(`/album/?page=${page}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   getOneAlbum(params, token, page: number) {
-    return instance.get("/album/" + params + "?page=" + page, {
+    let formData = new FormData();
+    formData.append("page", 1);
+
+    return instance.post(`/album/${params}?page=${page}`, formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  next(params, page, token?): any {
+    let formData = new FormData();
+    formData.append("page", page);
+
+    return instance.post(`/album/${params}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -31,7 +51,7 @@ export const AlbumsAPI = {
     formData.append("author", data.author);
     formData.append("image", data.picture);
     formData.append("tracks", data.tracks);
-    return instance.post("/album", formData, {
+    return instance.post("/album/create", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,

@@ -113,7 +113,7 @@ const Player = () => {
     } else {
       audio.play();
     }
-  }, [pause]);
+  }, [pause, active?.id]);
 
   useEffect(() => {
     //Сохраняем в куки плеер

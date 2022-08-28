@@ -25,6 +25,7 @@ const MultiStepForm = ({ children, initialValues, onSubmit }: Props) => {
     setStepNumber(stepNumber + 1);
     setSnapshot(values);
   };
+
   const previous = (values: FormikValues): void => {
     setStepNumber(stepNumber - 1);
     setSnapshot(values);
@@ -77,5 +78,5 @@ const MultiStepForm = ({ children, initialValues, onSubmit }: Props) => {
     </div>
   );
 };
-export const FormStep = ({ stepName = "", children }: any) => children;
+export const FormStep = ({ children }: any) => children;
 export default MultiStepForm;

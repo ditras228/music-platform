@@ -25,6 +25,13 @@ class CommentController extends Controller
             ]
         );
 
+        if(!$request->track_id && !$request->album_id){
+            return response()->json([
+                'status' => false,
+                'errors' => 'Не указан трек или альбом'
+            ])->setStatusCode(404);
+        }
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,

@@ -11,8 +11,8 @@
     position: absolute;
     bottom: -28px;
   }
-  &__field {
-    @include input();
+  &__area {
+    @include inputArea();
     color: #14142b;
     border: 2px solid transparent;
 

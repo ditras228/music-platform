@@ -10,8 +10,12 @@ import { useDispatch } from "react-redux";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import FileUpload, { fileFormats } from "../../../ui/file-upload/file-upload";
 import { wrapper } from "../../../store/index.reducer";
-import { getBaseServerSideProps } from "../../../methods/getBaseServerSideProps";
+import {
+  die,
+  getBaseServerSideProps,
+} from "../../../methods/getBaseServerSideProps";
 import { CreateTrack } from "../../store/user.actions";
+import TextArea from "../../../ui/text-area/text-area";
 
 if (typeof window !== "undefined") {
   var WaveSurfer = require("wavesurfer.js");
@@ -21,6 +25,7 @@ const InfoSchema = Yup.object({
   name: Yup.string().required("Обязательно"),
   artist: Yup.string().required("Обязательно"),
 });
+
 const ImageSchema = Yup.object().shape({
   picture: Yup.mixed().required("Обязательно"),
 });
@@ -30,8 +35,12 @@ const AudioSchema = Yup.object({
 });
 
 const Index = ({ token }) => {
-  const [image, setImage] = useState("");
   const [audio, setAudio] = useState("none");
+  const [image, setImage] = useState("");
+
+  const [audioName, setAudioName] = useState("");
+  const [imageName, setImageName] = useState("");
+
   const router = useRouter();
   const chart = useRef(null);
   const previewCanvasRef = useRef(null);
@@ -82,6 +91,8 @@ const Index = ({ token }) => {
               accept={fileFormats.AUDIO}
               name={"audio"}
               setAudio={setAudio}
+              setFileName={setAudioName}
+              fileName={audioName}
             />
           </FormStep>
 
@@ -89,12 +100,7 @@ const Index = ({ token }) => {
             <div className={classes.createContent__info}>
               <InputField name={"name"} label={"Название трека"} />
               <InputField name={"artist"} label={"Имя исполнителя"} />
-              <InputField
-                name={"text"}
-                label={"Слова к треку"}
-                multiline
-                rows={15}
-              />
+              <TextArea name={"text"} label={"Слова к треку"} rows={15} />
             </div>
           </FormStep>
 
@@ -104,6 +110,8 @@ const Index = ({ token }) => {
                 accept={"image/*"}
                 name={"picture"}
                 setImage={setImage}
+                setFileName={setImageName}
+                fileName={imageName}
               >
                 <button className={classes.createContent__btn}>
                   Загрузить изображение
@@ -121,6 +129,10 @@ const Index = ({ token }) => {
 export default Index;
 export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   const session = await getBaseServerSideProps({ ctx });
+
+  if (!session) {
+    return die();
+  }
 
   return {
     props: {

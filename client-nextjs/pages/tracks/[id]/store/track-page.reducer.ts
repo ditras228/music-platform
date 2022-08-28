@@ -1,6 +1,10 @@
-import { TrackPageActions, TrackPageActionTypes } from "./track-page.types";
+import {
+  ITrackPage,
+  TrackPageActions,
+  TrackPageActionTypes,
+} from "./track-page.types";
 
-const initialState = {
+const initialState: ITrackPage = {
   id: 0,
   name: "",
   artist: "",
@@ -13,6 +17,7 @@ const initialState = {
   page: 0,
   pivot: null,
   error: null,
+  isFetching: false,
 };
 
 export const trackPageReducer = (
@@ -42,7 +47,25 @@ export const trackPageReducer = (
     case TrackPageActionTypes.ADD_COMMENT:
       return {
         ...state,
-        comments: [action.payload, ...state.comments],
+        comments: {
+          ...state.comments,
+          data: [action.payload, ...state.comments.data],
+          total: state.comments.total + 1,
+        },
+      };
+    case TrackPageActionTypes.SET_FETCHING:
+      return {
+        ...state,
+        isFetching: action.payload,
+      };
+    case TrackPageActionTypes.SET_TRACK_COMMENTS:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          data: [...state.comments.data, ...action.payload.comments.data],
+          current_page: action.payload.comments.current_page,
+        },
       };
     default:
       return state;

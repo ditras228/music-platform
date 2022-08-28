@@ -14,6 +14,7 @@ import {
 } from "../components/playlist/store/playlist.actions";
 import { TracksAPI } from "../API/tracksAPI";
 import { PlayerState } from "../components/player/store/player.types";
+import { redirect } from "next/dist/server/api-utils";
 
 interface IBaseServerSideProps {
   ctx: GetServerSidePropsContext & { store: Store };
@@ -49,4 +50,13 @@ export const getBaseServerSideProps = async ({
     }
   }
   return session;
+};
+
+export const die = () => {
+  return {
+    redirect: {
+      destination: "/",
+      permanent: false,
+    },
+  };
 };

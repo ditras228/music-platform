@@ -1,28 +1,28 @@
 import classes from "./comments-form.module.scss";
 import React, { FC } from "react";
-import InputField from "../../ui/input-field/input-field";
-import { IComment } from "../../pages/tracks/store/track.types";
+import TextArea from "../../ui/text-area/text-area";
+import { IComments } from "../../pages/tracks/[id]/store/track-page.types";
 
 interface ITrackComments {
   formik: any;
-  comments: IComment[];
+  comments: IComments;
   session: any;
 }
 
-const CommentsForm: FC<ITrackComments> = ({ formik, comments, session }) => {
+const CommentsForm: FC<ITrackComments> = ({ formik, session, comments }) => {
   return (
     <div>
       <div className={classes.commentsForm__title}>
-        {comments?.length === 0 ? "нет комментариев" : "комментарии"}
+        {comments?.total === 0 ? "нет комментариев" : "комментарии"}
+        {" (" + comments?.total + ")"}
       </div>
       {session && (
         <div className={classes.commentsForm}>
-          <InputField
+          <TextArea
             label={"Введите текст"}
             value={formik.values.text}
             name={"text"}
-            multiline={true}
-          ></InputField>
+          ></TextArea>
           <button
             disabled={!formik.values.text}
             onClick={() => formik.handleSubmit()}
