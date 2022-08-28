@@ -30,19 +30,19 @@ Route::get('/auth/registration/confirm/{id}/{hash}', [RegistrationController::cl
 Route::middleware([Authorization::class])->group(function () {
 //    Route::apiResource('/track', TrackController::class);
 
-    Route::post('/track/', [TrackController::class, 'index']);
-    Route::post('/track/{id}', [TrackController::class, 'show']);
+    Route::post('/tracks/', [TrackController::class, 'index']);
+    Route::post('/tracks/{id}', [TrackController::class, 'show']);
     Route::post('/track/create', [TrackController::class, 'store']);
-    Route::put('/track/{id}', [TrackController::class, 'update']);
-    Route::delete('/track/{id}', [TrackController::class, 'destroy']);
+    Route::put('/tracks/{id}', [TrackController::class, 'update']);
+    Route::delete('/tracks/{id}', [TrackController::class, 'destroy']);
 
     Route::put('/listen/{track}', [TrackListensController::class, 'update']);
 
-    Route::post('/album/', [AlbumController::class, 'index']);
-    Route::post('/album/{id}', [AlbumController::class, 'show']);
+    Route::post('/albums/', [AlbumController::class, 'index']);
+    Route::post('/albums/{id}', [AlbumController::class, 'show']);
     Route::post('/album/create', [AlbumController::class, 'store']);
-    Route::put('/album/{id}', [AlbumController::class, 'update']);
-    Route::delete('/album/{id}', [AlbumController::class, 'destroy']);
+    Route::put('/albums/{id}', [AlbumController::class, 'update']);
+    Route::delete('/albums/{id}', [AlbumController::class, 'destroy']);
 
     Route::apiResource('/comment', CommentController::class);
 

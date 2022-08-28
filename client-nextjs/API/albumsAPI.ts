@@ -6,7 +6,7 @@ export const AlbumsAPI = {
     let formData = new FormData();
     formData.append("search", "");
 
-    return instance.post(`/album?page=${page}`, formData, {
+    return instance.post(`/albums?page=${page}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -16,7 +16,7 @@ export const AlbumsAPI = {
     formData.append("search", query);
     formData.append("page", page);
 
-    return instance.post(`/album/?page=${page}`, formData, {
+    return instance.post(`/albums/?page=${page}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -25,7 +25,7 @@ export const AlbumsAPI = {
     let formData = new FormData();
     formData.append("page", 1);
 
-    return instance.post(`/album/${params}?page=${page}`, formData, {
+    return instance.post(`/albums/${params}?page=${page}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -34,13 +34,13 @@ export const AlbumsAPI = {
     let formData = new FormData();
     formData.append("page", page);
 
-    return instance.post(`/album/${params}`, formData, {
+    return instance.post(`/albums/${params}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   deleteOneAlbum(params, token) {
-    return instance.delete("/album/" + params, {
+    return instance.delete("/albums/" + params, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },

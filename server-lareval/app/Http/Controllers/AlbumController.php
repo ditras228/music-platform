@@ -14,7 +14,7 @@ class AlbumController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $albums = Album::where('name', 'LIKE', "%{$search}%")->paginate(15);
+        $albums = Album::where('name', 'ILIKE', "%{$search}%")->paginate(15);
 
         foreach($albums as $newAlbums){
             $newAlbums->page = $albums->currentPage();

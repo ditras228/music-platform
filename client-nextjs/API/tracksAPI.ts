@@ -6,7 +6,7 @@ export const TracksAPI = {
     let formData = new FormData();
     formData.append("search", "");
 
-    return instance.post(`/track?page=${page}`, formData, {
+    return instance.post(`/tracks?page=${page}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -15,7 +15,7 @@ export const TracksAPI = {
     let formData = new FormData();
     formData.append("page", 1);
 
-    return instance.post(`/track/${params}`, formData, {
+    return instance.post(`/tracks/${params}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -24,13 +24,13 @@ export const TracksAPI = {
     let formData = new FormData();
     formData.append("page", page);
 
-    return instance.post(`/track/${params}`, formData, {
+    return instance.post(`/tracks/${params}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   deleteOne(params, token): any {
-    return instance.delete("/track/" + params, {
+    return instance.delete("/tracks/" + params, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
@@ -39,7 +39,7 @@ export const TracksAPI = {
     let formData = new FormData();
     formData.append("search", query);
 
-    return instance.post(`/track?page=${page}`, formData, {
+    return instance.post(`/tracks?page=${page}`, formData, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },

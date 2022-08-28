@@ -28,7 +28,7 @@ class TrackController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $tracks = Track::where('name', 'LIKE', "%{$search}%")->paginate(15);
+        $tracks = Track::where('name', 'ILIKE', "%{$search}%")->paginate(15);
 
         foreach($tracks as $newTracks){
             $newTracks->page = $tracks->currentPage();
