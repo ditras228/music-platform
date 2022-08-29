@@ -1,12 +1,13 @@
 @import "../../../styles/mixins/button";
 @import "../../../styles/mixins/font";
+@import "../../../styles/mixins/screen";
 
 .formNavigation {
   display: grid;
   grid-template-columns: 100px 1fr 100px;
   margin-top: 50px;
   position: fixed;
-  bottom: 0;
+  bottom: 171px;
   width: 100%;
   max-width: 1200px;
   padding: 20px 0;
@@ -25,5 +26,8 @@
     @include fontLarge();
     text-align: center;
     align-self: center;
+  }
+  @include screen-lg {
+    bottom: 119px;
   }
 }

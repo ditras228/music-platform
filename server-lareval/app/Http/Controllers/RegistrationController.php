@@ -73,6 +73,6 @@ class RegistrationController extends Controller
                 'errors' => 'Токен не валиден'
             ])->setStatusCode(500);
         }
-        return redirect('http://localhost:3000/');
+        return redirect('http://localhost:3000/auth/register-confirmed');
     }
 }

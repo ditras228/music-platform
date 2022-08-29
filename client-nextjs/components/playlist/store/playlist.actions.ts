@@ -16,7 +16,7 @@ export const fetchPlaylist = (token, page) => {
   };
 };
 
-export const fetchNextPlaylist = (token, page) => {
+export const fetchNextPlaylist = (token, page, isPrev?) => {
   return async (dispatch: Dispatch<any>) => {
     await TracksAPI.getTracks(token, page)
       .then((res) => {
@@ -24,7 +24,9 @@ export const fetchNextPlaylist = (token, page) => {
         dispatch({ type: PlaylistActionTypes.SET_PLAYLIST, payload: res.data });
         dispatch({
           type: PlayerActionTypes.SET_ACTIVE,
-          payload: res.data.data[0],
+          payload: isPrev
+            ? res.data.data[res.data.data.length - 1]
+            : res.data.data[0],
         });
       })
       .catch((e) => {
@@ -56,7 +58,7 @@ export const fetchAlbumPlaylist = (token, page, albumId) => {
   };
 };
 
-export const fetchNextAlbumPlaylist = (token, page, albumId) => {
+export const fetchNextAlbumPlaylist = (token, page, albumId, isPrev?) => {
   return async (dispatch: Dispatch<any>) => {
     await AlbumsAPI.getOneAlbum(albumId, token, page)
       .then((res) => {
@@ -71,7 +73,9 @@ export const fetchNextAlbumPlaylist = (token, page, albumId) => {
         });
         dispatch({
           type: PlayerActionTypes.SET_ACTIVE,
-          payload: res.data.tracks.data[0],
+          payload: isPrev
+            ? res.data.tracks.data[res.data.tracks.data.length - 1]
+            : res.data.tracks.data[0],
         });
       })
       .catch((e) => {

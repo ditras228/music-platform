@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./track-progress.module.scss";
+import classes from "./track-volume.module.scss";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useAction";
 
@@ -21,9 +21,7 @@ const Slider: React.FC<TrackVolume> = ({ audio }) => {
 
   return (
     <div className={classes.slider}>
-      <div className={classes.slider__text}>
-        {volume}/{100}
-      </div>
+      <SwitchIcon value={volume}></SwitchIcon>
       <input
         type="range"
         className={classes.slider__input}
@@ -37,3 +35,23 @@ const Slider: React.FC<TrackVolume> = ({ audio }) => {
 };
 
 export default Slider;
+
+const SwitchIcon = ({ value }) => {
+  if (value >= 75) {
+    return <div className={classes.slider__highIcon} />;
+  }
+
+  if (value >= 50 && value < 75) {
+    return <div className={classes.slider__middleIcon} />;
+  }
+
+  if (value > 0 && value < 50) {
+    return <div className={classes.slider__lowIcon} />;
+  }
+
+  if (value === 0) {
+    return <div className={classes.slider__mutedIcon} />;
+  }
+
+  return <div>error</div>;
+};

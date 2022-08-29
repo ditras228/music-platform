@@ -17,7 +17,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make(
             $request->all(), [
-                'name' => ['required'],
+                'email' => ['required'],
                 'password' => ['required']
             ]
         );
@@ -29,7 +29,7 @@ class AuthController extends Controller
             ])->setStatusCode(422);
         }
 
-        $user = User::where('name', $request->name)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (Hash::check($request->password, $user->password)) {
             $account = Account::where('user_id', $user->id)->first();

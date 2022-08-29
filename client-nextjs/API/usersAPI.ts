@@ -10,7 +10,7 @@ export const UsersAPI = {
     });
   },
   login(props): any {
-    return instance.post("auth/login", props);
+    return instance.post("auth/", props);
   },
   registration(props): any {
     return instance.post("auth/registration", props);

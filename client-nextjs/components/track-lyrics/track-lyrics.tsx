@@ -6,7 +6,7 @@ const TrackLyrics = ({ lyrics }) => {
     <div>
       {lyrics && (
         <div className={classes.trackLyrics}>
-          <div className={classes.trackLyrics__title}>Слова к песне</div>
+          <div className={classes.trackLyrics__title}>Слова к треку</div>
           <pre className={classes.trackLyrics__content}>{lyrics}</pre>
         </div>
       )}

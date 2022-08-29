@@ -77,7 +77,7 @@ export const getServerSideProps = wrapper.getServerSideProps(async (ctx) => {
   }
 
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
-  await dispatch(fetchAlbums(session.accessToken));
+  await dispatch(fetchAlbums(session.accessToken, 1));
 
   return {
     props: {

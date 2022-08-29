@@ -1,0 +1,15 @@
+@import "../../../styles/mixins/button";
+@import "../../../styles/mixins/font";
+
+.registerConfirmed {
+  display: grid;
+  justify-content: center;
+  grid-row-gap: 25px;
+
+  &__title {
+    @include fontHeaderSmall();
+  }
+  &__btn {
+    @include button();
+  }
+}

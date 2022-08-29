@@ -28,8 +28,6 @@ Route::get('/auth/registration/confirm/{id}/{hash}', [RegistrationController::cl
 
 
 Route::middleware([Authorization::class])->group(function () {
-//    Route::apiResource('/track', TrackController::class);
-
     Route::post('/tracks/', [TrackController::class, 'index']);
     Route::post('/tracks/{id}', [TrackController::class, 'show']);
     Route::post('/track/create', [TrackController::class, 'store']);

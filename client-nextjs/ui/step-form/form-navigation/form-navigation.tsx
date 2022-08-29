@@ -28,7 +28,7 @@ const FormNavigation = (props: Props) => {
         type={"submit"}
         color={"primary"}
       >
-        {props.isLastStep ? "Готово    " : "Далее"}
+        {props.isLastStep ? "Готово" : "Далее"}
       </button>
     </div>
   );

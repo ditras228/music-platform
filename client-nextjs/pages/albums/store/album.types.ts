@@ -1,11 +1,12 @@
-import { IComment, ITrack } from "../../tracks/store/track.types";
+import { ITrack } from "../../tracks/store/track.types";
 import { IComments } from "../../tracks/[id]/store/track-page.types";
 
 export interface IAlbums {
   current_page: number;
   total: number;
-  data: IAlbums[];
+  data: IAlbum[];
 }
+
 export interface IAlbum {
   id: number;
   listens: number;
@@ -35,7 +36,7 @@ export interface ITrackData {
 }
 
 export interface AlbumState {
-  albums: IAlbums;
+  albums: IAlbum[];
   error: string;
   isFetching: boolean;
   current_page: number;
@@ -59,7 +60,7 @@ interface RemoveAlbum {
 
 interface FetchAlbumsAction {
   type: AlbumActionTypes.FETCH_ALBUMS;
-  payload: IAlbum[];
+  payload: IAlbums;
 }
 
 interface FetchAlbumsErrorAction {

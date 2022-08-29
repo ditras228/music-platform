@@ -1,11 +1,10 @@
 import { AlbumAction, AlbumActionTypes, AlbumState } from "./album.types";
-import { TrackActionTypes } from "../../tracks/store/track.types";
 
 const initialState: AlbumState = {
   albums: [],
   error: "",
   isFetching: false,
-  current_page: 0,
+  current_page: 1,
   total: 0,
 };
 
@@ -17,7 +16,13 @@ export const albumReducer = (
     case AlbumActionTypes.FETCH_ALBUMS_ERROR:
       return { ...state, error: action.payload };
     case AlbumActionTypes.FETCH_ALBUMS:
-      return { ...state, error: "", albums: action.payload };
+      return {
+        ...state,
+        error: "",
+        albums: [...state.albums, ...action.payload.data],
+        total: action.payload.total,
+        current_page: action.payload.current_page,
+      };
     case AlbumActionTypes.REMOVE_ALBUM:
       return {
         ...state,
@@ -38,6 +43,7 @@ export const albumReducer = (
         albums: action.payload.data,
         total: action.payload.total,
         current_page: action.payload.current_page,
+        isFetching: false,
       };
     default:
       return state;

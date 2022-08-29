@@ -143,12 +143,13 @@ class TrackController extends Controller
     public function destroy($id)
     {
         $track = Track::find($id);
+        $albums = $track->albums()->get();
 
-        if (!$track) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Track not found',
-            ])->setStatusCode(404);
+        foreach ($albums as $newAlbums){
+            $countTracks = $newAlbums->tracks()->get()->count();
+            if($countTracks <= 3 ){
+                $newAlbums->delete();
+            }
         }
 
         $track->delete();

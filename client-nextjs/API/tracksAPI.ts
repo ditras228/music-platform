@@ -66,10 +66,12 @@ export const TracksAPI = {
     });
   },
 
-  listen(id): any {
-    return instance.put(`/listen/${id}`);
-  },
-  getAudio(id): any {
-    return instance.get(`/audio/${id}`);
+  listen(id, token, album_id?): any {
+    let formData = new FormData();
+    formData.append("album_id", album_id);
+
+    return instance.post(`/listen/${id}?_method=put`, formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   },
 };

@@ -7,7 +7,7 @@ export const fetchAlbums = (token, page) => {
   return async (dispatch: Dispatch<AlbumAction>) => {
     try {
       const { data } = await AlbumsAPI.getAlbums(token, page);
-      dispatch({ type: AlbumActionTypes.FETCH_ALBUMS, payload: data.data });
+      dispatch({ type: AlbumActionTypes.FETCH_ALBUMS, payload: data });
       dispatch({ type: AlbumActionTypes.SET_IS_FETCHING, payload: false });
     } catch (e) {
       dispatch({

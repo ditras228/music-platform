@@ -28,7 +28,7 @@ export const getBaseServerSideProps = async ({
   const dispatch = ctx.store.dispatch as NextThunkDispatch;
   const player = cookies(ctx).player as unknown as PlayerState;
 
-  if (session?.accessToken && player) {
+  if (session?.accessToken && player?.active) {
     const response = await TracksAPI.getOne(
       player.active.id,
       session.accessToken

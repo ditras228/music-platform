@@ -1,35 +1,90 @@
 @import "../../styles/mixins/font";
 @import "../../styles/mixins/icon";
+@import "../../styles/mixins/screen";
 
 .player {
-  height: 80px;
   width: 100%;
   position: fixed;
   bottom: 0;
-  padding: 0 40px;
+  padding: 0 0 20px 0;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: auto auto;
   align-items: center;
   grid-gap: 20px;
-  max-width: 1200px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #ffffff;
 
-  &__info {
-    &__name {
-      @include fontMedium();
-      line-height: 20px;
+  &__container {
+    justify-content: center;
+
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto auto;
+
+    @include screen-lg {
+      justify-content: normal;
     }
-    &__author {
-      @include fontSmall();
+
+    @include screen-xlg {
+      max-width: 1200px;
+    }
+  }
+
+  &__info {
+    display: grid;
+    grid-template-columns: 56px auto;
+    grid-column-gap: 15px;
+
+    &__image {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &__container {
+      &__name {
+        @include fontSmall(bold);
+      }
+
+      &__author {
+        @include fontSmall();
+      }
     }
   }
 
   &__column {
     display: grid;
-    grid-template-columns: 30px 1fr;
-    grid-column-gap: 20px;
-    @include fontMedium();
+    grid-column-gap: 75px;
+    grid-row-gap: 20px;
+
+    &__action {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      grid-column-gap: 20px;
+      align-items: center;
+
+      &__prev {
+        @include icon("prev.svg");
+      }
+
+      &__next {
+        @include icon("next.svg");
+      }
+
+      &__prev,
+      &__next {
+        width: 32px;
+        height: 32px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    @include screen-lg {
+      grid-template-columns: auto 1fr;
+    }
   }
 }

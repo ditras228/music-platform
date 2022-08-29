@@ -2,5 +2,11 @@
 @import "../../styles/mixins/button";
 
 .avatar {
+  background: red;
+  width: 70px;
   height: 70px;
+  @include fontHeaderMedium();
+  text-align: center;
+  display: grid;
+  align-content: center;
 }

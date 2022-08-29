@@ -30,6 +30,7 @@ export const trackReducer = (
         tracks: action.payload.data,
         total: action.payload.total,
         current_page: action.payload.current_page,
+        isFetching: false,
       };
     case TrackActionTypes.SET_IS_FETCHING:
       return {

@@ -19,7 +19,7 @@ export const Registration = (name, email, password) => {
         } else {
           dispatch({
             type: UsersActionTypes.REDIRECT_TO,
-            payload: "/auth/regsuccess",
+            payload: "/auth/register-success",
           });
         }
       })

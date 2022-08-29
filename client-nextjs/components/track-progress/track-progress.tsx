@@ -19,17 +19,10 @@ const TrackProgress: React.FC<TrackProgress> = ({ audio }) => {
       setCurrentTime(newValue);
     }
   };
-  function fmtMSS(s): string {
-    return (s - (s %= 60)) / 60 + (9 < s ? ":" : ":0") + s;
-  }
 
   return (
     <div className={classes.slider}>
-      <div className={classes.slider__text}>
-        <div>
-          {fmtMSS(currentTime)}/{fmtMSS(duration)}
-        </div>
-      </div>
+      <div className={classes.slider__text}></div>
       <input
         type="range"
         className={classes.slider__input}

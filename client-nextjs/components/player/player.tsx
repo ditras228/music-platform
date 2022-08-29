@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useAction";
-import { audioURL } from "../../API";
+import { audioURL, imagesURL } from "../../API";
 import classes from "./player.module.scss";
 import TrackVolume from "../track-volume/track-volume";
 import TrackProgress from "../track-progress/track-progress";
@@ -14,7 +14,9 @@ import {
   fetchNextPlaylist,
 } from "../playlist/store/playlist.actions";
 import { ITrack } from "../../pages/tracks/store/track.types";
-import { PlayerActionTypes } from "./store/player.types";
+import Image from "next/image";
+import { TracksAPI } from "../../API/tracksAPI";
+import { useRouter } from "next/router";
 
 let audio;
 
@@ -22,11 +24,11 @@ const Player = () => {
   const player = useTypedSelector((state) => state.player);
   const playlist = useTypedSelector((state) => state.playlist);
   const activeAlbum = useTypedSelector((state) => state.albumPage);
-  const track = useTypedSelector((state) => state.track);
   const { active, pause, volume, currentTime, duration } = player;
   const { setCurrentTime, setDuration, setActiveTrack } = useActions();
   const dispatch = useDispatch();
   const [session] = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (!audio) {
@@ -63,11 +65,40 @@ const Player = () => {
       // Если аудио закончило проигрывание..
       audio.onended = () => {
         if (playlist) {
+          TracksAPI.listen(active.id, session.accessToken, activeAlbum.id);
           nextTrack(playlist.tracks);
         }
       };
     }
   }, [active?.id, pause, currentTime]);
+
+  function prevTrack(tracks: ITrack[]) {
+    if (tracks.length > 0) {
+      const currentIndex = tracks.indexOf(
+        tracks.filter((value) => value.id == active.id)[0]
+      );
+      if (currentIndex > 0) {
+        setActiveTrack(tracks[currentIndex - 1]);
+      } else {
+        if (playlist.page !== 1) {
+          if (activeAlbum.id) {
+            dispatch(
+              fetchNextAlbumPlaylist(
+                session.accessToken,
+                active.page - 1,
+                activeAlbum.id,
+                true
+              )
+            );
+          } else {
+            dispatch(
+              fetchNextPlaylist(session.accessToken, active.page - 1, true)
+            );
+          }
+        }
+      }
+    }
+  }
 
   function nextTrack(tracks: ITrack[]) {
     if (tracks.length > 0) {
@@ -79,15 +110,11 @@ const Player = () => {
       } else {
         if (playlist.page === playlist.total) {
           if (activeAlbum.id) {
-            dispatch({
-              type: PlayerActionTypes.SET_ACTIVE,
-              payload: activeAlbum.tracks.data[0],
-            });
+            dispatch(
+              fetchNextAlbumPlaylist(session.accessToken, 1, activeAlbum.id)
+            );
           } else {
-            dispatch({
-              type: PlayerActionTypes.SET_ACTIVE,
-              payload: track.tracks[0],
-            });
+            dispatch(fetchNextPlaylist(session.accessToken, 1));
           }
         } else {
           if (activeAlbum.id) {
@@ -142,17 +169,46 @@ const Player = () => {
     });
   }
 
+  function imageClickHandler() {
+    router.push(`/tracks/${active.id}`);
+  }
+
   return (
     <div className={classes.player}>
-      <div className={classes.player__column}>
-        <Play audio={audio} />
-        <div className={classes.player__info}>
-          <div className={classes.player__info__name}>{active?.name}</div>
-          <div className={classes.player__info__author}>{active?.artist}</div>
-        </div>
-      </div>
       <TrackProgress audio={audio} />
-      <TrackVolume audio={audio} />
+      <div className={classes.player__container}>
+        <div className={classes.player__column}>
+          <div className={classes.player__column__action}>
+            <div
+              className={classes.player__column__action__prev}
+              onClick={() => prevTrack(playlist.tracks)}
+            ></div>
+            <Play audio={audio} />
+            <div
+              className={classes.player__column__action__next}
+              onClick={() => nextTrack(playlist.tracks)}
+            ></div>
+          </div>
+          <div className={classes.player__info}>
+            <Image
+              src={imagesURL + active.image}
+              width={56}
+              height={56}
+              className={classes.player__info__image}
+              onClick={() => imageClickHandler()}
+            ></Image>
+            <div className={classes.player__info__container}>
+              <div className={classes.player__info__container__name}>
+                {active?.name}
+              </div>
+              <div className={classes.player__info__container__author}>
+                {active?.artist}
+              </div>
+            </div>
+          </div>
+        </div>
+        <TrackVolume audio={audio} />
+      </div>
     </div>
   );
 };
